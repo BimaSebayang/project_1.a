@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="/css/custom-form.css">
+<!-- If you want use our custom-form -->
+<script src="/js/user-admin-setting/form-validator-add.js"></script>
+
+<div ng-controller="user-admin-setting-add">
+	<div class="d-flex">
+		<div>
+			<p>Add User</p>
+		</div>
+		<div class="ml-auto">
+			<div class="ml-auto">
+				<a ng-click="clickSide('user-admin-setting-index')"><i
+					class="fas fa-folder"></i> Index </a> <i class="fas fa-angle-right"></i>
+				<a href="#"><i class="fas fa-folder-open"></i> Add</a>
+			</div>
+		</div>
+	</div>
+	<hr style="position: relative; top: -20px;">
+
+	<div style="display: flex; width: 100%;">
+		<form>
+			<div style="width: 100%;">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" name="username" class="form-control"
+						ng-model="userName" placeholder="Name User">
+				</div>
+			</div>
+			<div style="width: 47%;">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+					</div>
+					<input type="text" name="useremail" class="form-control"
+						ng-model="userEmail" placeholder="Email User">
+				</div>
+			</div>
+
+			<div style="width: 47%; margin-left: 6%">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-phone"></i></span>
+					</div>
+					<input type="text" class="form-control" ng-model="userPhone"
+						placeholder="Kontak User">
+				</div>
+			</div>
+			<div style="width: 100%;">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" class="form-control" ng-model="userPassword"
+						placeholder="Password User">
+				</div>
+			</div>
+			<div style="width: 100%;">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-puzzle-piece"></i></span>
+					</div>
+					<select ng-model="roleId" class="form-control"
+						ng-options="res.roleName for res in roleList"
+						ng-change="selectRole(roleId)">
+						 <option value="" disabled selected>-- Select Role --</option>
+					</select>
+				</div>
+
+			</div>
+			<p>
+				<a ng-click="saveUserAdminSetting()" class="btn btn-lg red"> <span
+					class="fa fa-save"></span>Submit
+				</a>
+			</p>
+		</form>
+	</div>
+</div>

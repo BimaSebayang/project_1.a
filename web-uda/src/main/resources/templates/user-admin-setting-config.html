@@ -1,0 +1,126 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
+
+<div ng-controller="user-admin-setting-config">
+	<div class="d-flex">
+		<div>
+			<p>User Configuration</p>
+		</div>
+		<div class="ml-auto">
+			<div class="ml-auto">
+				<a ng-click="clickSide('user-admin-setting-index')"><i
+					class="fas fa-folder"></i> Index </a> <i class="fas fa-angle-right"></i>
+				<a href="#"><i class="fas fa-folder-open"></i> Configuration</a>
+			</div>
+		</div>
+	</div>
+	<hr style="position: relative; top: -20px;">
+</div>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-24">
+			<div class="table-responsive">
+				<table id="mytable" class="table table-bordred table-striped">
+					<thead>
+						<th><input type="checkbox" id="checkall" /></th>
+						<th>User ID</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone Number</th>
+						<th>Created Date</th>
+						<th>Created By</th>
+						<th>Active Status</th>
+						<th>Download User Detail</th>
+						<th>Download User History</th>
+						<th>Action</th>
+					</thead>
+					<tbody>
+						                  <tr>
+						                     <td><input type="checkbox" class="checkthis" /></td>
+						                     <td>USER0001919</td>
+						                     <td>Bima Satrya Sebayang</td>
+						                     <td>bimasebayang11@gmail.com</td>
+						                     <td>0877773738322</td>
+						                     <td>12/12/2019</td>
+						                     <td>ADMIN</td>
+						                     <td>Yes</td>
+						                     <td> <p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit"  data-toggle="modal" data-target="#exampleModal1" ><i class="fas fa-download"></i></button></p></td>
+						                     <td>  <p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit"  data-toggle="modal" data-target="#exampleModal1" ><i class="fas fa-file-download"></i></button></p></td>
+						                     <td>
+						                        <p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit"  data-toggle="modal" data-target="#exampleModal1" ><i class="fas fa-edit"></i></button></p>
+						                        <p data-placement="top" data-toggle="tooltip" title="Delete"><button data-toggle="modal" data-target="#exampleModal2" class="btn btn-danger btn-xs" data-title="Delete"><i class="fas fa-trash"></i></button></p>
+						                     </td>
+						                  </tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+	
+
+	
+<!-- 	<div class="container center"> -->
+<!-- 	<div class="row"> -->
+<!-- 		<h2 class="block-center">Bootstrap modal center</h2> -->
+<!-- 	</div> -->
+<!-- 	<div class="row"> -->
+<!-- 	    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">Modal center</button> -->
+<!--     </div> -->
+<!--     <div class="row"> -->
+<!-- 	    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Modal center</button> -->
+<!--     </div> -->
+</div>
+	
+</div>
+
+
+
+<!--List Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Test Modal 1
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Test Modal 2
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
