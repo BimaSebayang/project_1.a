@@ -30,12 +30,26 @@
 	<div id="wrapper" class="animate">
 		<nav
 			class="navbar header-top fixed-top navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">LOGO</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#navbarText" aria-controls="navbarText"
-				aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			<a class="navbar-brand" href="#" style="width: 7%;">LOGO</a>
+			<form class="form-inline my-2 my-lg-0" ng-if="activePaging">
+				<input class="form-control mr-sm-1" type="text"
+					placeholder="Search..." aria-label="Search" ng-model="searchText">
+				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
+					ng-click="searchParent(searchText)" type="submit">Search</button>
+				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
+					ng-click="lookForwardForm(controllerform)" data-toggle="modal"
+					data-target="#filterForm" type="button">Filter</button>
+				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
+					ng-click="refreshParent()" type="button">Refresh</button>
+				<select ng-model="selectedPage" class="btn btn-outline-success my-2 my-sm-0"
+					style="font-size: 12px; font-family: arial;" placeholder ="Page..."
+					ng-options="res.Key as res.Value for res in serialPaging"
+					ng-click = "pagingParent(selectedPage)">
+					<option value="" disabled selected>-- Select Page --</option>
+				</select>
+			</form>
+
+
 			<div class="collapse navbar-collapse" id="navbarText">
 				<ul class="navbar-nav animate side-nav">
 					<li class="nav-item"><a style="font-size: 13px;"
@@ -63,10 +77,87 @@
 		</nav>
 
 		<div class="container-fluid">
+
+			<div class="modal fade" id="filterForm" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" ng-if='isFilterUserAdminSettingConfig'>
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Filter Data</h5>
+						</div>
+						<div class="modal-body"
+							style="font-size: 14px; font-family: arial;">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th style="font-size: 14px; font-family: arial;" width="auto">
+											Filter - Field</th>
+										<th style="font-size: 14px; font-family: arial;">Filter -
+											Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Status
+											Keaktifan</td>
+
+										<td style="font-size: 12px; font-family: arial;"><label
+											ng-repeat="flag in flagName"> <input type="radio"
+												ng-model="$parent.filterIsActive" ng-value="flag.key"
+												name="pageSet" />{{flag.value}}
+										</label></td>
+									</tr>
+									<tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Role
+											Id</td>
+										<td><select ng-model="roleId" class="form-control"
+											style="font-size: 12px; font-family: arial;"
+											ng-options="res.roleId as res.roleName for res in roleName">
+											<option value="" disabled selected>-- Select Role --</option>
+										</select></td>
+									</tr>
+									<tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Range
+											Tanggal Dibuat</td>
+										<td><input style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterStartDate"
+											placeholder="YYYY-MM-DD"> <label
+											style="font-size: 12px; font-family: arial;">S/D</label> <input
+											style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterEndDate"
+											placeholder="YYYY-MM-DD"></td>
+									</tr>
+									<tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal" ng-click="cancelFilter(controllerform)">
+								<i class="fas fa-times"></i> Batal
+							</button>
+
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal"
+								ng-click="filterParentUASC(filterIsActive,roleId,filterStartDate,filterEndDate)">
+								<i class="fas fa-check"></i> Iya
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div ng-include="list-modal"></div>
 			<div ng-include="lastUrl"></div>
 		</div>
 	</div>
+
+
+
+
+
 </body>
 
 </html>

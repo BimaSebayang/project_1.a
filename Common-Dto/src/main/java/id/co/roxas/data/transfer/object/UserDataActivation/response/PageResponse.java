@@ -1,6 +1,8 @@
 package id.co.roxas.data.transfer.object.UserDataActivation.response;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,10 +17,18 @@ public class PageResponse extends BaseDto implements Serializable{
 	private int pageNumber;
 	private int pageSize;
 	private int totalPage;
+	private long totalElements;
+	private String sortBy;
+	private Map<String,Object> filtering = new HashMap<String,Object>();
 	private static final Gson gson = new GsonBuilder()
 			   .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
-	public PageResponse(Object wsContent, String message, int pageNumber, int pageSize, int totalPage,
-			             AuthorizationClassConf authorizationClassConf) {
+	
+	public PageResponse() {
+		
+	}
+	
+	public PageResponse(Object wsContent, String message, int pageNumber, int pageSize, int totalPage,long totalElements,
+			             String sortBy,AuthorizationClassConf authorizationClassConf,Map<String,Object> filtering) {
 		super();
 		super.setUserAccess(authorizationClassConf.getUserAccess());
 		super.setUuidConnector(authorizationClassConf.getRequestUuid());
@@ -30,6 +40,9 @@ public class PageResponse extends BaseDto implements Serializable{
 		this.pageNumber = pageNumber;
 		this.pageSize = pageSize;
 		this.totalPage = totalPage;
+		this.totalElements = totalElements;
+		this.sortBy = sortBy;
+		this.filtering = filtering;
 	}
 	public String getWsContent() {
 		return wsContent;
@@ -60,6 +73,16 @@ public class PageResponse extends BaseDto implements Serializable{
 	}
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
+	}
+	public long getTotalElements() {
+		return totalElements;
+	}
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public Map<String, Object> getFiltering() {
+		return filtering;
 	}
 	
 	

@@ -1,4 +1,4 @@
-package id.co.roxas.app.web.uda.controller.userSetting;
+package id.co.roxas.app.web.uda.controller.userAdminSetting;
 
 import javax.servlet.http.HttpServletRequest;
 

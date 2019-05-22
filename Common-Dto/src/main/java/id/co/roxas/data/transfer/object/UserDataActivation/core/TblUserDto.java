@@ -13,6 +13,7 @@ public class TblUserDto extends BaseDto implements Serializable {
 	private String userId;
 	private String userName;
 	private TblRoleDto roleId;
+	private String userBatch;
 	private TblTicketDto userTicket;
 	private int isActive;
 	private String userEmail;
@@ -115,6 +116,13 @@ public class TblUserDto extends BaseDto implements Serializable {
 	public static String getDtoticketing() {
 		return dtoTicketing;
 	}
+	public String getUserBatch() {
+		return userBatch;
+	}
+	public void setUserBatch(String userBatch) {
+		this.userBatch = userBatch;
+	}
+	
 	
 	
 	

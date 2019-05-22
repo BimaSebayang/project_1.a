@@ -1,25 +1,23 @@
 masterWebUdaIndexApp.controller('user-admin-setting-add', function($scope,
 		$http, $rootScope, $location, $window) {
-
+	  $scope.isActivePaging(false);
 	$scope.tester = undefined;
 
 	$scope.saveUserAdminSetting = function() {
 		$scope.url = $scope.endpoint + "/web-rest-uda/save/user-admin-setting";
-		var config = {
-			headers : {
-				'Accept' : 'text/plain'
-			}
-		};
+
 		$http.post($scope.url, {
 			userName : $scope.userName,
 			userEmail : $scope.userEmail,
 			userPhone : $scope.userPhone,
 			userPassword : $scope.userPassword,
+			userBatch : $scope.userBatch,
 			roleId : $scope.roleId
 		}, $scope.config).then(
 				function(response) {
 					debugger;
-					alert('save');
+					if(response.data.saveResult == '1')
+						$scope.clickSide('user-admin-setting-config');
 				},
 				function error(response) {
 					debugger;

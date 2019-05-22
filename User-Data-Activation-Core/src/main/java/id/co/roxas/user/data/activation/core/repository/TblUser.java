@@ -39,6 +39,9 @@ public class TblUser {
 	@Column(name="user_name", length=220, nullable=false)
 	private String userName;
 	
+	@Column(name="user_batch", length=220, nullable=false, unique = true)
+	private String userBatch;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id", nullable = true)
 	private TblRole roleId;
@@ -203,6 +206,15 @@ public class TblUser {
 	public void setUpdatedBy(TblUser updatedBy) {
 		this.updatedBy = updatedBy;
 	}
+
+	public String getUserBatch() {
+		return userBatch;
+	}
+
+	public void setUserBatch(String userBatch) {
+		this.userBatch = userBatch;
+	}
+
 	
 	
 	

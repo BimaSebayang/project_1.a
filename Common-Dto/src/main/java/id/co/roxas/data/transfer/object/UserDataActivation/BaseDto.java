@@ -37,5 +37,9 @@ public class BaseDto {
 	public Date getTimestamp() {
 		return timestamp;
 	}
+	
+	public static String getDtoticketing() {
+		return null;
+	}
    
 }

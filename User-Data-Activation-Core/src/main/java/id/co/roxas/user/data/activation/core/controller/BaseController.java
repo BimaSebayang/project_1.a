@@ -42,13 +42,13 @@ public class BaseController extends UltimateBase {
 		if (isNeedAccessAuthor) {
 			if (isAuthorizationCantAccess(AUTH_ADMIN, getAllAuthUser(authentication), true)) {
 				this.responseInvalid = new WsResponse(null, RESPONSE_BAD_AUTHOR, authorizationClassConf);
-				this.pageInvalid = new PageResponse(null, RESPONSE_BAD_AUTHOR, 0, 0, 0, authorizationClassConf);
+				this.pageInvalid = new PageResponse(null, RESPONSE_BAD_AUTHOR, 0, 0, 0, 0,null,authorizationClassConf,null);
 				return true;
 			}
 		}
 		if (isUuidNotValid(authorizationClassConf.getRequestUuid(), authorizationClassConf.getRealUuid())) {
 			this.responseInvalid = new WsResponse(null, RESPONSE_BAD_UUID, authorizationClassConf);
-			this.pageInvalid = new PageResponse(null, RESPONSE_BAD_UUID, 0, 0, 0, authorizationClassConf);
+			this.pageInvalid = new PageResponse(null, RESPONSE_BAD_UUID, 0, 0, 0, 0,null,authorizationClassConf,null);
 			return true;
 		}
 		return false;

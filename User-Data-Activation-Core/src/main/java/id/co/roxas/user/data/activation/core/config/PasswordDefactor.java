@@ -14,7 +14,7 @@ public class PasswordDefactor {
     	for (char c : pass.toCharArray()) {
 			int ascii = c;
 			int defactorAscii = 2 * ascii + 10;
-			sb.append(Character.toString(defactorAscii));
+			sb.append(Character.toString((char)defactorAscii));
 		}
     	//®èúÌðjpj|f
     	//ðôêÔîÈÌÒäÜæ

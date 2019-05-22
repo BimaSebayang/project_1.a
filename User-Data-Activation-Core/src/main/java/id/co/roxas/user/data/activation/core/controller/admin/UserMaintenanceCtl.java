@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import id.co.roxas.data.transfer.object.UserDataActivation.config.AuthorizationClassConf;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
+import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCustom;
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.TransactionCUDDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
@@ -35,23 +36,50 @@ public class UserMaintenanceCtl extends BaseController {
 	@Autowired
 	private UserMaintenanceSvc userMaintenanceSvc;
 
-	@GetMapping(value = "/role-transaction/select-all", params = {"isActive","roleId"})
+	@GetMapping(value = "/user-transaction/select-all", params = {"isActive","roleId","startDate","endDate"})
 	public PageResponse retrieveAllRole(@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
 			@RequestHeader(name = "module", required = true) String module, 
-			@RequestParam("isActive") String isActive,
-			@RequestParam("roleId") String roleId,
+			@RequestParam(name = "isActive") String isActive,
+			@RequestParam(name = "roleId") String roleId,
+			@RequestParam(name = "startDate") String startDate,
+			@RequestParam(name = "endDate") String endDate,
+			@RequestParam(name = "search") String search,
 			Pageable pageable,
 			Authentication authentication) {
 		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf(registUuid(uuid),
-				registUuid(TblRoleDto.getDtoticketing()),
+				registUuid(TblUserDto.getDtoticketing()),
 				getAllAuthUser(authentication), module, authentication.getName());
 		if (responsePusherInvalidatorAccess(authentication, authorizationClassConf, true)) {
 			return getPageInvalid();
 		} else {
-			Page<TblUserDto> page = userMaintenanceSvc.getAllUser(isActive, roleId, pageable);
+			PageRequestCustom<TblUserDto> page = userMaintenanceSvc.getAllUser
+					(isActive, roleId, startDate, endDate,search,authentication.getName(),pageable);
 			return new PageResponse
-					(page, SUCCESS_RETRIEVE, page.getPageable().getPageNumber(), 
-							page.getPageable().getPageSize(), page.getTotalPages(), authorizationClassConf);
+					(page.getListResponse(), SUCCESS_RETRIEVE, page.getPageNumbers(), 
+							page.getPageSize(), page.getTotalPages(), page.getTotalElements(), page.getSortBy(),authorizationClassConf
+							,page.getFiltering());
+		}
+	}
+	
+	@PutMapping("/user-transaction/action-activator")
+	public WsResponse userActivator(@Valid @RequestBody TblUserDto tblUserDto,
+			@RequestHeader(name = "uuid-connector-body", required = true) String uuid1,
+			@RequestHeader(name = "uuid-connector-response", required = true) String uuid2,
+			@RequestHeader(name = "module", required = true) String module, Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf(registUuid(uuid1, uuid2),
+				registUuid(TransactionCUDDto.getDtoticketing(), TblUserDto.getDtoticketing()),
+				getAllAuthUser(authentication), module, authentication.getName());
+		if (responsePusherInvalidatorAccess(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			TransactionCUDDto customDto = new TransactionCUDDto();
+			int result = userMaintenanceSvc.crudUserActivateSwitcher(tblUserDto, authentication.getName());
+				if (result == REPOSITORY_TRANSACTION_SUCCESS) {
+					customDto.setUpdateResult(result);
+					return new WsResponse(customDto, SUCCESS_UPDATE, authorizationClassConf);
+				} else {
+					return new WsResponse(null, INSUCCESS_UPDATE, authorizationClassConf);
+				}
 		}
 	}
 	
@@ -71,9 +99,9 @@ public class UserMaintenanceCtl extends BaseController {
 			int result = userMaintenanceSvc.CrudUserSave(tblUserDto, authentication.getName());
 				if (result == REPOSITORY_TRANSACTION_SUCCESS) {
 					customDto.setSaveResult(result);
-					return new WsResponse(customDto, "Save Success", authorizationClassConf);
+					return new WsResponse(customDto, SUCCESS_SAVE, authorizationClassConf);
 				} else {
-					return new WsResponse(null, "Save Insuccess", authorizationClassConf);
+					return new WsResponse(null, INSUCCESS_SAVE, authorizationClassConf);
 				}
 		}
 	}
@@ -93,10 +121,10 @@ public class UserMaintenanceCtl extends BaseController {
 			TransactionCUDDto customDto = new TransactionCUDDto();
 			    int result = userMaintenanceSvc.crudUpdateUser(tblUserDto, authentication.getName());
 				if (result == REPOSITORY_TRANSACTION_SUCCESS) {
-					customDto.setSaveResult(result);
-					return new WsResponse(customDto, "Update Success", authorizationClassConf);
+					customDto.setUpdateResult(result);
+					return new WsResponse(customDto, SUCCESS_UPDATE, authorizationClassConf);
 				} else {
-					return new WsResponse(null, "Update Insuccess", authorizationClassConf);
+					return new WsResponse(null, INSUCCESS_UPDATE, authorizationClassConf);
 				}
 		}
 	}

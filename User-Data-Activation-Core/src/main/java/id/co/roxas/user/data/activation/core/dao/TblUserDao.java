@@ -15,25 +15,35 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 @Repository
 public interface TblUserDao extends JpaRepository<TblUser, String>{
-     public List<TblUser> findAll();
-     
+    public List<TblUser> findAll();
+    
     @Query("select a from TblUser a "
      		+ " where ( a.userTicket.ticketId =:userValidation or a.userEmail =:userValidation "
      		+ " or a.userPhone =:userValidation or a.userId =:userValidation )  and a.roleId.isActive = 1 ")
     public TblUser findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(@Param("userValidation")String userValidation);
     
-    @Query(" select a from TblUser a where "
-    		//startfiltering
-    		+ " case "
-    		+ " when :isActive is not null then CAST(a.isActive as integer) =:isActive "
-    		+ " else a.isActive = 1 or a.isActive = 0 "
-    		+ " end "
+    @Query(" select a from TblUser a left join"
+    		+ " TblRole b"
+    		+ " on "
+    		+ " a.roleId = b "
+    		+ " where (?1 = '' or cast(a.isActive as text) = ?1 )"
     		+ " and "
-    		+ " case "
-    		+ " when :roleId is not null then a.roleId =:roleId "
-    		+ " else a.roleId like '%%' "
-    		+ " end ")
-    Page<TblUser> findAllWithFilterAndSearch(@Param("isActive") String isActive, @Param("roleId")String roleId, Pageable pageable);
+    		+ " ( ?2 = '' or a.roleId.roleId = ?2)"
+    		+ " and "
+    		+ " ( a.createdDate between ?3 and ?4 ) "
+    		+ " and "
+    		+ " a.userBatch != 'su' "
+    		+ " and "
+    		+ " a.userId != ?6 "
+    		+ " and "
+    		+ " ( upper(a.userName) like upper(?5)  or "
+    		+ "   cast(a.isActive as text) like ?5 or "
+    		+ "   upper(a.userEmail) like upper(?5) or"
+    		+ "   upper(b.roleName) like upper(?5) or "
+    		+ "   upper(a.userPhone) like upper(?5) or "
+    		+ "   upper(a.createdBy.userName) like upper(?5)  ) ")
+    Page<TblUser> findAllWithFilterAndSearch(String isActive,String roleId,Date startDate, Date endDate,
+    		String search,String ownUser,Pageable pageable);
     
     @Modifying
  	@Query("update TblUser set isActive =:isActive, "
@@ -53,7 +63,7 @@ public interface TblUserDao extends JpaRepository<TblUser, String>{
  			                       @Param("dateNonActive") Date dateNonActive,
  			                       @Param("dateActive") Date dateActive,
  			                       @Param("updatedDate") Date updatedDate, 
- 			                       @Param("updatedBy") String updatedBy, 
+ 			                       @Param("updatedBy") TblUser updatedBy, 
  			                       @Param("userId") String userId);
     
     @Modifying
@@ -74,6 +84,6 @@ public interface TblUserDao extends JpaRepository<TblUser, String>{
    			                       @Param("dateNonActive") Date dateNonActive,
    			                       @Param("dateActive") Date dateActive,
    			                       @Param("updatedDate") Date updatedDate, 
-   			                       @Param("updatedBy") String updatedBy, 
+   			                       @Param("updatedBy") TblUser updatedBy, 
    			                       @Param("userId") List<String> userId);
 }
