@@ -6,19 +6,18 @@
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<!------ Include the above in your HEAD tag ---------->
 
+<link rel="stylesheet" href="/css/custom-form.css">
+<script src="/js/master/form-validator-add.js"></script>
+<div class="container" ng-controller="role-admin-setting-config">
 
-
-<div class="container" ng-controller="user-admin-setting-config"
-	style="align-items: center;">
 	<div class="d-flex">
 		<div>
-			<p>User Configuration</p>
+			<p>Configuration Role And Details</p>
 		</div>
 		<div class="ml-auto">
 			<div class="ml-auto">
-				<a ng-click="clickSide('user-admin-setting-index')"><i
+				<a ng-click="clickSide('role-admin-setting-index')"><i
 					class="fas fa-folder"></i> Index </a> <i class="fas fa-angle-right"></i>
 				<a href="#"><i class="fas fa-folder-open"></i> Configuration</a>
 			</div>
@@ -26,217 +25,77 @@
 	</div>
 	<hr style="position: relative; top: -20px;">
 
-	<div class="row">
-		<div class="col-md-24">
-			<div class="table-responsive">
-				<table id="mytable" class="table table-bordred table-striped"
-					style="font-size: 12px; width: 1150px;">
-					<thead>
-						<th data-defaultsign="AZ">No.</th>
-						<th>Nama User</th>
-						<th>Email User</th>
-						<th>Kontak User</th>
-						<th>Tanggal Dibuat</th>
-						<th>Nama Pembuat</th>
-						<th>Status Keaktifan</th>
-						<th>Role User</th>
-						<th>Download User History</th>
-						<th>Action</th>
-					</thead>
-					<tbody>
-						<tr ng-repeat="user in userList">
-							<td>{{$index + from + 1}}</td>
-							<td>{{user.userName}}</td>
-							<td>{{user.userEmail}}</td>
-							<td>{{user.userPhone}}</td>
-							<td>{{user.createdDate | date : 'dd/MM/yyyy HH:mm:ss '}}</td>
-							<td>{{user.createdBy.userName}}</td>
-							<td>{{convertActivation(user.isActive)}}</td>
-							<td>{{user.roleId.roleName}}</td>
-							<td style="width: 100px;" align="center">
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a
+			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+			class="{{'nav-link ' + navActivatorRAT}}" id="role-add-tab"
+			data-toggle="tab" role="tab" aria-controls="role-add"
+			aria-selected="false">Configuration Role</a></li>
+		<li class="nav-item"><a
+			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+			class="{{'nav-link ' + navActivatorRDAT}}" id="role-detail-add-tab"
+			data-toggle="tab" role="tab" aria-controls="role-detail-add"
+			aria-selected="true">Configuration Role Detail</a></li>
+	</ul>
 
-								<button type="button" class="btn btn-flat btn-small"
-									style="background: #79f83a;" data-toggle="modal"
-									data-target="#edit" ng-click="onEdit(user)">
-									<i class="fas fa-download"> </i>
-								</button>
-
-							</td>
-							<td style="width: 120px;" align="center">
-								<button type="button" class="btn btn-flat btn-small"
-									style="background: #f8cc3a;" data-toggle="modal"
-									data-target="#edit" ng-click="onEdit(user)">
-									<i class="fas fa-edit"> </i>
-								</button>
-								<button type="button" class="btn btn-flat btn-small"
-									style="background: #dc5656;" data-toggle="modal"
-									data-target="#active" ng-if="!isActiveButton(user.isActive)"
-									ng-click="buttonActivation(user,1,user.isActive)">
-									<i class="fas fa-lock"> </i>
-								</button>
-								<button type="button" class="btn btn-flat btn-small"
-									style="background: #3a86f8;" data-toggle="modal"
-									ng-if="!isInActiveButton(user.isActive)"
-									ng-click="buttonActivation(user,0,user.isActive)"
-									data-target="#disactive">
-									<i class="fas fa-unlock"> </i>
-								</button>
-							</td>
-						</tr>
-						<tr ng-if="isEmpty">
-							<td colspan="9"><center>Data Tidak Ditemukan</center></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+	<div class="tab-content">
+		<div class="{{'tab-pane ' + navActivatorRAT}}" id="role-add"
+			role="tabpanel" aria-labelledby="role-add-tab">
 
 
-
-
-	<!--List Modal -->
-	<div class="modal fade" id="edit" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-
-		<div class="modal-dialog" role="document">
-			<div class="modal-content" style="width: 100%; align-items: center;">
-				<div class="modal-header" style="width: 100%;">
-					<h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
-				</div>
-				<div class="modal-body" style="width: 100%;">
-					<div style="display: flex; width: 100%;">
-						<form>
-							<div style="width: 100%;">
-								<div class="input-group form-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="fas fa-user"></i></span>
-									</div>
-									<input type="text" name="username" class="form-control"
-										ng-model="userName" placeholder="Name User">
-								</div>
-							</div>
-							<div style="width: 100%;">
-								<div class="input-group form-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="fas fa-user"></i></span>
-									</div>
-									<input type="text" name="userbatch" class="form-control"
-										ng-model="userBatch" placeholder="Batch User">
-								</div>
-							</div>
-							<div style="width: 100%;">
-								<div class="input-group form-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i
-											class="fas fa-envelope"></i></span>
-									</div>
-									<input type="text" name="useremail" class="form-control"
-										ng-model="userEmail" placeholder="Email User">
-								</div>
-							</div>
-
-							<div style="width: 100%;">
-								<div class="input-group form-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="fas fa-phone"></i></span>
-									</div>
-									<input type="text" class="form-control" ng-model="userPhone"
-										placeholder="Kontak User">
-								</div>
-							</div>
-							<div style="width: 100%;">
-								<div class="input-group form-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i
-											class="fas fa-puzzle-piece"></i></span>
-									</div>
-									<select ng-model="roleId" class="form-control"
-										ng-options="res.roleName for res in roleList"
-										ng-change="selectRole(roleId)">
-										<option value="" disabled selected>-- Select Role --</option>
-									</select>
-								</div>
-
-							</div>
-						</form>
+			<div class="row">
+				<div class="col-md-24">
+					<div class="table-responsive">
+						<table id="mytable" class="table table-bordred table-striped"
+							style="font-size: 12px; width: 1150px;">
+							<thead>
+								<th data-defaultsign="AZ">No.</th>
+								<th>Nama Role</th>
+								<th>Tanggal Dibuat</th>
+								<th>Nama Pembuat</th>
+								<th>Status Keaktifan</th>
+								<th>Detail Role</th>
+								<th>Detail Pengguna Role</th>
+								<th>Download Role History</th>
+								<th>Action</th>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
 					</div>
-
-
-				</div>
-				<div class="modal-footer" style="width: 100%;">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal"
-						ng-click="updateUserAdminSetting()">Save changes</button>
 				</div>
 			</div>
+
+
+
 		</div>
-	</div>
-
-
-	<div class="modal fade" id="active" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Non Aktivasi
-						Data</h5>
-					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
-					<!-- 						aria-label="Close"> -->
-					<!-- 						<span aria-hidden="true">×</span> -->
-					<!-- 					</button> -->
-				</div>
-				<div class="modal-body">
-					<div ng-if="discontinu">Data Telah Aktif</div>
-					<div ng-if="!discontinu">Apakah anda ingin Mengaktifkan User
-						dengan nama {{name}} Ber-Id {{userId}}</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">
-						<i class="fas fa-times"></i> Batal
-					</button>
-
-					<button type="button" class="btn btn-primary" data-dismiss="modal"
-						ng-if="!discontinu" ng-click="actionActivation(userId,1)">
-						<i class="fas fa-check"></i> Iya
-					</button>
+		<div class="{{'tab-pane ' + navActivatorRDAT}}" id="role-detail-add"
+			role="tabpanel" aria-labelledby="role-detail-add">
+		
+		
+		<div class="row">
+				<div class="col-md-24">
+					<div class="table-responsive">
+						<table id="mytable" class="table table-bordred table-striped"
+							style="font-size: 12px; width: 1150px;">
+							<thead>
+								<th data-defaultsign="AZ">No.</th>
+								<th>Nama Detail Role</th>
+								<th>Tanggal Dibuat</th>
+								<th>Nama Pembuat</th>
+								<th>Status Keaktifan</th>
+								<th>Role Kepemilikan</th>
+								<th>Download Role History</th>
+								<th>Action</th>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
-
-	<div class="modal fade" id="disactive" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Aktivasi Data</h5>
-					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
-					<!-- 						aria-label="Close"> -->
-					<!-- 						<span aria-hidden="true">×</span> -->
-					<!-- 					</button> -->
-				</div>
-				<div class="modal-body">
-					<div ng-if="discontinu">Data Telah NonAktif</div>
-					<div ng-if="!discontinu">Apakah anda ingin Mengnonaktifkan
-						User dengan nama {{name}} Ber-Id {{userId}}</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">
-						<i class="fas fa-times"></i> Batal
-					</button>
-
-					<button type="button" class="btn btn-primary" data-dismiss="modal"
-						ng-if="!discontinu" ng-click="actionActivation(userId,0)">
-						<i class="fas fa-check"></i> Iya
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 </div>
+
