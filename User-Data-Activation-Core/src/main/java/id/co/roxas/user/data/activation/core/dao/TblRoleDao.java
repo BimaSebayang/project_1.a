@@ -14,7 +14,8 @@ import id.co.roxas.user.data.activation.core.repository.TblRole;
 @Repository
 public interface TblRoleDao extends JpaRepository<TblRole,String>{
      
-	@Query("select a from TblRole a where a.isActive = 1 ")
+	@Query("select a from TblRole a  "
+			+ " where a.isActive = 1 ")
 	public List<TblRole> retrieveAllRoleIsActive();
 	
 	@Modifying

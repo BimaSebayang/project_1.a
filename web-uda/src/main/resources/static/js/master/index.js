@@ -100,5 +100,7 @@ $.getScript("/js/dashboard-admin/index.js");
 $.getScript("/js/user-admin-setting/index.js");
 $.getScript("/js/user-admin-setting/add.js");
 $.getScript("/js/user-admin-setting/config.js");
-
+$.getScript("/js/role-admin-setting/index.js");
+$.getScript("/js/role-admin-setting/add.js");
+$.getScript("/js/role-admin-setting/config.js");
 

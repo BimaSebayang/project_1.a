@@ -40,7 +40,39 @@
                     $(this).css({ "border": "1px solid silver", "color": "gray" });
                 }
             })
+            
+             $("input[name = 'rolename']").each(function (e, valor) {
+                var error = false;
+                if ($(this).val() == "") {
+                    error = true;
+                }
+                if (error === true) {
+                    //-- with errors
+                    $(this).parent().css({ "color": "red" });
+                    $(this).css({ "border": "1px solid red" });
+                } else {
+                    //-- without errors
+                    $(this).parent().css({ "color": "black" });
+                    $(this).css({ "border": "1px solid silver", "color": "gray" });
+                }
+            })
 
+            $("input[name = 'roleDtlName']").each(function (e, valor) {
+                var error = false;
+                if ($(this).val() == "") {
+                    error = true;
+                }
+                if (error === true) {
+                    //-- with errors
+                    $(this).parent().css({ "color": "red" });
+                    $(this).css({ "border": "1px solid red" });
+                } else {
+                    //-- without errors
+                    $(this).parent().css({ "color": "black" });
+                    $(this).css({ "border": "1px solid silver", "color": "gray" });
+                }
+            })
+            
              $("input[name = 'useremail']").each(function (e, valor) {
                 var error = false;
                 if ($(this).val() == "") {

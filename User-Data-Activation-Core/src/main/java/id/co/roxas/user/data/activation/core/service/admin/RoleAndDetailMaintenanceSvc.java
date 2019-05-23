@@ -2,6 +2,8 @@ package id.co.roxas.user.data.activation.core.service.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDtlDto;
@@ -26,6 +28,20 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 		List<TblRole> tblRoles = tblRoleDao.retrieveAllRoleIsActive();
 		List<TblRoleDto> tblRoleDtos = new ArrayList<>();
 		for (TblRole tblRole : tblRoles) {
+			if(tblRole.getTblRoleDtls().size()>0) {
+			TblRoleDto tblRoleDto = new TblRoleDto();
+			tblRoleDto.setRoleName(tblRole.getRoleName());
+			tblRoleDto.setRoleId(tblRole.getRoleId());
+			tblRoleDtos.add(tblRoleDto);
+			}
+		}
+		return tblRoleDtos;
+	}
+	
+	public List<TblRoleDto> selectAllRole(){
+		List<TblRole> tblRoles = tblRoleDao.findAll();
+		List<TblRoleDto> tblRoleDtos = new ArrayList<>();
+		for (TblRole tblRole : tblRoles) {
 			TblRoleDto tblRoleDto = new TblRoleDto();
 			tblRoleDto.setRoleName(tblRole.getRoleName());
 			tblRoleDto.setRoleId(tblRole.getRoleId());
@@ -42,6 +58,11 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 		tblRole.setCreatedBy(new TblUser(user));
 		tblRole.setIsActive(1);
 		tblRoleDao.save(tblRole);
+		for (TblRoleDtlDto roleDtl : tblRoleDto.getTblRoleDtlDtos()) {
+			if(Strings.isBlank(roleDtl.getRoleDtlName())) {
+			CrudDetailRoleSave(roleDtl,tblRole, user);
+			}
+		}
 		return REPOSITORY_TRANSACTION_SUCCESS;
 	}
 	
@@ -100,6 +121,18 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 		return REPOSITORY_TRANSACTION_SUCCESS;
 	}
 	
+	public int CrudDetailRoleSave(TblRoleDtlDto tblRoleDtlDto, TblRole tblRole, String user) {
+		TblRoleDtl tblRoleDtl = new TblRoleDtl();
+		tblRoleDtl = mapperFacade.map(tblRoleDtlDto, TblRoleDtl.class);
+		tblRoleDtl.setCreatedDate(dateNow);
+		tblRoleDtl.setIsActive(1);
+		tblRoleDtl.setCreatedBy(new TblUser(user));
+		tblRoleDtl.setDateActive(dateNow);
+		tblRoleDtl.setRoleId(tblRole);
+		tblRoleDtlDao.save(tblRoleDtl);
+		return REPOSITORY_TRANSACTION_SUCCESS;
+	}
+	
 	public int CrudDetailRoleUpdateInformation(TblRoleDtlDto tblRoleDtlDto, String user) {
 		TblRoleDtl tblRoleDtl = tblRoleDtlDao.getOne(tblRoleDtlDto.getRoleDtlId());
 		if (tblRoleDtl!=null) {
@@ -129,7 +162,14 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 			tblRoleDtl.setCreatedBy(new TblUser(user));
 			tblRoleDtl.setDateActive(dateNow);
 			if (tblRoleDtlDto.getRoleId() != null) {
+				if(!Strings.isBlank(tblRoleDtlDto.getRoleId().getRoleId())) {
 				tblRoleDtl.setRoleId(mapperFacade.map(tblRoleDtlDto.getRoleId(), TblRole.class));
+				}
+				else {
+					tblRoleDtl.setRoleId(null);
+				}
+			}else {
+				tblRoleDtl.setRoleId(null);
 			}
 			tblRoleDtls.add(tblRoleDtl);
 		}

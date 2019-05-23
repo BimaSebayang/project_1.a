@@ -51,7 +51,7 @@ public class InitUserInformationToWeb extends BaseController{
 		tblRoleDto.setRoleName(tblUser.getRoleId().getRoleName());
 		tblRoleDto.setRoleId(tblUser.getRoleId().getRoleId());
 		tblRoleDto.setIsActive(tblUser.getRoleId().getIsActive());
-		tblRoleDto.setTblRoleDtls(tblRoleDtlDtos);
+		tblRoleDto.setTblRoleDtlDtos(tblRoleDtlDtos);
 		tblUserDto.setRoleId(tblRoleDto);
 		tblUserDto.setIsActive(tblUser.getIsActive());
 		tblUserDto.setUserId(tblUser.getUserId());

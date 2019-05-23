@@ -25,7 +25,7 @@ public class UserAuthenticationCustomLogin extends BaseService{
 			  TblUserDto userDto = new TblUserDto();
 			  TblRoleDto roleDto = new TblRoleDto();
 			  roleDto = mapperFacade.map(tblUser.getRoleId(), TblRoleDto.class);
-			  roleDto.setTblRoleDtls(mapperFacade.mapAsList(tblUser.getRoleId().getTblRoleDtls(), TblRoleDtlDto.class));
+			  roleDto.setTblRoleDtlDtos(mapperFacade.mapAsList(tblUser.getRoleId().getTblRoleDtls(), TblRoleDtlDto.class));
 			  userDto = mapperFacade.map(tblUser, TblUserDto.class);
 			  userDto.setRoleId(roleDto);
 			  userDtos.add(userDto);

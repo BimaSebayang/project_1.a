@@ -85,12 +85,14 @@ public class TblRoleDto implements Serializable{
 		this.updatedDate = updatedDate;
 	}
 
-	public List<TblRoleDtlDto> getTblRoleDtls() {
+	
+
+	public List<TblRoleDtlDto> getTblRoleDtlDtos() {
 		return tblRoleDtls;
 	}
 
-	public void setTblRoleDtls(List<TblRoleDtlDto> tblRoleDtls) {
-		this.tblRoleDtls = tblRoleDtls;
+	public void setTblRoleDtlDtos(List<TblRoleDtlDto> tblRoleDtlDtos) {
+		this.tblRoleDtls = tblRoleDtlDtos;
 	}
 
 	public TblUserDto getCreatedBy() {

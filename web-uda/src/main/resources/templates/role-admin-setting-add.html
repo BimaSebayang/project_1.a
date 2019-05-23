@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="/css/custom-form.css">
+<script src="/js/master/form-validator-add.js"></script>
+<div class="container" ng-controller="role-admin-setting-add">
+
+	<div class="d-flex">
+		<div>
+			<p>Add Role And Details</p>
+		</div>
+		<div class="ml-auto">
+			<div class="ml-auto">
+				<a ng-click="clickSide('role-admin-setting-index')"><i
+					class="fas fa-folder"></i> Index </a> <i class="fas fa-angle-right"></i>
+				<a href="#"><i class="fas fa-folder-open"></i> Add</a>
+			</div>
+		</div>
+	</div>
+	<hr style="position: relative; top: -20px;">
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a
+			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+			class="{{'nav-link ' + navActivatorRAT}}" id="role-add-tab"
+			data-toggle="tab" role="tab" aria-controls="role-add"
+			aria-selected="false">Role Add</a></li>
+		<li class="nav-item"><a
+			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+			class="{{'nav-link ' + navActivatorRDAT}}" id="role-detail-add-tab"
+			data-toggle="tab" role="tab" aria-controls="role-detail-add"
+			aria-selected="true">Role Detail Add</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="{{'tab-pane ' + navActivatorRAT}}" id="role-add"
+			role="tabpanel" aria-labelledby="role-add-tab">
+			<div style="display: flex; width: 100%; top: 100px;">
+				<form>
+					<div style="width: 100%;">
+						<div class="input-group form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i
+									class="fas fa-puzzle-piece"></i></span>
+							</div>
+							<input type="text" name="rolename" class="form-control"
+								ng-model="roleName" placeholder="Role Name">
+						</div>
+
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th style="width: 30%;">Fungsional Role Detail</th>
+									<th style="width: 50%;">Nama Role Detail</th>
+									<th style="width: 20%;">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="res in sizeModel track by $index">
+									<td><input type="text" ng-model="res.roleDtlFunc"
+										class="form-control" ng-init="res.roleDtlFunc='AUTHWS'"
+										ng-change="onParameter(res.blacklistFlag, $index)"
+										disabled="disabled" /></td>
+									<td><input type="text" ng-model="res.roleDtlName"
+										class="form-control" name="roleDtlName"
+										ng-change="onDescription(res.blacklistFlagDesc, $index)" /></td>
+									<td>
+										<button ng-click="addModel()">
+											<label class="fa fa-plus fa"></label>
+										</button>
+										<button ng-click="removeModel($index)">
+											<label class="fa fa-minus fa"></label>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<p>
+						<a ng-click="saveRole()" class="btn btn-lg red"> <span
+							class="fa fa-save"></span>Submit
+						</a>
+					</p>
+
+				</form>
+			</div>
+		</div>
+		<div class="{{'tab-pane ' + navActivatorRDAT}}" id="role-detail-add"
+			role="tabpanel" aria-labelledby="role-detail-add">
+			<form style="width : 1000px;">
+				<div style="width: 100%;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="width: 25%;">Fungsional Role Detail</th>
+								<th style="width: 30%;">Nama Role Detail</th>
+								<th style="width: 30%;">Role Needed</th>
+								<th style="width: 15%;">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="res in sizeModelDetail track by $index">
+								<td><input type="text" ng-model="res.roleDtlFunc"
+									class="form-control" ng-init="res.roleDtlFunc='AUTHWS'"
+									ng-change="onParameter(res.blacklistFlag, $index)"
+									disabled="disabled" /></td>
+								<td><input type="text" ng-model="res.roleDtlName"
+									class="form-control" name="roleDtlName"
+									ng-change="onDescription(res.blacklistFlagDesc, $index)" /></td>
+								<td>
+								    <select class="form-control" ng-options="res.roleName for res in roleList"
+								    ng-model="res.roleId">
+								     <option value="" disabled selected>-- Select Role --</option>
+								    </select>
+								</td>
+								<td>
+									<button ng-click="addModelDetail()">
+										<label class="fa fa-plus fa"></label>
+									</button>
+									<button ng-click="removeModelDetail($index)">
+										<label class="fa fa-minus fa"></label>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<p>
+					<a ng-click="saveRoleDtl()" class="btn btn-lg red"> <span
+						class="fa fa-save"></span>Submit
+					</a>
+				</p>
+
+			</form>
+		</div>
+	</div>
+</div>
+

@@ -43,6 +43,20 @@ public class RoleAndDetailMaintenanceCtl extends BaseController {
 		}
 	}
 	
+	@GetMapping("/role-transaction/select-all/no-condition")
+	public WsResponse retrieveAllRoleWithNoCondition(@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
+			@RequestHeader(name = "module", required = true) String module, Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf(registUuid(uuid),
+				registUuid(TblRoleDto.getDtoticketing()),
+				getAllAuthUser(authentication), module, authentication.getName());
+		if (responsePusherInvalidatorAccess(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			List<TblRoleDto> tblRoleDtos = roleAndDetailMaintenanceSvc.selectAllRole();
+			return  new WsResponse(tblRoleDtos, SUCCESS_RETRIEVE, authorizationClassConf);
+		}
+	}
+	
 	@PostMapping("/role-transaction/save")
 	public WsResponse saveRole(@RequestBody TblRoleDto tblRoleDto,
 			@RequestHeader(name = "uuid-connector-body", required = true) String uuid1,
@@ -78,6 +92,28 @@ public class RoleAndDetailMaintenanceCtl extends BaseController {
 		} else {
 			TransactionCUDDto customDto = new TransactionCUDDto();
 			int result = roleAndDetailMaintenanceSvc.CrudDetailRoleSave(tblRoleDtlDto, authentication.getName());
+			if (result == REPOSITORY_TRANSACTION_SUCCESS) {
+				customDto.setSaveResult(result);
+				return new WsResponse(customDto, "Save Success", authorizationClassConf);
+			} else {
+				return new WsResponse(null, "Save Insuccess", authorizationClassConf);
+			}
+		}
+	}
+	
+	@PostMapping("/role-detail-transaction/save-all")
+	public WsResponse saveRoleDetailAll(@RequestBody List<TblRoleDtlDto> tblRoleDtlDtos,
+			@RequestHeader(name = "uuid-connector-body", required = true) String uuid1,
+			@RequestHeader(name = "uuid-connector-response", required = true) String uuid2,
+			@RequestHeader(name = "module", required = true) String module, Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf(registUuid(uuid1, uuid2),
+				registUuid(TransactionCUDDto.getDtoticketing(), TblRoleDtlDto.getDtoticketing()),
+				getAllAuthUser(authentication), module, authentication.getName());
+		if (responsePusherInvalidatorAccess(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			TransactionCUDDto customDto = new TransactionCUDDto();
+			int result = roleAndDetailMaintenanceSvc.CrudDetailRolesSave(tblRoleDtlDtos,authentication.getName());
 			if (result == REPOSITORY_TRANSACTION_SUCCESS) {
 				customDto.setSaveResult(result);
 				return new WsResponse(customDto, "Save Success", authorizationClassConf);
