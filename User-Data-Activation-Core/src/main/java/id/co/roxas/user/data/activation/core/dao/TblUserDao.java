@@ -45,6 +45,8 @@ public interface TblUserDao extends JpaRepository<TblUser, String>{
     Page<TblUser> findAllWithFilterAndSearch(String isActive,String roleId,Date startDate, Date endDate,
     		String search,String ownUser,Pageable pageable);
     
+    
+    
     @Modifying
  	@Query("update TblUser set isActive =:isActive, "
  			+ " dateNonActive = "

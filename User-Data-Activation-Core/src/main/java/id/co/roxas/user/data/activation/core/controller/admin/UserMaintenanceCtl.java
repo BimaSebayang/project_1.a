@@ -36,7 +36,7 @@ public class UserMaintenanceCtl extends BaseController {
 	@Autowired
 	private UserMaintenanceSvc userMaintenanceSvc;
 
-	@GetMapping(value = "/user-transaction/select-all", params = {"isActive","roleId","startDate","endDate"})
+	@GetMapping(value = "/user-transaction/select-all")
 	public PageResponse retrieveAllRole(@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
 			@RequestHeader(name = "module", required = true) String module, 
 			@RequestParam(name = "isActive") String isActive,

@@ -35,12 +35,15 @@
 			<scope>test</scope>
 		</dependency>
 		
+		
+		
 	</dependencies>
 	
 	<modules>
         <module>../User-Data-Activation-Core</module>
         <module>../Common-Dto</module>
-        <module>../web-uda	</module>
+        <module>../web-uda</module>
+        <module>../languange-identifier-core</module>
     </modules>
 	
 

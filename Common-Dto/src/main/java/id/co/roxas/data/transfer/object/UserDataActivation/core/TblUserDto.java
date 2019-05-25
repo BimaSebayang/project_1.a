@@ -25,6 +25,15 @@ public class TblUserDto extends BaseDto implements Serializable {
 	private Date updatedDate;
 	private TblUserDto createdBy;
 	private TblUserDto updatedBy;
+	
+	public TblUserDto(String userId,String userName) {
+		this.userId = userId;
+		this.userName = userName;
+	}
+	
+	public TblUserDto() {
+	}
+	
 	public String getUserId() {
 		return userId;
 	}

@@ -70,8 +70,8 @@ public class TblRole {
 	@JoinColumn(name = "updated_by", nullable = true)
 	private TblUser updatedBy;
 	
-//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "roleId")
-//	List<TblUser> tblUsers;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "roleId")
+	List<TblUser> tblUsers;
 
 	public TblRole() {
 		// TODO Auto-generated constructor stub
@@ -159,6 +159,14 @@ public class TblRole {
 
 	public void setUpdatedBy(TblUser updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public List<TblUser> getTblUsers() {
+		return tblUsers;
+	}
+
+	public void setTblUsers(List<TblUser> tblUsers) {
+		this.tblUsers = tblUsers;
 	}
 	
 	
