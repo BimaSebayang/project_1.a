@@ -35,6 +35,9 @@ public class TblUsedLangRepository {
         )
 	private String langId;
 	
+	@Column(name = "isActive",length = 20)
+	private int isActive;
+	
 	@Column(name="lang_name", length=50, nullable=false)
 	private String langName;
 	
@@ -44,6 +47,12 @@ public class TblUsedLangRepository {
 	@Column(name="lang_resource", length=100, nullable=true)
 	private String langResource;
 	
+	@Column(name="count_alphabet", nullable=true)
+	private int countAlphabet;
+	
+	@Column(name="index_alphabet", length=100, nullable=true)
+	private String indexAlphabet;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
 	
@@ -51,10 +60,10 @@ public class TblUsedLangRepository {
 	private String createdBy;
 	
 	@Column(name = "tbl_name_resources",length = 100)
-	private String tblNameResources;
+	private String tblNameResources;   //nama table yang diambil dari database/table mana
 
 	@Column(name = "lang_id_resc", length = 100)
-	private String langIdResc;
+	private String langIdResc;  //id Data yang diambil dari database/table mana
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "usedLangId")
 	List<TblUsingCharacterDetail> tblUsingCharacterDetails;

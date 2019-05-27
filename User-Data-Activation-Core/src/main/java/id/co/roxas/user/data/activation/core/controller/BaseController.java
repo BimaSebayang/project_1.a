@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import id.co.roxas.data.transfer.object.UserDataActivation.config.AuthorizationClassConf;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 import id.co.roxas.user.data.activation.core.UltimateBase;
 
 public class BaseController extends UltimateBase {

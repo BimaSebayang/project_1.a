@@ -1,4 +1,4 @@
-package id.co.roxas.data.transfer.object.UserDataActivation.converter;
+package id.co.roxas.data.transfer.object.shared.converter;
 
 
 import java.text.DateFormat;

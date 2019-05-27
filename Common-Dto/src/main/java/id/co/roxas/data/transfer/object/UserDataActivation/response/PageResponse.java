@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import id.co.roxas.data.transfer.object.UserDataActivation.BaseDto;
-import id.co.roxas.data.transfer.object.UserDataActivation.config.AuthorizationClassConf;
+import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 
 public class PageResponse extends BaseDto implements Serializable{
 	private static final long serialVersionUID = -7189123300020116052L;

@@ -48,6 +48,8 @@ public class TblUsingCharacterDetail {
 	@Column(name = "created_by",length = 20)
 	private String createdBy;
 	
+	@Column(name = "isActive",length = 20)
+	private int isActive;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "comb_id",nullable=true,referencedColumnName = "comb_id")
@@ -55,7 +57,7 @@ public class TblUsingCharacterDetail {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "lang_id", nullable=true,referencedColumnName = "lang_id")
-	private TblLangRepository langId;
+	private TblLangRepositoryTemp langId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "used_lang_id", nullable=true,referencedColumnName = "lang_id")
@@ -109,11 +111,11 @@ public class TblUsingCharacterDetail {
 		this.createdBy = createdBy;
 	}
 
-	public TblLangRepository getLangId() {
+	public TblLangRepositoryTemp getLangId() {
 		return langId;
 	}
 
-	public void setLangId(TblLangRepository langId) {
+	public void setLangId(TblLangRepositoryTemp langId) {
 		this.langId = langId;
 	}
 

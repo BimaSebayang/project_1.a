@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import id.co.roxas.data.transfer.object.UserDataActivation.config.AuthorizationClassConf;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDtlDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
@@ -23,6 +22,7 @@ import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCus
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.TransactionCUDDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 import id.co.roxas.user.data.activation.core.controller.BaseController;
 import id.co.roxas.user.data.activation.core.service.admin.RoleAndDetailMaintenanceSvc;
 

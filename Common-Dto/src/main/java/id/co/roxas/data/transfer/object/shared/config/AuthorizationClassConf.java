@@ -1,4 +1,4 @@
-package id.co.roxas.data.transfer.object.UserDataActivation.config;
+package id.co.roxas.data.transfer.object.shared.config;
 
 public class AuthorizationClassConf {
     private String[] requestUuid;

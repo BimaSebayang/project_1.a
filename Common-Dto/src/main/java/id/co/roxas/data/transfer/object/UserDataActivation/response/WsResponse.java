@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import id.co.roxas.data.transfer.object.UserDataActivation.BaseDto;
-import id.co.roxas.data.transfer.object.UserDataActivation.config.AuthorizationClassConf;
+import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 
 public class WsResponse extends BaseDto implements Serializable {
 	private String wsContent;

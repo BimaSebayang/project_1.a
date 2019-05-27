@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
-import id.co.roxas.data.transfer.object.UserDataActivation.converter.DateConverter;
+import id.co.roxas.data.transfer.object.shared.converter.DateConverter;
 import id.co.roxas.user.data.activation.core.UltimateBase;
 
 @Component

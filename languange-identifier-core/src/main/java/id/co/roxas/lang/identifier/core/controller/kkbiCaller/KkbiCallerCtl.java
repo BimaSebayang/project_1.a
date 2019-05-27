@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.co.roxas.lang.identifier.core.dao.TblCombinationWordRepositoryDao;
-import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryDao;
+import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
 import id.co.roxas.lang.identifier.core.repository.TblCombinationWordRepository;
-import id.co.roxas.lang.identifier.core.repository.TblLangRepository;
+import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTemp;
 
 @RestController
 @RequestMapping("/lang-init")
 public class KkbiCallerCtl {
 
 	@Autowired
-	private TblLangRepositoryDao tblLangRepositoryDao;
+	private TblLangRepositoryTempDao tblLangRepositoryDao;
 
 	@Autowired
 	private TblCombinationWordRepositoryDao tblCombinationWordRepositoryDao;
@@ -31,26 +31,39 @@ public class KkbiCallerCtl {
 	@RequestMapping("/comb-word/{jumlahHuruf}")
 	public String helloCombWord(@PathVariable("jumlahHuruf") int jumlahHuruf) {
 		
-		List<String> arrs = tblCombinationWordRepositoryDao.getAllWords(jumlahHuruf-1);
-		List<TblCombinationWordRepository>combinationWordRepositories = new ArrayList<>();
-		//System.err.println(new Gson().toJson(arrs));
-		for (String huruf : buatHuruf(SemuaAbjad(), arrs, jumlahHuruf)) {
-			TblCombinationWordRepository repository = new TblCombinationWordRepository();
-			repository.setCombWord(huruf);
-			repository.setCountWord(huruf.toCharArray().length);
-			repository.setCreatedBy("ME");
-			repository.setCreatedDate(new Date());
-			combinationWordRepositories.add(repository);
-            tblCombinationWordRepositoryDao.save(repository);
-		}
+	//	List<String> arrs = tblCombinationWordRepositoryDao.getAllWords(jumlahHuruf-1);
 		
+		//System.err.println(new Gson().toJson(arrs));
+			List<TblCombinationWordRepository>combinationWordRepositories = new ArrayList<>();
+	
+				for (String huruf : buatHuruf(SemuaAbjad(),jumlahHuruf)) {			
+					TblCombinationWordRepository repository = new TblCombinationWordRepository();
+					repository.setCombWord(huruf);
+					repository.setCountWord(huruf.toCharArray().length);
+					repository.setCreatedBy("ME");
+					repository.setCreatedDate(new Date());
+					tblCombinationWordRepositoryDao.save(repository);
+					//combinationWordRepositories.add(repository);
+				}
+			
+			
+//			for (String huruf : buatHuruf(SemuaAbjad(), arrs, jumlahHuruf)) {
+//				TblCombinationWordRepository repository = new TblCombinationWordRepository();
+//				repository.setCombWord(huruf);
+//				repository.setCountWord(huruf.toCharArray().length);
+//				repository.setCreatedBy("ME");
+//				repository.setCreatedDate(new Date());
+//				combinationWordRepositories.add(repository);
+//				//combinationWordRepositories.add(repository);
+//			}
+			tblCombinationWordRepositoryDao.saveAll(combinationWordRepositories);
 		
 		return "DONE";
 	}
 
 	@RequestMapping("/call/{hurufMin}/{hurufMax}")
 	public String helloKkbi(@PathVariable("hurufMin") int hurufMin, @PathVariable("hurufMax") int hurufMax) {
-
+//-XX:PermSize=64 -XX:MaxPermSize=128m 
 		try {
 			for (int i = hurufMin; i <= hurufMax; i++) {
 				Connect(i);
@@ -82,7 +95,7 @@ public class KkbiCallerCtl {
 			}
 
 			if (sb.toString().toLowerCase().contains("</div><b>")) {
-				TblLangRepository langRepository = new TblLangRepository();
+				TblLangRepositoryTemp langRepository = new TblLangRepositoryTemp();
 				langRepository.setLangName(bh);
 				langRepository.setCreatedBy("ME");
 				langRepository.setCreatedDate(new Date());
@@ -127,11 +140,10 @@ public class KkbiCallerCtl {
 	}
 
 	public List<String> buatHuruf(List<String> arrays, int jumlahHuruf) {
-		jumlahHuruf = jumlahHuruf - 1;
-
 		List<String> lastArr = new ArrayList<>();
 		lastArr.addAll(arrays);
-		while (jumlahHuruf-- > 0) {
+		int count = 1;
+		while (count <= jumlahHuruf) {
 			List<String> newArr = new ArrayList<>();
 			for (String la : lastArr) {
 				for (String ar : arrays) {
@@ -140,8 +152,8 @@ public class KkbiCallerCtl {
 			}
 			lastArr.clear();
 			lastArr.addAll(newArr);
+			count++;
 		}
-
 		return lastArr;
 	}
 
@@ -163,5 +175,28 @@ public class KkbiCallerCtl {
 		lastArr.clear();
 		lastArr.addAll(newArr);
 		return lastArr;
+	}
+	
+	public List<String> buatHuruf(String arrays, List<String> lastArray) {
+
+		List<String> lastArr = new ArrayList<>();
+		lastArr.addAll(lastArray);
+		List<String> newArr = new ArrayList<>();
+			for (String la : lastArr) {
+					newArr.add(la.concat(arrays));
+			}
+		lastArr.clear();
+		lastArr.addAll(newArr);
+		return lastArr;
+	}
+	
+	public List<String> buatHuruf(List<String> arrays, String lastArray) {
+
+		
+		List<String> newArr = new ArrayList<>();
+			for (String la : arrays) {
+					newArr.add(lastArray.concat(la));
+			}
+		return newArr;
 	}
 }

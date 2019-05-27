@@ -22,7 +22,7 @@ import id.co.roxas.lang.identifier.core.config.StringPrefixedSequenceIdGenerator
 
 @Entity
 @Table(name="Tbl_Lang_Repository")
-public class TblLangRepository {
+public class TblLangRepositoryTemp {
 
 	@Id
 	@Column(name="lang_id", length=100, updatable=false)
