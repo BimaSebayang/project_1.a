@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ import id.co.roxas.user.data.activation.core.repository.TblUser;
 @RequestMapping("/database-init")
 public class InitializerDatabase {
 
-	@RequestMapping("/system-creator")
+	@GetMapping("/system-creator")
 	public String systemCreator() {
 	    DatabaseInitializer();
 		return "DONE";

@@ -11,10 +11,12 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -36,9 +38,13 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
  */
 
 //Please do not change access identifier,
+@Component
 public class UltimateBase {
 
-	protected static final String END_POINT_URL = "http://localhost:28080/uaa";
+	@Value("${gateway.port-title}")
+	protected static String gatewayPorttitle;
+
+   protected static final String END_POINT_URL = "http://localhost:58080/gateway/uaa";
 	protected static final String LOGIN_URL = "/web-uda/login";
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	protected static final String ENDPOINT_URL = "/web-uda/";
@@ -46,7 +52,7 @@ public class UltimateBase {
 	private static final String USER_UDA = "my-trusted-client";
 	private static final String PASSWORD_UDA = "secret";
 	private static final String SIZE_PAGE = "15";
-	
+
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
 
 	protected String getToken(HttpServletRequest request) {
@@ -76,14 +82,12 @@ public class UltimateBase {
 
 	protected ParamQueryCustomLib[] retrieveAllPagingNeeded(ParamQueryCustomLib... paramQueryCustomLibs) {
 		for (ParamQueryCustomLib paramQueryCustomLib : paramQueryCustomLibs) {
-          this.paramQueryCustomLibs.add(paramQueryCustomLib);
+			this.paramQueryCustomLibs.add(paramQueryCustomLib);
 		}
-		return   this.paramQueryCustomLibs.toArray
-				 (new ParamQueryCustomLib[this.paramQueryCustomLibs.size()]);
+		return this.paramQueryCustomLibs.toArray(new ParamQueryCustomLib[this.paramQueryCustomLibs.size()]);
 	}
-	
-	protected void paramPaging(String page, String size, String search,
-			String defaultSort,String... sort) {
+
+	protected void paramPaging(String page, String size, String search, String defaultSort, String... sort) {
 		this.paramQueryCustomLibs = new ArrayList<>();
 		if (Strings.isBlank(page)) {
 			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("page", "0"));
@@ -94,9 +98,9 @@ public class UltimateBase {
 		if (Strings.isBlank(search)) {
 			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("search", ""));
 		} else {
-			this.paramQueryCustomLibs.add( new ParamQueryCustomLib("search", search));
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("search", search));
 		}
-		
+
 		if (sort.length == 0) {
 			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("sort", defaultSort));
 		}
@@ -220,8 +224,8 @@ public class UltimateBase {
 				}
 			}
 		}
-        System.err.println("body : " + new Gson().toJson(body));
-        System.err.println("header : " + new Gson().toJson(header));
+		System.err.println("body : " + new Gson().toJson(body));
+		System.err.println("header : " + new Gson().toJson(header));
 		HttpEntity httpEntity = new HttpEntity(body, header);
 		RestTemplate restTemplate = new RestTemplate();
 		System.err.println("url yang diberikan : " + url.concat(paramBuilder.toString()));

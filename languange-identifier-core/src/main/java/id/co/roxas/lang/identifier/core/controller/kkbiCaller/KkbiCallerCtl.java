@@ -5,18 +5,31 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.KbbiMapperDto;
 import id.co.roxas.lang.identifier.core.dao.TblCombinationWordRepositoryDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
+import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
 import id.co.roxas.lang.identifier.core.repository.TblCombinationWordRepository;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTemp;
+import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/lang-init")
@@ -28,25 +41,196 @@ public class KkbiCallerCtl {
 	@Autowired
 	private TblCombinationWordRepositoryDao tblCombinationWordRepositoryDao;
 
-	@RequestMapping("/comb-word/{jumlahHuruf}")
-	public String helloCombWord(@PathVariable("jumlahHuruf") int jumlahHuruf) {
-		
-	//	List<String> arrs = tblCombinationWordRepositoryDao.getAllWords(jumlahHuruf-1);
-		
-		//System.err.println(new Gson().toJson(arrs));
-			List<TblCombinationWordRepository>combinationWordRepositories = new ArrayList<>();
+	@Autowired
+	private TblLangRepositoryTempDao tblLangRepositoryTempDao;
 	
-				for (String huruf : buatHuruf(SemuaAbjad(),jumlahHuruf)) {			
-					TblCombinationWordRepository repository = new TblCombinationWordRepository();
-					repository.setCombWord(huruf);
-					repository.setCountWord(huruf.toCharArray().length);
-					repository.setCreatedBy("ME");
-					repository.setCreatedDate(new Date());
-					tblCombinationWordRepositoryDao.save(repository);
-					//combinationWordRepositories.add(repository);
+	@Autowired
+	private TblLangRepositoryTempDtlDao tblLangRepositoryTempDtlDao;
+
+	@GetMapping("/word-letter/{word}")
+	private List<List<String>> getWord(@PathVariable("word") String huruf) {
+		List<List<String>> hs = new ArrayList<>();
+		List<TblLangRepositoryTemp> list = tblLangRepositoryTempDao.getTempDataInfo(huruf);
+		for (TblLangRepositoryTemp tblLangRepositoryTemp : list) {
+			String[] pol = tblLangRepositoryTemp.getLangDesc().split("&lt;b&gt");
+			// split("&lt;/b&gt; &lt;i&gt");
+			// hs.add(Arrays.asList(pol));
+			hs.add(replaceSomeWord(pol));
+		}
+		return hs;
+	}
+	
+	@GetMapping("/map-word-letter/{word}")
+	private List<KbbiMapperDto> getWordKbbiMapper(@PathVariable("word") String huruf) {
+		List<KbbiMapperDto> hs = new ArrayList<>();
+		List<TblLangRepositoryTemp> list = tblLangRepositoryTempDao.getTempDataInfo(huruf);
+		for (TblLangRepositoryTemp tblLangRepositoryTemp : list) {
+			String[] pol = tblLangRepositoryTemp.getLangDesc().split("&lt;b&gt");
+			//KbbiMapperDto kbbiMapperDto= mapKbbi(replaceSomeWord(pol));
+			hs.addAll(mapKbbi(replaceSomeWord(pol)));
+		}
+		return hs;
+	}
+	
+	@GetMapping("/word-letter/save")
+	private String onProgressSave(Pageable pageable) {
+		//Page<TblLangRepositoryTemp> page = tblLangRepositoryTempDao.getAllTempPage(pageable);
+		//List<TblLangRepositoryTemp> page = tblLangRepositoryTempDao.findAll();
+		List<TblLangRepositoryTemp> page = tblLangRepositoryTempDao.getAllTempPage();
+		List<TblLangRepositoryTempDtl> dtls = new ArrayList<>();
+		for (TblLangRepositoryTemp tblLangRepositoryTemp : page) {
+			 String[] pol = tblLangRepositoryTemp.getLangDesc().split("&lt;b&gt");
+		     List<KbbiMapperDto> dtos = mapKbbi(replaceSomeWord(pol));
+		     for (KbbiMapperDto tblLangRepositoryTempDtl : dtos) {
+		    	 TblLangRepositoryTempDtl dtl = new TblLangRepositoryTempDtl();
+		    	 dtl.setCreatedBy("ME");
+		    	 dtl.setCreatedDate(new Date());
+		    	 String h = new String();
+                 for (Entry<String, String> lang: 
+                	                    tblLangRepositoryTempDtl.getExampleDetailHeadLabel().entrySet()) {
+					h = h.concat(lang.getKey().concat(" "));
+				 }
+                 dtl.setLangDesc(h);
+                 dtl.setLangName(tblLangRepositoryTempDtl.getHeadLabel());
+                // dtl.setLangIdDtl("TEST");
+                 dtl.setLangResource("TBL_LANG_REPOSITORY_TEMP");
+                 dtl.setRoleDetail("MEANING");
+                 dtl.setTblId(tblLangRepositoryTemp);
+                 System.err.println("akan save kal " + tblLangRepositoryTemp.getLangName());
+                 tblLangRepositoryTempDtlDao.save(dtl);
+                 //dtls.add(dtl);
+			 }
+		}
+		//tblLangRepositoryTempDtlDao.saveAll(dtls);
+		return "DONE";
+	}
+	
+    private String setValidWord = "";
+	private List<KbbiMapperDto> mapKbbi(List<String> word) {
+		List<KbbiMapperDto> kbbiMapperDtos = new ArrayList<>();
+		
+		int i = 0;
+		KbbiMapperDto kbbiMapperDto = new KbbiMapperDto();
+		Map<String, String> exampleDetailHeadLabel = new HashMap<>();
+		for (String w : word) {
+			
+			if(w.contains("/*head-label*/") )
+			{
+				
+				String repw = changeChar(w, new String[] {"/*head-label*/"}, new String[] {"@"});
+				String[] hj = repw.split("@");
+				System.out.println(hj[0]);		
+				kbbiMapperDto = new KbbiMapperDto();
+				kbbiMapperDto.setActualRegex(w);
+				exampleDetailHeadLabel = new HashMap<>();
+				String temp = removalChar(hj[0], 
+						new String[] {"1","2","3","4","5","6","7","8","9","0",";"}).trim();
+				
+				if(hj.length>1) {
+					if(!hj[1].contains("/*example-label*/")&&!hj[1].contains("/*end-label*/")) {
+						exampleDetailHeadLabel.put(removalChar(hj[1],new String[] {"/*end-label*/"}),null);
+					}
+					else {
+						String repws = changeChar(hj[1], new String[] {"/*example-label*/"}, new String[] {"@"});
+						String[] sjh = repws.split("@");
+						if(sjh.length>1) {
+						exampleDetailHeadLabel.put(removalChar(sjh[0],new String[] {"/*end-label*/"}), 
+								removalChar(sjh[1],new String[] {"/*end-label*/"}));
+						}
+						else {
+							exampleDetailHeadLabel.put(removalChar(sjh[0],new String[] {"/*end-label*/"}),null);	
+						}
+					}
+					kbbiMapperDto.setExampleDetailHeadLabel(exampleDetailHeadLabel);
 				}
+				
+				if(!Strings.isBlank(temp)) {
+					setValidWord = temp;
+				}
+				String wannaDtl =  setValidWord;
+				kbbiMapperDto.setHeadLabel(wannaDtl);
+			}
+			else {
+				String repws = changeChar(w, new String[] {"/*example-label*/"}, new String[] {"@"});
+				String[] hjs = repws.split("@");
+				if(hjs.length>1) {
+				exampleDetailHeadLabel.put(hjs[0], hjs[1]);
+				}
+				else {
+					exampleDetailHeadLabel.put(hjs[0],null);	
+				}
+				kbbiMapperDto.setExampleDetailHeadLabel(exampleDetailHeadLabel);
+			}
 			
+			if(i<word.size()-1) {
+				if(word.get(i+1).contains("/*head-label*/") && kbbiMapperDto.getHeadLabel()!=null) {
+					kbbiMapperDtos.add(kbbiMapperDto);
+				}
+			}else {
+				if(i==word.size()-1 && kbbiMapperDto.getActualRegex().contains("/*head-label*/")) {
+					kbbiMapperDtos.add(kbbiMapperDto);
+				}
+			}
 			
+			i++;
+		}
+		
+		return kbbiMapperDtos;
+	}
+
+
+	private List<String> replaceSomeWord(String[] old) {
+		List<String> newword = new ArrayList<>();
+		List<String> oldList = Arrays.asList(old);
+		for (String ol : oldList) {
+			String changCh = changeChar(ol, new String[] { "&lt;/b&gt; &lt;i&gt;","&lt;i&gt;","&lt;br&gt;" },
+					                        new String[] {" /*head-label*/ "," /*example-label*/ ",
+					                        		      " /*end-label*/ "});
+			newword.add(removalChar(changCh, new String[] { "&lt;/b&gt;", "&lt;/i&gt;","·",
+					                                        "&lt;sup&gt;","&lt;/sup&gt" }));
+		}
+		return newword;
+	}
+
+	private String changeChar(String words, String[] chs, String[] changes) {
+		if (chs.length == changes.length) {
+			for (int i = 0; i<chs.length; i++) {
+				//System.err.println("replace " + words + " regex " + ch + " dengan _/partition/_ ");
+				words = words.replace(chs[i], changes[i]);
+			}
+
+		}
+		return words;
+	}
+
+	private String removalChar(String words, String[] chs) {
+		for (String ch : chs) {
+			//System.err.println("replace " + words + " regex " + ch + " dengan nullspace ");
+			words = words.replace(ch, "");
+		}
+
+		return words;
+	}
+
+	@GetMapping("/comb-word/{jumlahHuruf}")
+	public String helloCombWord(@PathVariable("jumlahHuruf") int jumlahHuruf) {
+
+		// List<String> arrs =
+		// tblCombinationWordRepositoryDao.getAllWords(jumlahHuruf-1);
+
+		// System.err.println(new Gson().toJson(arrs));
+		List<TblCombinationWordRepository> combinationWordRepositories = new ArrayList<>();
+
+		for (String huruf : buatHuruf(SemuaAbjad(), jumlahHuruf)) {
+			TblCombinationWordRepository repository = new TblCombinationWordRepository();
+			repository.setCombWord(huruf);
+			repository.setCountWord(huruf.toCharArray().length);
+			repository.setCreatedBy("ME");
+			repository.setCreatedDate(new Date());
+			tblCombinationWordRepositoryDao.save(repository);
+			// combinationWordRepositories.add(repository);
+		}
+
 //			for (String huruf : buatHuruf(SemuaAbjad(), arrs, jumlahHuruf)) {
 //				TblCombinationWordRepository repository = new TblCombinationWordRepository();
 //				repository.setCombWord(huruf);
@@ -56,12 +240,12 @@ public class KkbiCallerCtl {
 //				combinationWordRepositories.add(repository);
 //				//combinationWordRepositories.add(repository);
 //			}
-			tblCombinationWordRepositoryDao.saveAll(combinationWordRepositories);
-		
+		tblCombinationWordRepositoryDao.saveAll(combinationWordRepositories);
+
 		return "DONE";
 	}
 
-	@RequestMapping("/call/{hurufMin}/{hurufMax}")
+	@GetMapping("/call/{hurufMin}/{hurufMax}")
 	public String helloKkbi(@PathVariable("hurufMin") int hurufMin, @PathVariable("hurufMax") int hurufMax) {
 //-XX:PermSize=64 -XX:MaxPermSize=128m 
 		try {
@@ -168,35 +352,33 @@ public class KkbiCallerCtl {
 					newArr.add(la.concat(ar));
 				}
 			}
-		}
-		else {
+		} else {
 			return arrays;
 		}
 		lastArr.clear();
 		lastArr.addAll(newArr);
 		return lastArr;
 	}
-	
+
 	public List<String> buatHuruf(String arrays, List<String> lastArray) {
 
 		List<String> lastArr = new ArrayList<>();
 		lastArr.addAll(lastArray);
 		List<String> newArr = new ArrayList<>();
-			for (String la : lastArr) {
-					newArr.add(la.concat(arrays));
-			}
+		for (String la : lastArr) {
+			newArr.add(la.concat(arrays));
+		}
 		lastArr.clear();
 		lastArr.addAll(newArr);
 		return lastArr;
 	}
-	
+
 	public List<String> buatHuruf(List<String> arrays, String lastArray) {
 
-		
 		List<String> newArr = new ArrayList<>();
-			for (String la : arrays) {
-					newArr.add(lastArray.concat(la));
-			}
+		for (String la : arrays) {
+			newArr.add(lastArray.concat(la));
+		}
 		return newArr;
 	}
 }

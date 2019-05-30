@@ -23,7 +23,7 @@ public class UltimateBase {
 	protected static final String INSUCCESS_SAVE = "Save Insuccess";
 	protected static final String SUCCESS_UPDATE = "Update Success";
 	protected static final String INSUCCESS_UPDATE = "Update Insuccess";
-	protected static final String SUCCESS_DELETE = "Delete Insuccess";
+	protected static final String SUCCESS_DELETE = "Delete success";
 	protected static final String INSUCCESS_DELETE = "Delete Insuccess";
 	protected MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
 	protected final MapperPageClass mapperPageClass = new MapperPageClass();

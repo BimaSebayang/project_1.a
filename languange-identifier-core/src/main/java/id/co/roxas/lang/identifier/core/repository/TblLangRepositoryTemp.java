@@ -21,7 +21,7 @@ import org.hibernate.annotations.Parameter;
 import id.co.roxas.lang.identifier.core.config.StringPrefixedSequenceIdGenerator;
 
 @Entity
-@Table(name="Tbl_Lang_Repository")
+@Table(name="Tbl_Lang_Repository_Temp")
 public class TblLangRepositoryTemp {
 
 	@Id
