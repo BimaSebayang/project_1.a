@@ -2,6 +2,7 @@ package id.co.roxas.app.web.uda;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -44,7 +47,8 @@ public class UltimateBase {
 	@Value("${gateway.port-title}")
 	protected static String gatewayPorttitle;
 
-   protected static final String END_POINT_URL = "http://localhost:58080/gateway/uaa";
+//   protected static final String END_POINT_URL = "http://localhost:58080/gateway/uaa";
+	protected static final String END_POINT_URL = "http://localhost:28080/uaa";
 	protected static final String LOGIN_URL = "/web-uda/login";
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	protected static final String ENDPOINT_URL = "/web-uda/";
@@ -207,9 +211,12 @@ public class UltimateBase {
 	private HttpRestResponse wsBody(String url, Object body, HttpMethod method, Map<String, String> headerMap,
 			ParamQueryCustomLib... paramQuery) {
 		MultiValueMap<String, Object> header = new LinkedMultiValueMap<>();
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	    
 		if (headerMap != null) {
 			for (Entry<String, String> hm : headerMap.entrySet()) {
-				header.add(hm.getKey(), hm.getValue());
+				headers.add(hm.getKey(), hm.getValue());
 			}
 		}
 		StringBuilder paramBuilder = new StringBuilder();
@@ -225,14 +232,16 @@ public class UltimateBase {
 			}
 		}
 		System.err.println("body : " + new Gson().toJson(body));
-		System.err.println("header : " + new Gson().toJson(header));
-		HttpEntity httpEntity = new HttpEntity(body, header);
+		System.err.println("header : " + new Gson().toJson(headers));
+		
+		HttpEntity httpEntity = new HttpEntity(body, headers);
 		RestTemplate restTemplate = new RestTemplate();
 		System.err.println("url yang diberikan : " + url.concat(paramBuilder.toString()));
 
 		String resultApi = new String();
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(url.concat(paramBuilder.toString()), method,
+			ResponseEntity<String> responseEntity = restTemplate.
+					exchange(url.concat(paramBuilder.toString()), method,
 					httpEntity, String.class);
 			System.err.println("status : " + responseEntity.getStatusCode());
 			System.err.println("result api : " + responseEntity.getBody());

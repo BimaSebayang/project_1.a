@@ -1,4 +1,4 @@
-package id.co.roxas.centered.web;
+package id.co.roxas.gateway;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CenterWebApplicationTests {
+public class WebGatewayApplicationTests {
 
 	@Test
 	public void contextLoads() {

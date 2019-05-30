@@ -5,6 +5,7 @@ var loginApp = angular.module('loginApp', []).config(['$httpProvider', function 
 loginApp.controller('RequestLogin', function ($scope, $http, $rootScope, $location, $window) {
   
     $scope.login = function () {
+    	debugger;
         var endpoint = location.protocol + '//' + location.host;
         var url = endpoint + "/web-rest-uda/request-login";
         var config = {
@@ -17,6 +18,7 @@ loginApp.controller('RequestLogin', function ($scope, $http, $rootScope, $locati
             password: $scope.password
         }
         $http.post(url, body, config).then(function (response) {
+        	debugger;
             $window.location.href = response.data;
         }, function error(response) {
             $scope.postResultMessage = "Error with status: " + response.statusText;

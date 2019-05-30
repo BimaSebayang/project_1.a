@@ -45,6 +45,7 @@
         <module>../web-uda</module>
         <module>../languange-identifier-core</module>
         <module>../web-service-gateway</module>
+        <module>../web-gateway</module>
     </modules>
 	
 
