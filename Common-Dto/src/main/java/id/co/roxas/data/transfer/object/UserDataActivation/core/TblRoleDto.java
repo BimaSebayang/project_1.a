@@ -23,7 +23,9 @@ public class TblRoleDto implements Serializable{
 	
 	private Date updatedDate;
 	
-	List<TblRoleDtlDto> tblRoleDtls;
+	private List<TblRoleDtlDto> tblRoleDtls;
+	
+	private List<TblUserDto> tblUserDtos;
 	
 	private TblUserDto createdBy;
 	
@@ -117,6 +119,22 @@ public class TblRoleDto implements Serializable{
 
 	public static String getDtoticketing() {
 		return dtoTicketing;
+	}
+
+	public List<TblRoleDtlDto> getTblRoleDtls() {
+		return tblRoleDtls;
+	}
+
+	public void setTblRoleDtls(List<TblRoleDtlDto> tblRoleDtls) {
+		this.tblRoleDtls = tblRoleDtls;
+	}
+
+	public List<TblUserDto> getTblUserDtos() {
+		return tblUserDtos;
+	}
+
+	public void setTblUserDtos(List<TblUserDto> tblUserDtos) {
+		this.tblUserDtos = tblUserDtos;
 	}
 	
 	

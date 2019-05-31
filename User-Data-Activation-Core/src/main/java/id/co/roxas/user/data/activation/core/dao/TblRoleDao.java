@@ -31,13 +31,15 @@ public interface TblRoleDao extends JpaRepository<TblRole,String>{
 			+ "  or "
 			+ "  cast(a.isActive as text) like ?1 ) "
 			+ "  and  "
+			+ "  a != (select a.roleId from TblUser a where a.userId = ?6)"
+			+ "  and "
 			+ "  ( a.createdDate between ?2 and ?3 ) "
 			+ "  and "
 			+ "  ( ?4 in (select e.roleDtlName from TblRoleDtl e where e.roleId = a)  or ?4 ='' ) "
 			+ "  and "
 			+ "  ( ?5 = '' or cast(a.isActive as text) = ?5 ) ")
 	public Page<TblRole> findAllRoleWithCondition(String search,Date startDate, Date endDate, 
-			String roleDtlId, String isActive, Pageable pageable);
+			String roleDtlId, String isActive, String names,Pageable pageable);
 	
 	@Modifying
 	@Query("update TblRole set isActive =:isActive, "

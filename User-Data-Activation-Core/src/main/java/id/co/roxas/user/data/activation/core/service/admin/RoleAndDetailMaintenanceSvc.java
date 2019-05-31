@@ -35,7 +35,7 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 	private TblRoleDtlDao tblRoleDtlDao;
 
 	public PageRequestCustom<TblRoleDto> getAllRole(String isActive, String roleDtlId, String startDate, String endDate,
-			String search, Pageable pageable) {
+			String search, String names,Pageable pageable) {
 
 		if (Strings.isBlank(isActive)) {
 			System.err.println("is active null");
@@ -58,11 +58,11 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 		}
 
 		getStartDateEndDate(startDate, endDate, "ddMMyyyy");
-		Page<TblRole> page = tblRoleDao.findAllRoleWithCondition(staplingWords(search, "%"), startDat, endDat, roleDtlId, isActive,
-				pageable);
+		Page<TblRole> page = tblRoleDao.findAllRoleWithCondition(staplingWords(search, "%"), startDat, endDat,
+				roleDtlId, isActive,names, pageable);
 
-		Page<TblRole> filter = tblRoleDao.findAllRoleWithCondition(staplingWords(search, "%"), startDat, endDat, roleDtlId, isActive,
-				PageRequest.of(0, Integer.MAX_VALUE));
+		Page<TblRole> filter = tblRoleDao.findAllRoleWithCondition(staplingWords(search, "%"), startDat, endDat,
+				roleDtlId, isActive,names, PageRequest.of(0, Integer.MAX_VALUE));
 
 		List<Map<String, String>> flagActivator = new ArrayList<>();
 		List<Map<String, String>> tblRoleDtlDtos = new ArrayList<>();
@@ -79,10 +79,10 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 			flagActivator.add(activator);
 			for (TblRoleDtl tbl : filt.getTblRoleDtls()) {
 				Map<String, String> role = new HashMap<>();
-					role.put("roleName",tbl.getRoleDtlName());
-					tblRoleDtlDtos.add(role);
+				role.put("roleName", tbl.getRoleDtlName());
+				tblRoleDtlDtos.add(role);
 			}
-			
+
 		}
 
 		Map<String, Object> filtering = new HashMap<>();
@@ -95,17 +95,34 @@ public class RoleAndDetailMaintenanceSvc extends BaseService {
 			TblRoleDto tblRoleDto = new TblRoleDto();
 			tblRoleDto = mapperFacade.map(tblRole, TblRoleDto.class);
 			List<TblRoleDtlDto> detail = new ArrayList<>();
-			for (TblRoleDtl dtldto : tblRole.getTblRoleDtls()) {
-				TblRoleDtlDto roleDtlDto = new TblRoleDtlDto();
-				roleDtlDto.setRoleDtlId(dtldto.getRoleDtlId());
-				roleDtlDto.setRoleDtlName(dtldto.getRoleDtlName());
-				roleDtlDto.setRoleDtlFunc(dtldto.getRoleDtlFunc());
-				detail.add(roleDtlDto);
+			List<TblUserDto> userDtos = new ArrayList<>();
+			if (tblRole.getTblRoleDtls() != null) {
+				System.out.println("banyaknya detail " + tblRole.getTblRoleDtls().size());
+				for (TblRoleDtl dtldto : tblRole.getTblRoleDtls()) {
+					TblRoleDtlDto roleDtlDto = new TblRoleDtlDto();
+					roleDtlDto.setRoleDtlId(dtldto.getRoleDtlId());
+					roleDtlDto.setRoleDtlName(dtldto.getRoleDtlName());
+					roleDtlDto.setRoleDtlFunc(dtldto.getRoleDtlFunc());
+					detail.add(roleDtlDto);
+				}
 			}
+			
+			if (tblRole.getTblUsers() != null) {
+				System.out.println("banyaknya detail user" + tblRole.getTblUsers().size());
+				for (TblUser dtldto : tblRole.getTblUsers()) {
+					TblUserDto userDto = new TblUserDto();
+					userDto.setUserName(dtldto.getUserName());
+					userDtos.add(userDto);
+				}
+			}
+
+			tblRoleDto.setTblUserDtos(userDtos);
 			tblRoleDto.setTblRoleDtlDtos(detail);
-			if(tblRole.getCreatedBy()!=null) {
-			tblRoleDto.setCreatedBy(new TblUserDto(tblRole.getCreatedBy().getUserId(), tblRole.getCreatedBy().getUserName()));
-			tblRoleDto.setUpdatedBy(new TblUserDto(tblRole.getCreatedBy().getUserId(), tblRole.getCreatedBy().getUserName()));	
+			if (tblRole.getCreatedBy() != null) {
+				tblRoleDto.setCreatedBy(
+						new TblUserDto(tblRole.getCreatedBy().getUserId(), tblRole.getCreatedBy().getUserName()));
+				tblRoleDto.setUpdatedBy(
+						new TblUserDto(tblRole.getCreatedBy().getUserId(), tblRole.getCreatedBy().getUserName()));
 			}
 			tblRoleDtos.add(tblRoleDto);
 		}

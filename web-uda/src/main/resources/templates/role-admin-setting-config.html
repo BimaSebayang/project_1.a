@@ -7,8 +7,6 @@
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
-<link rel="stylesheet" href="/css/custom-form.css">
-<script src="/js/master/form-validator-add.js"></script>
 <div class="container" ng-controller="role-admin-setting-config">
 
 	<div class="d-flex">
@@ -60,6 +58,55 @@
 								<th>Action</th>
 							</thead>
 							<tbody>
+								<tr ng-repeat="role in roleList">
+									<td>{{$index + from + 1}}</td>
+									<td>{{role.roleName}}</td>
+									<td>{{role.createdDate | date : 'dd/MM/yyyy HH:mm:ss '}}</td>
+									<td>{{role.createdBy.userName}}</td>
+									<td>{{convertActivation(role.isActive)}}</td>
+									<td align="center"><button type="button" class="btn btn-flat btn-small"
+											style="background: #ebce75;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-eye"> </i>
+										</button></td>
+									<td align="center"><button type="button" class="btn btn-flat btn-small"
+											style="background: #ebce75;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-eye"> </i>
+										</button></td>
+									<td style="width: 100px;" align="center">
+
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #79f83a;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-download"> </i>
+										</button>
+
+									</td>
+									<td style="width: 170px;" align="center">
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #f8cc3a;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-edit"> </i>
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #dc5656;" data-toggle="modal"
+											data-target="#active" ng-if="!isActiveButton(role.isActive)"
+											ng-click="buttonActivation(user,1,user.isActive)">
+											<i class="fas fa-lock"> </i>
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #3a86f8;" data-toggle="modal"
+											ng-if="!isInActiveButton(role.isActive)"
+											ng-click="buttonActivation(user,0,user.isActive)"
+											data-target="#disactive">
+											<i class="fas fa-unlock"> </i>
+										</button>
+									</td>
+								</tr>
+								<tr ng-if="isEmpty">
+									<td colspan="9"><center>Data Tidak Ditemukan</center></td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -71,9 +118,9 @@
 		</div>
 		<div class="{{'tab-pane ' + navActivatorRDAT}}" id="role-detail-add"
 			role="tabpanel" aria-labelledby="role-detail-add">
-		
-		
-		<div class="row">
+
+
+			<div class="row">
 				<div class="col-md-24">
 					<div class="table-responsive">
 						<table id="mytable" class="table table-bordred table-striped"
@@ -94,7 +141,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </div>

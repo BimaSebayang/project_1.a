@@ -1,5 +1,6 @@
 package id.co.roxas.user.data.activation.core.controller.admin;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class RoleAndDetailMaintenanceCtl extends BaseController {
 			return getPageInvalid();
 		} else {
 			PageRequestCustom<TblRoleDto> page = roleAndDetailMaintenanceSvc.getAllRole(isActive, roleDtlId, startDate,
-					endDate, search, pageable);
+					endDate, search, authentication.getName(),pageable);
 			return new PageResponse(page.getListResponse(), SUCCESS_RETRIEVE, page.getPageNumbers(), page.getPageSize(),
 					page.getTotalPages(), page.getTotalElements(), page.getSortBy(), authorizationClassConf,
 					page.getFiltering());

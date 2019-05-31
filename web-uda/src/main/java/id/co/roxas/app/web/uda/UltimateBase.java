@@ -43,22 +43,21 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 //Please do not change access identifier,
 @Component
 public class UltimateBase {
-
-	@Value("${gateway.port-title}")
-	protected static String gatewayPorttitle;
-
-//   protected static final String END_POINT_URL = "http://localhost:58080/gateway/uaa";
-	protected static final String END_POINT_URL = "http://localhost:28080/uaa";
-	protected static final String LOGIN_URL = "/web-uda/login";
+	@Value("${roxas.gateway.port-title.uaa}")
+	protected String END_POINT_URL;
+	@Value("${roxas.user-uda}")
+	protected String USER_UDA;
+	@Value("${roxas.password-uda}")
+	protected String PASSWORD_UDA;
+	@Value("${roxas.size-page}")
+	protected String SIZE_PAGE;
+	@Value("${roxas.grant-type}")
+	protected String PASSWORD;
+	@Value("${roxas.login-url}")
+	protected String LOGIN_URL;
+	
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
-	protected static final String ENDPOINT_URL = "/web-uda/";
-	private static final String PASSWORD = "password";
-	private static final String USER_UDA = "my-trusted-client";
-	private static final String PASSWORD_UDA = "secret";
-	private static final String SIZE_PAGE = "15";
-
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
-
 	protected String getToken(HttpServletRequest request) {
 		String token = (String) request.getSession().getAttribute("token");
 		System.err.println("current token : " + token);

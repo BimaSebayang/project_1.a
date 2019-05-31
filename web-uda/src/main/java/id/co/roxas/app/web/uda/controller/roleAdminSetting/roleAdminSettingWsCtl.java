@@ -1,5 +1,6 @@
 package id.co.roxas.app.web.uda.controller.roleAdminSetting;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,16 @@ import com.google.gson.Gson;
 
 import id.co.roxas.app.web.uda.config.HttpSecurityService;
 import id.co.roxas.app.web.uda.controller.BaseRestWebController;
+import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDtlDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.TransactionCUDDto;
+import id.co.roxas.data.transfer.object.UserDataActivation.model.PageClassResponse;
+import id.co.roxas.data.transfer.object.UserDataActivation.model.PageRevolver;
+import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.converter.DateConverter;
 
 @RestController
 public class roleAdminSettingWsCtl extends BaseRestWebController{
@@ -54,6 +60,36 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 			e.printStackTrace();
 		}
 		return tblRoleDtos;
+	}
+	
+	@PostMapping("/select-all/role-admin-setting")
+	public PageClassResponse<TblRoleDto> selectAllRole(@RequestBody PageRevolver pageRevolver, HttpServletRequest httpServletRequest) throws ParseException{
+		PageClassResponse<TblRoleDto> pageRequestCustom = new PageClassResponse<>();
+		List<TblRoleDto> tblRoleDtos = new ArrayList<>();
+		HttpSecurityService httpSecurityService = new HttpSecurityService(null, TblRoleDto.getDtoticketing(), "I001");
+		paramPaging(pageRevolver.getPage(), 
+						pageRevolver.getSize(), pageRevolver.getSearch(), 
+						"createdDate,desc", pageRevolver.getSort());
+		PageResponse pageResponse = pageResultsWithSecurityAccess
+				(END_POINT_URL + "/admin-ws/role-transaction/query-all", 
+						null, HttpMethod.GET, null, getToken(httpServletRequest), 
+						httpSecurityService, 
+						retrieveAllPagingNeeded
+						       ( new ParamQueryCustomLib("roleId", pageRevolver.getRoleId())
+						        ,new ParamQueryCustomLib("roleDtlId", pageRevolver.getRoleDtlId())
+								,new ParamQueryCustomLib("isActive", pageRevolver.getIsActive())
+								,new ParamQueryCustomLib("startDate",DateConverter.parseDateToString(pageRevolver.getStartDate(), "ddMMyyyy") )
+							    ,new ParamQueryCustomLib("endDate", DateConverter.parseDateToString(pageRevolver.getEndDate(), "ddMMyyyy") )));
+		try {
+			tblRoleDtos = mapperJsonToListDto(pageResponse.getWsContent(), TblRoleDto.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pageRequestCustom.setAllDatas(tblRoleDtos);
+		pageRequestCustom.setPage(pageResponse.getPageNumber());
+		pageRequestCustom.setTotalPage(pageResponse.getTotalPage());
+		pageRequestCustom.setFiltering(pageResponse.getFiltering());
+		return pageRequestCustom;
 	}
 	
 	@PostMapping("/save/detail/role-admin-setting")

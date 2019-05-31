@@ -12,6 +12,7 @@ public class PageRevolver {
      private String size;
      private String[] sort;
      private String search;
+     private String roleDtlId;
 	public String getRoleId() {
 		return roleId;
 	}
@@ -60,5 +61,11 @@ public class PageRevolver {
 	public void setSearch(String search) {
 		this.search = search;
 	}
-     
+	public String getRoleDtlId() {
+		return roleDtlId;
+	}
+	public void setRoleDtlId(String roleDtlId) {
+		this.roleDtlId = roleDtlId;
+	}
+    
 }

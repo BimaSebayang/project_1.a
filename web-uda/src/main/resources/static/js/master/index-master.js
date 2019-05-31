@@ -75,6 +75,11 @@ masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 		     $scope.flagName = arg3.flagName;
 		     $scope.roleName = arg3.roleName;
 		}
+		if(arg2 == 'role-admin-setting-config'){
+			debugger;
+		     $scope.flagName = arg3.flagName;
+		     $scope.roleName = arg3.roleDtlName;
+		}
 		$scope.serialPaging = arg5;
 	}
 	
