@@ -70,7 +70,6 @@ zuul: # those values must be configured depending on the application specific ne
       sensitiveHeaders: Cookie, Set-Cookie
       url: http://localhost:28080/uaa
       service-id: uaa-service  
-
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
   command:
