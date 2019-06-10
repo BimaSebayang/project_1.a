@@ -2,7 +2,6 @@ package id.co.roxas.lang.identifier.core.service.auth;
 
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
