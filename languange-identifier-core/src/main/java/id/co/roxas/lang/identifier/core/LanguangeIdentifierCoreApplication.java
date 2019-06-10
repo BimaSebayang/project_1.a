@@ -2,13 +2,19 @@ package id.co.roxas.lang.identifier.core;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.xmlpull.v1.XmlPullParserException;
 
-
+import id.co.roxas.lang.identifier.core.service.auth.CustomUserService;
+import id.co.roxas.lang.identifier.core.service.auth.UserAuthenticationCustomLogin;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -27,7 +33,15 @@ public class LanguangeIdentifierCoreApplication {
 		SpringApplication.run(LanguangeIdentifierCoreApplication.class, args);
 	}
 	
-	
+	@Autowired
+	public void authenticationManager(AuthenticationManagerBuilder builder, UserAuthenticationCustomLogin userAuthenticationCustomLogin) throws Exception {
+	   builder.userDetailsService(new UserDetailsService() {
+		@Override
+		public UserDetails loadUserByUsername(String userValidation) throws UsernameNotFoundException {
+			return new CustomUserService(userAuthenticationCustomLogin.findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(userValidation));
+		}
+	})	;
+	}
 	
     @Bean
     public Docket api() throws IOException, XmlPullParserException {

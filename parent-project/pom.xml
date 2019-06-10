@@ -44,7 +44,7 @@
         <module>../Common-Dto</module>
         <module>../web-uda</module>
         <module>../languange-identifier-core</module>
-        <module>../web-service-gateway</module>
+        <module>../Core-gateway</module>
         <module>../web-gateway</module>
     </modules>
 	

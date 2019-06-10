@@ -1,4 +1,4 @@
-package id.co.roxas.app.web.uda;
+package id.co.roxas.lang.identifier.core;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,11 +30,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 
-import id.co.roxas.app.web.uda.config.HttpRestResponse;
-import id.co.roxas.app.web.uda.config.HttpSecurityService;
-import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.lang.identifier.core.config.HttpRestResponse;
+import id.co.roxas.lang.identifier.core.config.HttpSecurityService;
+import id.co.roxas.lang.identifier.core.lib.ParamQueryCustomLib;
 
 /*
  * creator : Bima Satrya Sebayang.
@@ -147,7 +147,7 @@ public class UltimateBase {
 		return getResultWs(url, body, method, headerMap, paramQuery);
 	}
 
-	protected String restingToken(String userName, String userPassword) {
+	protected String restingTokenUaa(String userName, String userPassword) {
 		Map<String, Object> mapToken = new HashMap<>();
 		Map<String, String> header = new HashMap<>();
 		header.put("Authorization",

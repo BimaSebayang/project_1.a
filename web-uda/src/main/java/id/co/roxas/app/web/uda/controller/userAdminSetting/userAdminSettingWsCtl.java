@@ -32,7 +32,7 @@ public class userAdminSettingWsCtl extends BaseRestWebController {
 	public List<TblRoleDto> retrieveAllRole(HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(null, TblRoleDto.getDtoticketing(),
 				"user-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/select-all", null,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-transaction/select-all", null,
 				HttpMethod.GET, null, getToken(httpServletRequest), httpSecurityService);
 		List<TblRoleDto> tblRoleDtos = new ArrayList<>();
 		try {
@@ -48,7 +48,7 @@ public class userAdminSettingWsCtl extends BaseRestWebController {
 	public TransactionCUDDto userAdminSettingSave(@RequestBody TblUserDto tblUserDto, HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(TblUserDto.getDtoticketing(),
 				TransactionCUDDto.getDtoticketing(), "user-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/user-transaction/save", tblUserDto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/user-transaction/save", tblUserDto,
 				HttpMethod.POST, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -64,7 +64,7 @@ public class userAdminSettingWsCtl extends BaseRestWebController {
 	public TransactionCUDDto userAdminSettingUpdate(@RequestBody TblUserDto tblUserDto, HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(TblUserDto.getDtoticketing(),
 				TransactionCUDDto.getDtoticketing(), "user-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/user-transaction/update", tblUserDto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/user-transaction/update", tblUserDto,
 				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -83,7 +83,7 @@ public class userAdminSettingWsCtl extends BaseRestWebController {
 		TblUserDto dto = new TblUserDto();
 		dto.setUserId(uaf.getUserId());
 		dto.setIsActive(uaf.getActionResult());
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/user-transaction/action-activator", dto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/user-transaction/action-activator", dto,
 				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -104,7 +104,7 @@ public class userAdminSettingWsCtl extends BaseRestWebController {
 						pageRevolver.getSize(), pageRevolver.getSearch(), 
 						"createdDate,desc", pageRevolver.getSort());
 		PageResponse pageResponse = pageResultsWithSecurityAccess
-				(END_POINT_URL + "/admin-ws/user-transaction/select-all", 
+				(UAA_END_POINT_URL + "/admin-ws/user-transaction/select-all", 
 						null, HttpMethod.GET, null, getToken(httpServletRequest), 
 						httpSecurityService, 
 						retrieveAllPagingNeeded

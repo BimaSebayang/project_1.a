@@ -36,7 +36,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 	public TransactionCUDDto roleAdminSettingSave(@RequestBody TblRoleDto tblRoleDto, HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDto.getDtoticketing(),
 				TransactionCUDDto.getDtoticketing(), "role-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/save", tblRoleDto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-transaction/save", tblRoleDto,
 				HttpMethod.POST, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -53,7 +53,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 	public TransactionCUDDto userAdminSettingUpdate(@RequestBody TblRoleDto tblRoleDto, HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDto.getDtoticketing(),
 				TransactionCUDDto.getDtoticketing(), "user-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/update", tblRoleDto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-transaction/update", tblRoleDto,
 				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -72,7 +72,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 		TblRoleDto dto = new TblRoleDto();
 		dto.setRoleId(raf.getRoleId());
 		dto.setIsActive(raf.getActionResult());
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/action-activator", dto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-transaction/action-activator", dto,
 				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -91,7 +91,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 		TblRoleDtlDto dto = new TblRoleDtlDto();
 		dto.setRoleDtlId(raf.getRoleDtlId());
 		dto.setIsActive(raf.getActionResult());
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-detail-transaction/action-activator", dto,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-detail-transaction/action-activator", dto,
 				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {
@@ -107,7 +107,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 	public List<TblRoleDto> retrieveAllRole(HttpServletRequest httpServletRequest) {
 		HttpSecurityService httpSecurityService = new HttpSecurityService(null, TblRoleDto.getDtoticketing(),
 				"user-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/select-all/no-condition", null,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-transaction/select-all/no-condition", null,
 				HttpMethod.GET, null, getToken(httpServletRequest), httpSecurityService);
 		List<TblRoleDto> tblRoleDtos = new ArrayList<>();
 		try {
@@ -128,7 +128,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 						pageRevolver.getSize(), pageRevolver.getSearch(), 
 						"createdDate,desc", pageRevolver.getSort());
 		PageResponse pageResponse = pageResultsWithSecurityAccess
-				(END_POINT_URL + "/admin-ws/role-transaction/query-all", 
+				(UAA_END_POINT_URL + "/admin-ws/role-transaction/query-all", 
 						null, HttpMethod.GET, null, getToken(httpServletRequest), 
 						httpSecurityService, 
 						retrieveAllPagingNeeded
@@ -158,7 +158,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 						pageRevolver.getSize(), pageRevolver.getSearch(), 
 						"createdDate,desc", pageRevolver.getSort());
 		PageResponse pageResponse = pageResultsWithSecurityAccess
-				(END_POINT_URL + "/admin-ws/role-detail-transaction/query-all", 
+				(UAA_END_POINT_URL + "/admin-ws/role-detail-transaction/query-all", 
 						null, HttpMethod.GET, null, getToken(httpServletRequest), 
 						httpSecurityService, 
 						retrieveAllPagingNeeded
@@ -185,7 +185,7 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 		System.out.println(new Gson().toJson(tblRoleDtlDtos));
 		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDtlDto.getDtoticketing(),
 				TransactionCUDDto.getDtoticketing(), "role-admin-setting");
-		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-detail-transaction/save-all", tblRoleDtlDtos,
+		WsResponse response = resultWsWitSecurityAccess(UAA_END_POINT_URL + "/admin-ws/role-detail-transaction/save-all", tblRoleDtlDtos,
 				HttpMethod.POST, null, getToken(httpServletRequest), httpSecurityService);
 		TransactionCUDDto cudDto = new TransactionCUDDto();
 		try {

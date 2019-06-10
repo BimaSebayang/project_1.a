@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import id.co.roxas.user.data.activation.core.config.MapperPageClass;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 
@@ -26,7 +25,6 @@ public class UltimateBase {
 	protected static final String SUCCESS_DELETE = "Delete success";
 	protected static final String INSUCCESS_DELETE = "Delete Insuccess";
 	protected MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
-	protected final MapperPageClass mapperPageClass = new MapperPageClass();
 	protected final Date dateNow = new Date(); 
 	
 	protected String staplingWords(String word, String nvl) {
