@@ -13,6 +13,7 @@ public class PageRevolver {
      private String[] sort;
      private String search;
      private String roleDtlId;
+     private String filterName;
 	public String getRoleId() {
 		return roleId;
 	}
@@ -67,5 +68,12 @@ public class PageRevolver {
 	public void setRoleDtlId(String roleDtlId) {
 		this.roleDtlId = roleDtlId;
 	}
+	public String getFilterName() {
+		return filterName;
+	}
+	public void setFilterName(String filterName) {
+		this.filterName = filterName;
+	}
+	
     
 }

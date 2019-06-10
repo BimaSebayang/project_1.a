@@ -23,6 +23,9 @@ import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.TransactionCUDDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageClassResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageRevolver;
+import id.co.roxas.data.transfer.object.UserDataActivation.model.RoleActivationForm;
+import id.co.roxas.data.transfer.object.UserDataActivation.model.RoleDtlActivationForm;
+import id.co.roxas.data.transfer.object.UserDataActivation.model.UserActivationForm;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.shared.converter.DateConverter;
@@ -45,6 +48,60 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 		return cudDto;
 	}
 	
+
+	@PostMapping("/update/role-admin-setting")
+	public TransactionCUDDto userAdminSettingUpdate(@RequestBody TblRoleDto tblRoleDto, HttpServletRequest httpServletRequest) {
+		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDto.getDtoticketing(),
+				TransactionCUDDto.getDtoticketing(), "user-admin-setting");
+		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/update", tblRoleDto,
+				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
+		TransactionCUDDto cudDto = new TransactionCUDDto();
+		try {
+			cudDto = mapperJsonToSingleDto(response.getWsContent(), TransactionCUDDto.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cudDto;
+	}
+	
+	@PostMapping("/action-activation/role-admin-setting")
+	public TransactionCUDDto userActionActiveDisactive(@RequestBody  RoleActivationForm raf, HttpServletRequest httpServletRequest) {
+		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDto.getDtoticketing(),
+				TransactionCUDDto.getDtoticketing(), "role-admin-setting");
+		TblRoleDto dto = new TblRoleDto();
+		dto.setRoleId(raf.getRoleId());
+		dto.setIsActive(raf.getActionResult());
+		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-transaction/action-activator", dto,
+				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
+		TransactionCUDDto cudDto = new TransactionCUDDto();
+		try {
+			cudDto = mapperJsonToSingleDto(response.getWsContent(), TransactionCUDDto.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cudDto;
+	}
+	
+	@PostMapping("/action-activation/role-dtl-admin-setting")
+	public TransactionCUDDto userActionActiveDisactive(@RequestBody  RoleDtlActivationForm raf, HttpServletRequest httpServletRequest) {
+		HttpSecurityService httpSecurityService = new HttpSecurityService(TblRoleDtlDto.getDtoticketing(),
+				TransactionCUDDto.getDtoticketing(), "role-admin-setting");
+		TblRoleDtlDto dto = new TblRoleDtlDto();
+		dto.setRoleDtlId(raf.getRoleDtlId());
+		dto.setIsActive(raf.getActionResult());
+		WsResponse response = resultWsWitSecurityAccess(END_POINT_URL + "/admin-ws/role-detail-transaction/action-activator", dto,
+				HttpMethod.PUT, null, getToken(httpServletRequest), httpSecurityService);
+		TransactionCUDDto cudDto = new TransactionCUDDto();
+		try {
+			cudDto = mapperJsonToSingleDto(response.getWsContent(), TransactionCUDDto.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cudDto;
+	}
 	
 	@GetMapping("/role/select-all/no-condition")
 	public List<TblRoleDto> retrieveAllRole(HttpServletRequest httpServletRequest) {
@@ -86,6 +143,36 @@ public class roleAdminSettingWsCtl extends BaseRestWebController{
 			e.printStackTrace();
 		}
 		pageRequestCustom.setAllDatas(tblRoleDtos);
+		pageRequestCustom.setPage(pageResponse.getPageNumber());
+		pageRequestCustom.setTotalPage(pageResponse.getTotalPage());
+		pageRequestCustom.setFiltering(pageResponse.getFiltering());
+		return pageRequestCustom;
+	}
+	
+	@PostMapping("/select-all/role-detail-admin-setting")
+	public PageClassResponse<TblRoleDtlDto> selectAllRoleDetail(@RequestBody PageRevolver pageRevolver, HttpServletRequest httpServletRequest) throws ParseException{
+		PageClassResponse<TblRoleDtlDto> pageRequestCustom = new PageClassResponse<>();
+		List<TblRoleDtlDto> tblRoleDtlDtos = new ArrayList<>();
+		HttpSecurityService httpSecurityService = new HttpSecurityService(null, TblRoleDtlDto.getDtoticketing(), "I001");
+		paramPaging(pageRevolver.getPage(), 
+						pageRevolver.getSize(), pageRevolver.getSearch(), 
+						"createdDate,desc", pageRevolver.getSort());
+		PageResponse pageResponse = pageResultsWithSecurityAccess
+				(END_POINT_URL + "/admin-ws/role-detail-transaction/query-all", 
+						null, HttpMethod.GET, null, getToken(httpServletRequest), 
+						httpSecurityService, 
+						retrieveAllPagingNeeded
+						       ( new ParamQueryCustomLib("roleId", pageRevolver.getRoleId())
+						        ,new ParamQueryCustomLib("filterName", pageRevolver.getFilterName())
+								,new ParamQueryCustomLib("isActive", pageRevolver.getIsActive())
+								,new ParamQueryCustomLib("startDate",DateConverter.parseDateToString(pageRevolver.getStartDate(), "ddMMyyyy") )
+							    ,new ParamQueryCustomLib("endDate", DateConverter.parseDateToString(pageRevolver.getEndDate(), "ddMMyyyy") )));
+		try {
+			tblRoleDtlDtos = mapperJsonToListDto(pageResponse.getWsContent(), TblRoleDtlDto.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pageRequestCustom.setAllDatas(tblRoleDtlDtos);
 		pageRequestCustom.setPage(pageResponse.getPageNumber());
 		pageRequestCustom.setTotalPage(pageResponse.getTotalPage());
 		pageRequestCustom.setFiltering(pageResponse.getFiltering());

@@ -37,7 +37,7 @@ public class TblRole {
         )
 	private String roleId;
 	
-	@Column(name="role_name",length=20, unique=true, updatable = false)
+	@Column(name="role_name",length=20, unique=true)
 	private String roleName;
 	
 	@Column(name="is_active")

@@ -24,13 +24,12 @@
 	<hr style="position: relative; top: -20px;">
 
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item"><a
-			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+		<li class="nav-item"><a ng-click="navChange('role-add-tab')"
 			class="{{'nav-link ' + navActivatorRAT}}" id="role-add-tab"
 			data-toggle="tab" role="tab" aria-controls="role-add"
 			aria-selected="false">Configuration Role</a></li>
 		<li class="nav-item"><a
-			ng-click="navChange(navActivatorRAT,navActivatorRDAT)"
+			ng-click="navChange('role-detail-add-tab')"
 			class="{{'nav-link ' + navActivatorRDAT}}" id="role-detail-add-tab"
 			data-toggle="tab" role="tab" aria-controls="role-detail-add"
 			aria-selected="true">Configuration Role Detail</a></li>
@@ -64,21 +63,38 @@
 									<td>{{role.createdDate | date : 'dd/MM/yyyy HH:mm:ss '}}</td>
 									<td>{{role.createdBy.userName}}</td>
 									<td>{{convertActivation(role.isActive)}}</td>
-									<td align="center"><button type="button" class="btn btn-flat btn-small"
+									<td align="center">
+										<button type="button" class="btn btn-flat btn-small"
 											style="background: #ebce75;" data-toggle="modal"
-											data-target="#edit" ng-click="onEdit(user)">
+											ng-if="role.tblRoleDtlDtos.length!=0"
+											data-target="#see-detail-role"
+											ng-click="loadTblRoleDtlDtos($index + from)">
 											<i class="fas fa-eye"> </i>
-										</button></td>
-									<td align="center"><button type="button" class="btn btn-flat btn-small"
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #937415;" data-toggle="modal"
+											ng-if="role.tblRoleDtlDtos.length==0">
+											<i class="fas fa-eye-slash"> </i>
+										</button>
+									</td>
+									<td align="center">
+										<button type="button" class="btn btn-flat btn-small"
 											style="background: #ebce75;" data-toggle="modal"
-											data-target="#edit" ng-click="onEdit(user)">
+											ng-if="role.tblUserDtos.length!=0"
+											data-target="#see-detail-user"
+											ng-click="loadTblUserDtos($index + from)">
 											<i class="fas fa-eye"> </i>
-										</button></td>
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #937415;" data-toggle="modal"
+											ng-if="role.tblUserDtos.length==0">
+											<i class="fas fa-eye-slash"> </i>
+										</button>
+									</td>
 									<td style="width: 100px;" align="center">
 
 										<button type="button" class="btn btn-flat btn-small"
-											style="background: #79f83a;" data-toggle="modal"
-											data-target="#edit" ng-click="onEdit(user)">
+											style="background: #79f83a;" data-toggle="modal">
 											<i class="fas fa-download"> </i>
 										</button>
 
@@ -86,19 +102,19 @@
 									<td style="width: 170px;" align="center">
 										<button type="button" class="btn btn-flat btn-small"
 											style="background: #f8cc3a;" data-toggle="modal"
-											data-target="#edit" ng-click="onEdit(user)">
+											data-target="#editRole" ng-click="onEditRole(role)">
 											<i class="fas fa-edit"> </i>
 										</button>
 										<button type="button" class="btn btn-flat btn-small"
 											style="background: #dc5656;" data-toggle="modal"
 											data-target="#active" ng-if="!isActiveButton(role.isActive)"
-											ng-click="buttonActivation(user,1,user.isActive)">
+											ng-click="buttonActivation(role,1,role.isActive)">
 											<i class="fas fa-lock"> </i>
 										</button>
 										<button type="button" class="btn btn-flat btn-small"
 											style="background: #3a86f8;" data-toggle="modal"
 											ng-if="!isInActiveButton(role.isActive)"
-											ng-click="buttonActivation(user,0,user.isActive)"
+											ng-click="buttonActivation(role,0,role.isActive)"
 											data-target="#disactive">
 											<i class="fas fa-unlock"> </i>
 										</button>
@@ -136,6 +152,47 @@
 								<th>Action</th>
 							</thead>
 							<tbody>
+								<tr ng-repeat="roleDetail in roleListDetail">
+									<td>{{$index + from + 1}}</td>
+									<td>{{roleDetail.roleDtlName}}</td>
+									<td>{{roleDetail.createdDate | date : 'dd/MM/yyyy HH:mm:ss
+										'}}</td>
+									<td>{{roleDetail.createdBy.userName}}</td>
+									<td>{{convertActivation(roleDetail.isActive)}}</td>
+									<td>{{roleDetail.roleId.roleName}}</td>
+									<td style="width: 100px;" align="center">
+
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #79f83a;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-download"> </i>
+										</button>
+									</td>
+									<td style="width: 170px;" align="center">
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #f8cc3a;" data-toggle="modal"
+											data-target="#edit" ng-click="onEdit(user)">
+											<i class="fas fa-edit"> </i>
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #dc5656;" data-toggle="modal"
+											data-target="#activeDtl"
+											ng-if="!isActiveButton(roleDetail.isActive)"
+											ng-click="buttonDtlActivation(roleDetail,1,user.isActive)">
+											<i class="fas fa-lock"> </i>
+										</button>
+										<button type="button" class="btn btn-flat btn-small"
+											style="background: #3a86f8;" data-toggle="modal"
+											ng-if="!isInActiveButton(roleDetail.isActive)"
+											ng-click="buttonDtlActivation(roleDetail,0,user.isActive)"
+											data-target="#disactiveDtl">
+											<i class="fas fa-unlock"> </i>
+										</button>
+									</td>
+								</tr>
+								<tr ng-if="isEmpty">
+									<td colspan="9"><center>Data Tidak Ditemukan</center></td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -144,5 +201,284 @@
 
 		</div>
 	</div>
+
+
+
+	<div class="modal fade" id="active" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Aktivasi Data</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body">
+					<div ng-if="discontinu">Data Telah Aktif</div>
+					<div ng-if="!discontinu">Apakah anda ingin Mengaktifkan Role
+						dengan nama {{roleName}} Ber-Id {{roleId}}</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-times"></i> Batal
+					</button>
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-if="!discontinu" ng-click="actionActivation(roleId,1)">
+						<i class="fas fa-check"></i> Iya
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+
+	<div class="modal fade" id="disactive" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Non Aktivasi
+						Data</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body">
+					<div ng-if="discontinu">Data Telah NonAktif</div>
+					<div ng-if="!discontinu">Apakah anda ingin Mengnonaktifkan
+						Role dengan nama {{roleName}} Ber-Id {{roleId}}</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-times"></i> Batal
+					</button>
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-if="!discontinu" ng-click="actionActivation(roleId,0)">
+						<i class="fas fa-check"></i> Iya
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="modal fade" id="activeDtl" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Aktivasi Data</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body">
+					<div ng-if="discontinu">Data Telah Aktif</div>
+					<div ng-if="!discontinu">Apakah anda ingin Mengaktifkan Role
+						dengan nama {{roleDtlName}} Ber-Id {{roleDtlId}}</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-times"></i> Batal
+					</button>
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-if="!discontinu" ng-click="actionDtlActivation(roleDtlId,1)">
+						<i class="fas fa-check"></i> Iya
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+
+	<div class="modal fade" id="disactiveDtl" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Non Aktivasi
+						Data</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body">
+					<div ng-if="discontinu">Data Telah NonAktif</div>
+					<div ng-if="!discontinu">Apakah anda ingin Mengnonaktifkan
+						Role dengan nama {{roleDtlName}} Ber-Id {{roleDtlId}}</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-times"></i> Batal
+					</button>
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-if="!discontinu" ng-click="actionDtlActivation(roleDtlId,0)">
+						<i class="fas fa-check"></i> Iya
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="see-detail-role" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">User Detail</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body" style="font-size: 14px; font-family: arial;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="font-size: 14px; font-family: arial;" width="auto">
+									Role Detail Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="dtl in tblRoleDtlDtos | orderBy : 'roleDtlName'">
+								<td>{{dtl.roleDtlName}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-backward"></i> Kembali
+					</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="see-detail-user" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Role Detail</h5>
+					<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 						aria-label="Close"> -->
+					<!-- 						<span aria-hidden="true">×</span> -->
+					<!-- 					</button> -->
+				</div>
+				<div class="modal-body" style="font-size: 14px; font-family: arial;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="font-size: 14px; font-family: arial;" width="auto">
+									Role Detail Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="dtl in tblUserDtos | orderBy : 'userName'">
+								<td>{{dtl.userName}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<i class="fas fa-backward"></i> Kembali
+					</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="editRole" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style="width: 100%; align-items: center;">
+				<div class="modal-header" style="width: 100%;">
+					<h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+				</div>
+				<div class="modal-body" style="width: 100%;">
+
+					<div style="display: flex; width: 100%; top: 100px;">
+						<form>
+							<div style="width: 100%;">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="fas fa-puzzle-piece"></i></span>
+									</div>
+									<input type="text" name="rolename" class="form-control"
+										ng-model="roleName" placeholder="Role Name">
+								</div>
+
+								<table class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th style="width: 30%;">Fungsional Role Detail</th>
+											<th style="width: 50%;">Nama Role Detail</th>
+											<th style="width: 20%;">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="res in sizeModel track by $index">
+											<td><input type="text" ng-model="res.roleDtlFunc"
+												class="form-control" ng-init="res.roleDtlFunc='AUTHWS'"
+												ng-change="onParameter(res.blacklistFlag, $index)"
+												disabled="disabled" /></td>
+											<td><input type="text" ng-model="res.roleDtlName"
+												class="form-control" name="roleDtlName"
+												ng-change="onDescription(res.blacklistFlagDesc, $index)" /></td>
+											<td>
+												<button ng-click="addModel()">
+													<label class="fa fa-plus fa"></label>
+												</button>
+												<button ng-click="removeModel($index)">
+													<label class="fa fa-minus fa"></label>
+												</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+				<div class="modal-footer" style="width: 100%;">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-click="updateRoleAdminSetting()">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </div>
 

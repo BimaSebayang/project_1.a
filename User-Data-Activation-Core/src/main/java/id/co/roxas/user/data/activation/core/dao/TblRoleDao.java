@@ -12,20 +12,33 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import id.co.roxas.user.data.activation.core.repository.TblRole;
+import id.co.roxas.user.data.activation.core.repository.TblUser;
 
 @Repository
 public interface TblRoleDao extends JpaRepository<TblRole,String>{
      
+
 	@Query("select a from TblRole a  "
 			+ " where a.isActive = 1 ")
 	public List<TblRole> retrieveAllRoleIsActive();
 	
+	@Query("select a from TblRole a left join TblRoleDtl b "
+			+ " on "
+			+ " a = b.roleId "
+			+ " where "
+			+ " upper(b.roleDtlName) = upper(?1) ")
+	public List<TblRole> retrieveAllRoleIsActiveButNotInUsedInOtherRole(String roleDtlName);
+	
+	@Query("select a from TblRole a where a.roleId = ?1")
+	public TblRole getRoleById(String roleId);
 	
 	@Query("select a from TblRole a left join TblUser tb on"
 			+ "  a.createdBy = tb where "
 			+ "  (upper(a.roleName) like upper(?1) "
 			+ "  or "
 			+ "  a in (select b.roleId from TblRoleDtl b where upper(b.roleDtlName) like upper(?1)) "
+			+ "  or "
+			+ "  a in (select b.roleId from TblUser b where upper(b.userName) like upper(?1))"
 			+ "  or "
 			+ "  upper(tb.userName) like upper(?1)"
 			+ "  or "
@@ -59,7 +72,7 @@ public interface TblRoleDao extends JpaRepository<TblRole,String>{
 			                       @Param("dateNonActive") Date dateNonActive,
 			                       @Param("dateActive") Date dateActive,
 			                       @Param("updatedDate") Date updatedDate, 
-			                       @Param("updatedBy") String updatedBy, 
+			                       @Param("updatedBy") TblUser updatedBy, 
 			                       @Param("roleId") String roleId);
 	
 	@Modifying
@@ -80,6 +93,6 @@ public interface TblRoleDao extends JpaRepository<TblRole,String>{
 			                       @Param("dateNonActive") Date dateNonActive,
 			                       @Param("dateActive") Date dateActive,
 			                       @Param("updatedDate") Date updatedDate, 
-			                       @Param("updatedBy") String updatedBy, 
+			                       @Param("updatedBy") TblUser updatedBy, 
 			                       @Param("roleIds") List<String> roleIds);
 }

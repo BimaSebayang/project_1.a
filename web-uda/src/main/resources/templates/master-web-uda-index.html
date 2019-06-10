@@ -37,7 +37,7 @@
 				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
 					ng-click="searchParent(searchText)" type="submit">Search</button>
 				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
-					ng-click="lookForwardForm(controllerform)" data-toggle="modal"
+				    data-toggle="modal"
 					data-target="#filterForm" type="button">Filter</button>
 				<button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2"
 					ng-click="refreshParent()" type="button">Refresh</button>
@@ -146,8 +146,141 @@
 							</button>
 						</div>
 					</div>
+				
+				    
+				
+				    <div class="modal-content" ng-if='isFilteringRoleAdminSettingConfig'>
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Filter Data</h5>
+						</div>
+						<div class="modal-body"
+							style="font-size: 14px; font-family: arial;">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th style="font-size: 14px; font-family: arial;" width="auto">
+											Filter - Field</th>
+										<th style="font-size: 14px; font-family: arial;">Filter -
+											Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Status
+											Keaktifan</td>
+
+										<td style="font-size: 12px; font-family: arial;"><label
+											ng-repeat="flag in flagName"> <input type="radio"
+												ng-model="$parent.filterIsActive" ng-value="flag.key"
+												name="pageSet" />{{flag.value}}
+										</label></td>
+									</tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Role
+											Detail</td>
+										<td><select ng-model="roleId" class="form-control"
+											style="font-size: 12px; font-family: arial;"
+											ng-options="res.roleId as res.roleName for res in roleDtlName">
+											<option value="" disabled selected>-- Select Role Detail--</option>
+										</select></td>
+									</tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Range
+											Tanggal Dibuat</td>
+										<td><input style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterStartDate"
+											placeholder="YYYY-MM-DD"> <label
+											style="font-size: 12px; font-family: arial;">S/D</label> <input
+											style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterEndDate"
+											placeholder="YYYY-MM-DD"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal" ng-click="cancelFilter(controllerform)">
+								<i class="fas fa-times"></i> Batal
+							</button>
+
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal"
+								ng-click="filterParentUASC(filterIsActive,roleId,filterStartDate,filterEndDate)">
+								<i class="fas fa-check"></i> Iya
+							</button>
+						</div>
+					</div>
+				
+				
+								
+				    <div class="modal-content" ng-if='isFilteringRoleDetailAdminSettingConfig'>
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Filter Data</h5>
+						</div>
+						<div class="modal-body"
+							style="font-size: 14px; font-family: arial;">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th style="font-size: 14px; font-family: arial;" width="auto">
+											Filter - Field</th>
+										<th style="font-size: 14px; font-family: arial;">Filter -
+											Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Status
+											Keaktifan</td>
+
+										<td style="font-size: 12px; font-family: arial;"><label
+											ng-repeat="flag in flagName"> <input type="radio"
+												ng-model="$parent.filterIsActive" ng-value="flag.key"
+												name="pageSet" />{{flag.value}}
+										</label></td>
+									</tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Role
+											Detail</td>
+										<td><select ng-model="roleId" class="form-control"
+											style="font-size: 12px; font-family: arial;"
+											ng-options="res.roleId as res.roleName for res in roleRoleName">
+											<option value="" disabled selected>-- Select Role Detail--</option>
+										</select></td>
+									</tr>
+									<tr>
+										<td style="font-size: 12px; font-family: arial;" width="auto">Range
+											Tanggal Dibuat</td>
+										<td><input style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterStartDate"
+											placeholder="YYYY-MM-DD"> <label
+											style="font-size: 12px; font-family: arial;">S/D</label> <input
+											style="font-size: 12px; font-family: arial;"
+											class="form-control" type="date" ng-model="filterEndDate"
+											placeholder="YYYY-MM-DD"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal" ng-click="cancelFilter(controllerform)">
+								<i class="fas fa-times"></i> Batal
+							</button>
+
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal"
+								ng-click="filterParentUASC(filterIsActive,roleId,filterStartDate,filterEndDate)">
+								<i class="fas fa-check"></i> Iya
+							</button>
+						</div>
+					</div>
+				
+				
 				</div>
 			</div>
+			
 
 			<div ng-include="list-modal"></div>
 			<div ng-include="lastUrl"></div>

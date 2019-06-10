@@ -14,20 +14,6 @@ masterWebUdaIndexApp.controller('user-admin-setting-config', function($scope,
 	};
 
 
-	$scope.isActiveButton = function(arg) {
-		if (arg == 1)
-			return true;
-		else
-			return false;
-	}
-
-	$scope.isInActiveButton = function(arg) {
-		if (arg == 0)
-			return true;
-		else
-			return false;
-	}
-
 	$scope.buttonActivation = function(user, cond, realCond) {
 		// debugger;
 		if (cond == realCond) {

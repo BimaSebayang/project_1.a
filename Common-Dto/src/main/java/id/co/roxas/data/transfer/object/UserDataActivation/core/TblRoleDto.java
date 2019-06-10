@@ -31,6 +31,18 @@ public class TblRoleDto implements Serializable{
 	
 	private TblUserDto updatedBy;
 
+	
+	
+	public TblRoleDto() {
+		super();
+	}
+
+	public TblRoleDto(String roleId, String roleName) {
+		super();
+		this.roleId = roleId;
+		this.roleName = roleName;
+	}
+
 	public String getRoleId() {
 		return roleId;
 	}

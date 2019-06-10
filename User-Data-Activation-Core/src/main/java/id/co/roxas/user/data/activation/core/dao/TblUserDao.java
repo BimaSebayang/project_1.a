@@ -19,7 +19,7 @@ public interface TblUserDao extends JpaRepository<TblUser, String>{
     
     @Query("select a from TblUser a "
      		+ " where ( a.userTicket.ticketId =:userValidation or a.userEmail =:userValidation "
-     		+ " or a.userPhone =:userValidation or a.userId =:userValidation )  and a.roleId.isActive = 1 ")
+     		+ " or a.userPhone =:userValidation or a.userId =:userValidation or a.userBatch = :userValidation )  and a.roleId.isActive = 1 ")
     public TblUser findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(@Param("userValidation")String userValidation);
     
     @Query(" select a from TblUser a left join"
