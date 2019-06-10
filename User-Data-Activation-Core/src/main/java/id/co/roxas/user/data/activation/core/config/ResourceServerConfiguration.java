@@ -9,10 +9,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+	
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/database-init/**", "/web-request/**", "/images/*", "/css/*", "/swagger-ui.js",
+				.antMatchers("/database-init/**", "/images/*", "/css/*", "/swagger-ui.js",
 						"/swagger-ui.min.js", "/api-docs", "/swagger-ui.html", "/fonts/*", "/api-docs/*",
 						"/api-docs/default/*", "/o2c.html", "index.html", "/webjars/**", "/hystrix/**",
 						"**/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**")

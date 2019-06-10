@@ -23,13 +23,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("my-trusted-client")
+		clients.inMemory().withClient("my-trusted-website")
 		.authorizedGrantTypes("password")
 		.authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
 		.scopes("read","write","trust")
 		.resourceIds("oauth2-resource")
 		.accessTokenValiditySeconds(5000)
-		.secret("{noop}secret").refreshTokenValiditySeconds(5000);
+		.secret("{noop}lacking0309WebSite").refreshTokenValiditySeconds(5000)
+		.and().withClient("my-trusted-service-neighbourhood")
+		.authorizedGrantTypes("password")
+		.authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
+		.scopes("read","write","trust")
+		.resourceIds("oauth2-resource")
+		.accessTokenValiditySeconds(5000)
+		.secret("{noop}lacking0309Neighbour").refreshTokenValiditySeconds(5000)
+		.and().withClient("my-trusted-client")
+		.authorizedGrantTypes("password")
+		.authorities("ROLE_CLIENT","ROLE_TRUSTED_CLIENT")
+		.scopes("read","write","trust")
+		.resourceIds("oauth2-resource")
+		.accessTokenValiditySeconds(5000)
+		.secret("{noop}secretClientsIsExist").refreshTokenValiditySeconds(5000);	
 	}
 
 	@Override

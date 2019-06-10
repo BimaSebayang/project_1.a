@@ -55,6 +55,10 @@ public class UltimateBase {
 	protected String PASSWORD;
 	@Value("${roxas.login-url}")
 	protected String LOGIN_URL;
+	@Value("${roxas.neigh.user-uda}")
+	protected String NEIGH_USER;
+	@Value("${roxas.neigh.password-uda}")
+	protected String NEIGH_PASSWORD;
 	
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
@@ -209,6 +213,7 @@ public class UltimateBase {
 	@SuppressWarnings("rawtypes")
 	private HttpRestResponse wsBody(String url, Object body, HttpMethod method, Map<String, String> headerMap,
 			ParamQueryCustomLib... paramQuery) {
+		System.err.println("masuk ke sini");
 		MultiValueMap<String, Object> header = new LinkedMultiValueMap<>();
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -289,6 +294,7 @@ public class UltimateBase {
 	private WsResponse getResultWs(String url, Object body, HttpMethod method, Map<String, String> headerMap,
 			ParamQueryCustomLib... paramQuery) {
 		WsResponse wsResponse = new WsResponse();
+		
 		HttpRestResponse httpRestResponse = wsBody(url, body, method, headerMap, paramQuery);
 
 		switch (httpRestResponse.getStatus()) {
