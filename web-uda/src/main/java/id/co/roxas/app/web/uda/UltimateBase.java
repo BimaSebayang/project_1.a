@@ -33,8 +33,11 @@ import com.google.gson.Gson;
 import id.co.roxas.app.web.uda.config.HttpRestResponse;
 import id.co.roxas.app.web.uda.config.HttpSecurityService;
 import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
+import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.ticket.PasswordRefactor;
+import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 
 /*
  * creator : Bima Satrya Sebayang.
@@ -55,12 +58,45 @@ public class UltimateBase {
 	protected String PASSWORD;
 	@Value("${roxas.login-url}")
 	protected String LOGIN_URL;
+
 	
+
+	protected static final String MOBILE = "mobile";
+	protected static final String DESKTOP = "desktop";
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
+
+	
+	protected TblUserDto getUserDtoAccess(TicketCc cc) {
+		WsResponse response = resultWsWithoutSecurity
+				(UAA_END_POINT_URL+"/web-request/ticket/request-user", 
+						cc, HttpMethod.POST, null, new ParamQueryCustomLib[] {});
+		TblUserDto tblUserDto = null;
+		 try {
+			tblUserDto = mapperJsonToSingleDto(response.getWsContent(), TblUserDto.class);
+		} catch (Exception e) {
+			System.out.println("user tidak terdaftar");
+		}
+		 return tblUserDto;
+	}
+	
+	protected String getAccessDevice(HttpServletRequest request) {
+		  if(request.getHeader("User-Agent").indexOf("Mobile") != -1) {
+		    return MOBILE;
+		  } else {
+		    return DESKTOP;
+		  }
+	}
+	
 	protected String getToken(HttpServletRequest request) {
-		String token = (String) request.getSession().getAttribute("token");
-		System.err.println("current token : " + token);
+		TicketCc cc = new TicketCc();
+		cc.setModule("web-uaa");
+		cc.setSessionId(request.getSession().getId());
+		cc.setAccessIdentifier(getAccessDevice(request));
+		TblUserDto tblUserDto = getUserDtoAccess(cc);
+		String identifier = tblUserDto.getUserId(); 
+		String password = PasswordRefactor.refactorChar(tblUserDto.getUserPassword());
+		String token = restingToken(identifier, password);
 		return token;
 	}
 
@@ -70,7 +106,6 @@ public class UltimateBase {
 
 	protected String lastUrl(HttpServletRequest request) {
 		String neededUrl = (String) request.getSession().getAttribute("last-url");
-		System.err.println("last result url : " + neededUrl);
 		if (neededUrl == null) {
 			return DASHBOARD_URL;
 		} else {
@@ -150,6 +185,8 @@ public class UltimateBase {
 	protected String restingToken(String userName, String userPassword) {
 		Map<String, Object> mapToken = new HashMap<>();
 		Map<String, String> header = new HashMap<>();
+//		header.put("Authorization",
+//				"Basic ".concat("bXktdHJ1c3RlZC1jbGllbnQ6c2VjcmV0"));
 		header.put("Authorization",
 				"Basic ".concat(Base64.getEncoder().encodeToString((USER_UDA + ":" + PASSWORD_UDA).getBytes())));
 		HttpRestResponse httpRestResponse = wsBody(UAA_END_POINT_URL + "/oauth/token", null, HttpMethod.POST, header,
@@ -211,8 +248,8 @@ public class UltimateBase {
 			ParamQueryCustomLib... paramQuery) {
 		MultiValueMap<String, Object> header = new LinkedMultiValueMap<>();
 		HttpHeaders headers = new HttpHeaders();
-	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-	    
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
 		if (headerMap != null) {
 			for (Entry<String, String> hm : headerMap.entrySet()) {
 				headers.add(hm.getKey(), hm.getValue());
@@ -232,15 +269,14 @@ public class UltimateBase {
 		}
 		System.err.println("body : " + new Gson().toJson(body));
 		System.err.println("header : " + new Gson().toJson(headers));
-		
+
 		HttpEntity httpEntity = new HttpEntity(body, headers);
 		RestTemplate restTemplate = new RestTemplate();
 		System.err.println("url yang diberikan : " + url.concat(paramBuilder.toString()));
 
 		String resultApi = new String();
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.
-					exchange(url.concat(paramBuilder.toString()), method,
+			ResponseEntity<String> responseEntity = restTemplate.exchange(url.concat(paramBuilder.toString()), method,
 					httpEntity, String.class);
 			System.err.println("status : " + responseEntity.getStatusCode());
 			System.err.println("result api : " + responseEntity.getBody());

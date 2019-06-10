@@ -4,12 +4,18 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import id.co.roxas.app.web.uda.UltimateBase;
+import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
 import id.co.roxas.app.web.uda.staticVar.InformationStatus;
+import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
+import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 
 @Controller
 @RequestMapping("/web-uda")
@@ -18,55 +24,32 @@ public abstract class BaseWebController extends UltimateBase {
 	private String message;
 	
 	protected void refreshAllSession(HttpServletRequest request) {
+		TicketCc cc = new TicketCc();
+		cc.setModule("web-uaa");
+		cc.setSessionId(request.getSession().getId());
+		cc.setAccessIdentifier(getAccessDevice(request));
+		TblUserDto tblUserDto = getUserDtoAccess(cc);
+		cc.setSessionId(null);
+		cc.setAccessIdentifier(getAccessDevice(request));
+		cc.setUserIdentifier(tblUserDto.getUserId());
+		@SuppressWarnings("unused")
+		WsResponse response2 = resultWsWithoutSecurity
+				(UAA_END_POINT_URL+"/web-request/ticket/update-user", 
+						cc, HttpMethod.PUT, null, new ParamQueryCustomLib[] {});
 		request.getSession().invalidate();
 	}
 	
 
     protected String onSecurityAccess(String url, HttpServletRequest request) {
-    	
-//    	String token = (String) request.getSession().getAttribute("token");
-//    	Date ageToken = (Date) request.getSession().getAttribute("age-token");
-//    	String userName = (String) request.getSession().getAttribute("user-name");
-//    	String userPassword = (String) request.getSession().getAttribute("user-password");
-    	
-    	String token = (String) request.getSession().getAttribute("token");
-    	Date ageToken = (Date) request.getSession().getAttribute("age-token");
-    	String userName = (String) request.getSession().getAttribute("user-name");
-    	String userPassword = (String) request.getSession().getAttribute("user-password");
-    	
-    	if(token == null) {
-    		
-    		this.message = InformationStatus.EMPTY_TOKEN;
-    		System.err.println(message);
-    		lastWantedUrlRequest(url, request);
-    		return "login";
-    	}
-    	else {
-    		if(ageToken.before(new Date())){
-    			token = restingToken(userName, userPassword);
-    			if(token!=null) {
-    				this.message = InformationStatus.PERFECT_COG;
-    				System.err.println(message);
-    				request.getSession().setAttribute("age-token", new Date());
-    				request.getSession().setAttribute("token", token);
-    				return url;
-    			}
-    			else {
-    				
-    				this.message = InformationStatus.AGE_TOKEN_OLD;
-    				System.err.println(message);
-    				lastWantedUrlRequest(url, request);
-    				return "login";
-    			}
-    		}
-    		else {
-    			this.message = InformationStatus.TOKEN_CANT_RETRIEVE;
-    			System.err.println(message);
-    			request.getSession().setAttribute("token", null);
-    			lastWantedUrlRequest(url, request);
-    			return "login";
-    		}
-    	}
+    	TicketCc cc = new TicketCc();
+		cc.setModule("web-uaa");
+		cc.setSessionId(request.getSession().getId());
+		cc.setAccessIdentifier(getAccessDevice(request));
+		TblUserDto tblUserDto = getUserDtoAccess(cc);
+		if(tblUserDto==null) {
+			return LOGIN_URL;
+		}
+		return url;
     }
 
 	public String getMessage() {

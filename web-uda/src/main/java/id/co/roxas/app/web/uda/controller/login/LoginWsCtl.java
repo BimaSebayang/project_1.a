@@ -20,6 +20,7 @@ import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.TransactionCUDDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.LoginForm;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 
 @RestController
 public class LoginWsCtl extends BaseRestWebController{
@@ -35,17 +36,20 @@ public class LoginWsCtl extends BaseRestWebController{
 	public String requestLoginWs(@RequestBody LoginForm loginForm, HttpServletRequest request) {
 		String token = restingToken(loginForm.getUserName(), loginForm.getPassword());
 		if(token==null) {
-		   return LOGIN_URL;
+		   return "/web-uda/"+LOGIN_URL;
 		}
 		else {
-			request.getSession().setAttribute("token",token);
-	    	request.getSession().setAttribute("age-token", new Date());
-	    	request.getSession().setAttribute("user-name", loginForm.getUserName());
-	    	request.getSession().setAttribute("user-password", loginForm.getPassword());
-	    	RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-	    	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-	    	System.err.println("login : " + attributes.getRequest().getSession().getAttribute(token));
-		     return lastUrl(request);
+			TicketCc cc = new TicketCc();
+			cc.setModule("web-uaa");
+			cc.setSessionId(request.getSession().getId());
+			cc.setAccessIdentifier(getAccessDevice(request));
+			cc.setUserIdentifier(loginForm.getUserName());
+			
+			@SuppressWarnings("unused")
+			WsResponse response = resultWsWithoutSecurity
+					(UAA_END_POINT_URL+"/web-request/ticket/update-user", 
+							cc, HttpMethod.PUT, null, new ParamQueryCustomLib[] {});
+		    return lastUrl(request);
 		}
 	}
 }

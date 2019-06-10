@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import id.co.roxas.user.data.activation.core.config.PasswordRefactor;
+import id.co.roxas.data.transfer.object.shared.ticket.PasswordRefactor;
 import id.co.roxas.user.data.activation.core.repository.TblRoleDtl;
 import id.co.roxas.user.data.activation.core.repository.TblUser;
 

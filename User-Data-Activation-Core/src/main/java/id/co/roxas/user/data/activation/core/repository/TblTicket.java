@@ -28,6 +28,19 @@ public class TblTicket {
     )
 	private String ticketId;
 
+	@Column(name="uaa_session_id_web",length=100, unique=true)
+	private String uaaSessionIdWeb;
+	
+	@Column(name="lang_session_id_web",length=100, unique=true)
+	private String langSessionIdWeb;
+	
+	@Column(name="uaa_session_id_android",length=100, unique=true)
+	private String uaaSessionIdAndroid;
+	
+	@Column(name="lang_session_id_android",length=100, unique=true)
+	private String langSessionIdAndroid;
+	
+	
 	public String getTicketId() {
 		return ticketId;
 	}
@@ -35,6 +48,41 @@ public class TblTicket {
 	public void setTicketId(String ticketId) {
 		this.ticketId = ticketId;
 	}
+
+	public String getUaaSessionIdWeb() {
+		return uaaSessionIdWeb;
+	}
+
+	public void setUaaSessionIdWeb(String uaaSessionIdWeb) {
+		this.uaaSessionIdWeb = uaaSessionIdWeb;
+	}
+
+	public String getLangSessionIdWeb() {
+		return langSessionIdWeb;
+	}
+
+	public void setLangSessionIdWeb(String langSessionIdWeb) {
+		this.langSessionIdWeb = langSessionIdWeb;
+	}
+
+	public String getUaaSessionIdAndroid() {
+		return uaaSessionIdAndroid;
+	}
+
+	public void setUaaSessionIdAndroid(String uaaSessionIdAndroid) {
+		this.uaaSessionIdAndroid = uaaSessionIdAndroid;
+	}
+
+	public String getLangSessionIdAndroid() {
+		return langSessionIdAndroid;
+	}
+
+	public void setLangSessionIdAndroid(String langSessionIdAndroid) {
+		this.langSessionIdAndroid = langSessionIdAndroid;
+	}
+
+
+     
 	
 	
 }

@@ -58,31 +58,31 @@ zuul: # those values must be configured depending on the application specific ne
     max-semaphores: 500
   ignored-services: '*'
   ignore-security-headers: false
-  ignored-headers: cookie,set-cookie
+  ignored-headers: Authorization
   routes:
     web-uda-ctl:
       path: /web-uda/**
-      sensitiveHeaders: Cookie, Set-Cookie
+      sensitiveHeaders: Authorization
       url: http://localhost:48081/web-uda
       service-id: web-uda-service
     web-uda-image:
       path: /images/**
-      sensitiveHeaders: Cookie, Set-Cookie
+      sensitiveHeaders: Authorization
       url: http://localhost:48081/images
       service-id: web-uda-images
     web-uda-js:
       path: /js/**
-      sensitiveHeaders: Cookie, Set-Cookie
+      sensitiveHeaders: Authorization
       url: http://localhost:48081/js
       service-id: web-uda-js 
     web-uda-css:
       path: /css/**
-      sensitiveHeaders: Cookie, Set-Cookie
+      sensitiveHeaders: Authorization
       url: http://localhost:48081/css
       service-id: web-uda-css
     web-uda-ws:
       path: /web-rest-uda/**
-      sensitiveHeaders: Cookie, Set-Cookie
+      sensitiveHeaders: Authorization
       url: http://localhost:48081/web-rest-uda
       service-id: web-uda-ws 
   

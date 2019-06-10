@@ -19,7 +19,7 @@ import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblTicketDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCustom;
-import id.co.roxas.user.data.activation.core.config.PasswordDefactor;
+import id.co.roxas.data.transfer.object.shared.ticket.PasswordDefactor;
 import id.co.roxas.user.data.activation.core.dao.TblTicketDao;
 import id.co.roxas.user.data.activation.core.dao.TblUserDao;
 import id.co.roxas.user.data.activation.core.repository.TblRole;

@@ -24,6 +24,10 @@ public class UltimateBase {
 	protected static final String INSUCCESS_UPDATE = "Update Insuccess";
 	protected static final String SUCCESS_DELETE = "Delete success";
 	protected static final String INSUCCESS_DELETE = "Delete Insuccess";
+	protected static final String MOBILE = "mobile";
+	protected static final String DESKTOP = "desktop";
+	protected static final String WEB_UAA = "web-uaa";
+	protected static final String WEB_LANG = "web-languange";
 	protected MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
 	protected final Date dateNow = new Date(); 
 	

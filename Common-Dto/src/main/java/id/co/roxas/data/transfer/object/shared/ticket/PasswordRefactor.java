@@ -1,4 +1,4 @@
-package id.co.roxas.user.data.activation.core.config;
+package id.co.roxas.data.transfer.object.shared.ticket;
 
 public class PasswordRefactor {
 	    public static String refactorChar(String pass) {

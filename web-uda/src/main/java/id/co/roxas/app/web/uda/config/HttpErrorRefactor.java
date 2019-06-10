@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import id.co.roxas.app.web.uda.controller.BaseWebController;
 
 @Controller
-public class HTTPErrorRefactor extends BaseWebController{
+public class HttpErrorRefactor extends BaseWebController{
 	@RequestMapping(value = "/HTTP404", method = RequestMethod.GET)
 	public String HTTP404(HttpServletRequest httpServletRequest) {
 		return "HTTP404";
