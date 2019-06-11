@@ -22,6 +22,21 @@ public interface TblUserDao extends JpaRepository<TblUser, String>{
      		+ " or a.userPhone =:userValidation or a.userId =:userValidation or a.userBatch = :userValidation )  and a.roleId.isActive = 1 ")
     public TblUser findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(@Param("userValidation")String userValidation);
     
+    @Query("select "
+    		+ " case "
+    		+ " when ( a.userTicket.uaaSessionIdWeb is null or :logout = 'YES')  and :look = 'UAAWEB' then a.userTicket.ticketId "
+    		+ " when ( a.userTicket.langSessionIdWeb is null or :logout = 'YES')  and :look = 'LANGWEB' then a.userTicket.ticketId "
+    		+ " when ( a.userTicket.uaaSessionIdAndroid is null or :logout = 'YES')  and :look = 'UAAANDROID' then a.userTicket.ticketId "
+    		+ " when ( a.userTicket.langSessionIdAndroid is null or :logout = 'YES')  and :look = 'LANGANDROID' then a.userTicket.ticketId "
+    		+ " end "
+    		+ " from TblUser a "
+     		+ " where ( a.userTicket.ticketId =:userValidation "
+     		+ " or a.userEmail =:userValidation or a.userId =:userValidation "
+     		+ " or a.userPhone =:userValidation or a.userId =:userValidation "
+     		+ " or a.userBatch =:userValidation ) "
+     		+ " and a.roleId.isActive = 1 ")
+    public String findByUserTicketOrUserEmailOrUserUserPhoneOrUserIdButSessionNull
+                   (@Param("userValidation")String userValidation, @Param("look") String look, @Param("logout") String isLogOut);
     
     @Query("select a from TblUser a where a.userTicket.uaaSessionIdWeb = ?1")
     public TblUser findUserByItsSessionUaaWeb(String sessionId);

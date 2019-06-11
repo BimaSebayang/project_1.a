@@ -23,33 +23,39 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 
 @RestController
-public class LoginWsCtl extends BaseRestWebController{
-      
+public class LoginWsCtl extends BaseRestWebController {
+
 	@GetMapping("/hello-ws")
 	public String helloWs() {
 		return "hello ws ";
 	}
-	
-    
-	
+
 	@PostMapping("/request-login")
 	public String requestLoginWs(@RequestBody LoginForm loginForm, HttpServletRequest request) {
 		String token = restingToken(loginForm.getUserName(), loginForm.getPassword());
-		if(token==null) {
-		   return "/web-uda/"+LOGIN_URL;
-		}
-		else {
+		if (token == null) {
+			return "/web-uda/" + LOGIN_URL;
+		} else {
 			TicketCc cc = new TicketCc();
 			cc.setModule("web-uaa");
 			cc.setSessionId(request.getSession().getId());
 			cc.setAccessIdentifier(getAccessDevice(request));
 			cc.setUserIdentifier(loginForm.getUserName());
-			
+
 			@SuppressWarnings("unused")
-			WsResponse response = resultWsWithoutSecurity
-					(UAA_END_POINT_URL+"/web-request/ticket/update-user", 
-							cc, HttpMethod.PUT, null, new ParamQueryCustomLib[] {});
-		    return lastUrl(request);
+			WsResponse response = resultWsWithoutSecurity(UAA_END_POINT_URL + "/web-request/ticket/update-user", cc,
+					HttpMethod.PUT, null, new ParamQueryCustomLib[] {});
+			TransactionCUDDto cudDto = new TransactionCUDDto();
+			try {
+				cudDto = mapperJsonToSingleDto(response.getWsContent(), TransactionCUDDto.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (cudDto.getUpdateResult() == 1)
+				return lastUrl(request);
+			else
+				return "/web-uda/" + LOGIN_URL;
 		}
 	}
 }

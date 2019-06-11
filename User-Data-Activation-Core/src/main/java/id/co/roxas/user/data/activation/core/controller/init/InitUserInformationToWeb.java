@@ -41,65 +41,82 @@ public class InitUserInformationToWeb extends BaseController {
 
 	@Autowired
 	private TblUserDao tblUserDao;
-    @Autowired
-    private TblTicketDao tblTicketDao;
-    
-    @Autowired
-    @Qualifier("transactionManager")
-    protected PlatformTransactionManager txManager;
-    
-    @PostConstruct
-    public void reNullAllTicket() {
-    	   TransactionTemplate tmpl = new TransactionTemplate(txManager);
-           tmpl.execute(new TransactionCallbackWithoutResult() {
-               @Override
-               protected void doInTransactionWithoutResult(TransactionStatus status) {
-                   tblTicketDao.updateToNullAllTicket();
-               }
-           });
-    }
-    
+	@Autowired
+	private TblTicketDao tblTicketDao;
+
+	@Autowired
+	@Qualifier("transactionManager")
+	protected PlatformTransactionManager txManager;
+
+	@PostConstruct
+	public void reNullAllTicket() {
+		TransactionTemplate tmpl = new TransactionTemplate(txManager);
+		tmpl.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				tblTicketDao.updateToNullAllTicket();
+			}
+		});
+	}
+
 	@PostMapping("/ticket/request-user")
 	public WsResponse getRequestIdentifierTicket(@Valid @RequestBody TicketCc ticketCc) {
 		TblUser tblUser = new TblUser();
 		if (ticketCc.getModule().equals(WEB_UAA)) {
 			if (ticketCc.getAccessIdentifier().equals(MOBILE)) {
-                 //please fill this for uaasessionweb;
+				// please fill this for uaasessionweb;
 			} else if (ticketCc.getAccessIdentifier().equals(DESKTOP)) {
-                 tblUser = tblUserDao.findUserByItsSessionUaaWeb(ticketCc.getSessionId());
+				tblUser = tblUserDao.findUserByItsSessionUaaWeb(ticketCc.getSessionId());
 			}
 		} else if (ticketCc.getModule().equals(WEB_LANG)) {
 			if (ticketCc.getAccessIdentifier().equals(MOBILE)) {
-				 //please fill this for langsessionweb;
+				// please fill this for langsessionweb;
 			} else if (ticketCc.getAccessIdentifier().equals(DESKTOP)) {
-				  tblUser = tblUserDao.findUserByItsSessionLangWeb(ticketCc.getSessionId());
+				tblUser = tblUserDao.findUserByItsSessionLangWeb(ticketCc.getSessionId());
 			}
 		}
 		return new WsResponse(getUserDto(tblUser), "DATA READY TO READ");
 	}
-	
+
 	@PutMapping("/ticket/update-user")
 	@Transactional
 	public WsResponse updateTicketUser(@Valid @RequestBody TicketCc ticketCc) {
-		TblUser tblUser = tblUserDao.findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(ticketCc.getUserIdentifier());
+		TransactionCUDDto customDto = new TransactionCUDDto();
+		String ticket;
+		System.err.println("is log out : " + ticketCc.getIsLogOut());
 		if (ticketCc.getModule().equals(WEB_UAA)) {
 			if (ticketCc.getAccessIdentifier().equals(MOBILE)) {
-                 //please fill this for uaasessionweb;
+				// please fill this for uaasessionweb;
 			} else if (ticketCc.getAccessIdentifier().equals(DESKTOP)) {
-				System.err.println(tblUser.getUserTicket().getTicketId());
-				tblTicketDao.updateSessionUaaWebByItsTicketId(tblUser.getUserTicket().getTicketId(), 
-                		ticketCc.getSessionId());
+				if (ticketCc.getIsLogOut()==0) {
+					ticket = tblUserDao.findByUserTicketOrUserEmailOrUserUserPhoneOrUserIdButSessionNull(
+							ticketCc.getUserIdentifier(), "UAAWEB", null);
+				} else {
+					ticket = tblUserDao.findByUserTicketOrUserEmailOrUserUserPhoneOrUserIdButSessionNull(
+							ticketCc.getUserIdentifier(), "UAAWEB", "YES");
+				}
+				if (ticket != null) {
+					tblTicketDao.updateSessionUaaWebByItsTicketId(ticket, ticketCc.getSessionId());
+					customDto.setUpdateResult(REPOSITORY_TRANSACTION_SUCCESS);
+				}
 			}
 		} else if (ticketCc.getModule().equals(WEB_LANG)) {
 			if (ticketCc.getAccessIdentifier().equals(MOBILE)) {
-				 //please fill this for langsessionweb;
+				// please fill this for langsessionweb;
 			} else if (ticketCc.getAccessIdentifier().equals(DESKTOP)) {
-				tblTicketDao.updateSessionLangWebByItsTicketId(tblUser.getUserTicket().getTicketId(), 
-                		ticketCc.getSessionId());
+				if (ticketCc.getIsLogOut()==0) {
+					ticket = tblUserDao.findByUserTicketOrUserEmailOrUserUserPhoneOrUserIdButSessionNull(
+							ticketCc.getUserIdentifier(), "LANGWEB",null);
+				} else {
+					ticket = tblUserDao.findByUserTicketOrUserEmailOrUserUserPhoneOrUserIdButSessionNull(
+							ticketCc.getUserIdentifier(), "LANGWEB","YES");
+				}
+				if (ticket != null) {
+					tblTicketDao.updateSessionLangWebByItsTicketId(ticket, ticketCc.getSessionId());
+					customDto.setUpdateResult(REPOSITORY_TRANSACTION_SUCCESS);
+				}
 			}
 		}
-		TransactionCUDDto customDto = new TransactionCUDDto();
-		customDto.setUpdateResult(REPOSITORY_TRANSACTION_SUCCESS);
 		return new WsResponse(customDto, SUCCESS_UPDATE);
 	}
 

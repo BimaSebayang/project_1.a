@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.user.data.activation.core.dao.TblRoleDao;
 import id.co.roxas.user.data.activation.core.dao.TblRoleDtlDao;
 import id.co.roxas.user.data.activation.core.dao.TblTicketDao;
@@ -24,12 +26,21 @@ import id.co.roxas.user.data.activation.core.repository.TblUser;
 @RequestMapping("/database-init")
 public class InitializerDatabase {
 
+	
+	@GetMapping("/refreshAllSession")
+	@Transactional
+	public WsResponse refreshAllSession() {
+		tblTicketDao.updateToNullAllTicket();
+		return new WsResponse(null, "DONE");
+	}
+	
 	@GetMapping("/system-creator")
 	public String systemCreator() {
 	    DatabaseInitializer();
 		return "DONE";
 	}
 	
+
 	@Autowired
 	private  TblUserDao tblUserDao;
 	@Autowired

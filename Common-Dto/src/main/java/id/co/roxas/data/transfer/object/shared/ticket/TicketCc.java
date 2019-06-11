@@ -7,6 +7,7 @@ public class TicketCc {
         private String sessionId;
         private String module;
         private String userIdentifier;
+        private int isLogOut = 0;
 		public String getAccessIdentifier() {
 			return accessIdentifier;
 		}
@@ -30,6 +31,12 @@ public class TicketCc {
 		}
 		public void setUserIdentifier(String userIdentifier) {
 			this.userIdentifier = userIdentifier;
+		}
+		public int getIsLogOut() {
+			return isLogOut;
+		}
+		public void setIsLogOut(int isLogOut) {
+			this.isLogOut = isLogOut;
 		}
 		
         

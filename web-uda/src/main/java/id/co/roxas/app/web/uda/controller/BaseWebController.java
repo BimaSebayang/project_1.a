@@ -32,6 +32,7 @@ public abstract class BaseWebController extends UltimateBase {
 		cc.setSessionId(null);
 		cc.setAccessIdentifier(getAccessDevice(request));
 		cc.setUserIdentifier(tblUserDto.getUserId());
+		cc.setIsLogOut(1);
 		@SuppressWarnings("unused")
 		WsResponse response2 = resultWsWithoutSecurity
 				(UAA_END_POINT_URL+"/web-request/ticket/update-user", 
