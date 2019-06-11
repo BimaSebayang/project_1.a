@@ -31,9 +31,10 @@ public class LoginWsCtl extends BaseRestWebController {
 
 	@PostMapping("/request-login")
 	public String requestLoginWs(@RequestBody LoginForm loginForm, HttpServletRequest request) {
+		System.err.println("masuk kagak yahh");
 		String token = restingToken(loginForm.getUserName(), loginForm.getPassword());
 		if (token == null) {
-			return UDA_END_POINT_URL+ "/" + LOGIN_URL;
+			return LOGIN_URL;
 		} else {
 			TicketCc cc = new TicketCc();
 			cc.setModule("web-uaa");
@@ -54,7 +55,7 @@ public class LoginWsCtl extends BaseRestWebController {
 			if (cudDto.getUpdateResult() == 1)
 				return lastUrl(request);
 			else
-				return UDA_END_POINT_URL+ "/" + LOGIN_URL;
+				return LOGIN_URL;
 		}
 	}
 }

@@ -8,7 +8,6 @@ import id.co.roxas.app.web.languange.UltimateBase;
 
 
 @Controller
-@RequestMapping("/web-rest-uda")
 public abstract class BaseRestWebController extends UltimateBase{
 
 }

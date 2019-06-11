@@ -7,7 +7,7 @@ loginApp.controller('RequestLogin', function ($scope, $http, $rootScope, $locati
     $scope.login = function () {
     	debugger;
         var endpoint = location.protocol + '//' + location.host;
-        var url = endpoint + "/web-rest-uda/request-login";
+        var url = endpoint + "/languange/request-login";
         var config = {
             headers: {
                 'Accept': 'text/plain'
@@ -19,7 +19,7 @@ loginApp.controller('RequestLogin', function ($scope, $http, $rootScope, $locati
         }
         $http.post(url, body, config).then(function (response) {
         	debugger;
-            $window.location.href = response.data;
+            $window.location.href = "/languange"+response.data;
         }, function error(response) {
             $scope.postResultMessage = "Error with status: " + response.statusText;
         });

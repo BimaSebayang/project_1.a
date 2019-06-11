@@ -17,7 +17,6 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 
 @Controller
-@RequestMapping("${roxas.uda-web-url}")
 public abstract class BaseWebController extends UltimateBase {
 	
 	private String message;

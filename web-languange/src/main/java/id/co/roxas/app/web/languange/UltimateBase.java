@@ -49,7 +49,7 @@ public class UltimateBase {
 	
 	@Value("${roxas.uda-web-url}")
 	protected String UDA_END_POINT_URL;
-	@Value("${roxas.gateway.port-title.uaa}")
+	@Value("${roxas.gateway.port-title.languange}")
 	protected String UAA_END_POINT_URL;
 	@Value("${roxas.user-uda}")
 	protected String USER_UDA;
