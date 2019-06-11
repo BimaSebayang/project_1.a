@@ -1,4 +1,4 @@
-package id.co.roxas.app.web.uda.controller;
+package id.co.roxas.app.web.languange.controller;
 
 import java.util.Date;
 
@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import id.co.roxas.app.web.uda.UltimateBase;
-import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
-import id.co.roxas.app.web.uda.staticVar.InformationStatus;
+import id.co.roxas.app.web.languange.UltimateBase;
+import id.co.roxas.app.web.languange.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;

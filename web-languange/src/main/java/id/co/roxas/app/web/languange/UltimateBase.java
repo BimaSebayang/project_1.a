@@ -1,4 +1,4 @@
-package id.co.roxas.app.web.uda;
+package id.co.roxas.app.web.languange;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,9 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 
-import id.co.roxas.app.web.uda.config.HttpRestResponse;
-import id.co.roxas.app.web.uda.config.HttpSecurityService;
-import id.co.roxas.app.web.uda.lib.ParamQueryCustomLib;
+import id.co.roxas.app.web.languange.config.HttpRestResponse;
+import id.co.roxas.app.web.languange.config.HttpSecurityService;
+import id.co.roxas.app.web.languange.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
