@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,19 +33,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 
+import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
+import id.co.roxas.data.transfer.object.shared.ticket.PasswordRefactor;
+import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 import id.co.roxas.lang.identifier.core.config.HttpRestResponse;
 import id.co.roxas.lang.identifier.core.config.HttpSecurityService;
 import id.co.roxas.lang.identifier.core.lib.ParamQueryCustomLib;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 
-/*
- * creator : Bima Satrya Sebayang.
- */
-
-//Please do not change access identifier,
 @Component
 public class UltimateBase {
+	protected static final int REPOSITORY_TRANSACTION_SUCCESS = 1;
+	protected static final int UNRECOGNIZE_ID = 1;
+	protected static final String RESPONSE_BAD_UUID = "Bad Uuid Class Connector";
+	protected static final String RESPONSE_BAD_AUTHOR = "Bad Authorization User";
+	protected static final String SUCCESS_RETRIEVE = "Data Retrieve Success";
+	protected static final String SUCCESS_SAVE = "Save Success";
+	protected static final String INSUCCESS_SAVE = "Save Insuccess";
+	protected static final String SUCCESS_UPDATE = "Update Success";
+	protected static final String INSUCCESS_UPDATE = "Update Insuccess";
+	protected static final String SUCCESS_DELETE = "Delete success";
+	protected static final String INSUCCESS_DELETE = "Delete Insuccess";
+	protected static final String WEB_UAA = "web-uaa";
+	protected static final String WEB_LANG = "web-languange";
 	@Value("${roxas.gateway.port-title.uaa}")
 	protected String UAA_END_POINT_URL;
 	@Value("${roxas.user-uda}")
@@ -55,16 +71,76 @@ public class UltimateBase {
 	protected String PASSWORD;
 	@Value("${roxas.login-url}")
 	protected String LOGIN_URL;
+
 	@Value("${roxas.neigh.user-uda}")
 	protected String NEIGH_USER;
 	@Value("${roxas.neigh.password-uda}")
 	protected String NEIGH_PASSWORD;
-	
+
+	protected static final String MOBILE = "mobile";
+	protected static final String DESKTOP = "desktop";
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
+
+	protected TblUserDto getUserDtoAccess(TicketCc cc) {
+		WsResponse response = resultWsWithoutSecurity(UAA_END_POINT_URL + "/web-request/ticket/request-user", cc,
+				HttpMethod.POST, null, new ParamQueryCustomLib[] {});
+		TblUserDto tblUserDto = null;
+		try {
+			tblUserDto = mapperJsonToSingleDto(response.getWsContent(), TblUserDto.class);
+		} catch (Exception e) {
+			System.out.println("user tidak terdaftar");
+		}
+		return tblUserDto;
+	}
+
+	protected String getAccessDevice(HttpServletRequest request) {
+		if (request.getHeader("User-Agent").indexOf("Mobile") != -1) {
+			return MOBILE;
+		} else {
+			return DESKTOP;
+		}
+	}
+	
+	protected String restingTokenUaa(String userName, String userPassword) {
+		Map<String, Object> mapToken = new HashMap<>();
+		Map<String, String> header = new HashMap<>();
+		header.put("Authorization",
+				"Basic ".concat(Base64.getEncoder().encodeToString((USER_UDA + ":" + PASSWORD_UDA).getBytes())));
+		HttpRestResponse httpRestResponse = wsBody(UAA_END_POINT_URL + "/oauth/token", null, HttpMethod.POST, header,
+				new ParamQueryCustomLib("grant_type", PASSWORD), new ParamQueryCustomLib("username", userName),
+				new ParamQueryCustomLib("password", userPassword));
+		switch (httpRestResponse.getStatus()) {
+		case OK:
+
+			mapToken = mapResultApi(httpRestResponse.getBody());
+			if (mapToken != null && mapToken.get("access_token") != null) {
+				return (String) mapToken.get("access_token");
+			}
+
+			break;
+
+		case NOT_ACCEPTABLE:
+			return null;
+		case INTERNAL_SERVER_ERROR:
+			return null;
+		default:
+			return null;
+		}
+
+		return null;
+	}
+
+
 	protected String getToken(HttpServletRequest request) {
-		String token = (String) request.getSession().getAttribute("token");
-		System.err.println("current token : " + token);
+		TicketCc cc = new TicketCc();
+		cc.setModule("web-uaa");
+		cc.setSessionId(request.getSession().getId());
+		cc.setAccessIdentifier(getAccessDevice(request));
+		TblUserDto tblUserDto = getUserDtoAccess(cc);
+		String identifier = tblUserDto.getUserId();
+		String password = PasswordRefactor.refactorChar(tblUserDto.getUserPassword());
+		String token = restingToken(identifier, password);
 		return token;
 	}
 
@@ -74,7 +150,6 @@ public class UltimateBase {
 
 	protected String lastUrl(HttpServletRequest request) {
 		String neededUrl = (String) request.getSession().getAttribute("last-url");
-		System.err.println("last result url : " + neededUrl);
 		if (neededUrl == null) {
 			return DASHBOARD_URL;
 		} else {
@@ -151,9 +226,11 @@ public class UltimateBase {
 		return getResultWs(url, body, method, headerMap, paramQuery);
 	}
 
-	protected String restingTokenUaa(String userName, String userPassword) {
+	protected String restingToken(String userName, String userPassword) {
 		Map<String, Object> mapToken = new HashMap<>();
 		Map<String, String> header = new HashMap<>();
+//		header.put("Authorization",
+//				"Basic ".concat("bXktdHJ1c3RlZC1jbGllbnQ6c2VjcmV0"));
 		header.put("Authorization",
 				"Basic ".concat(Base64.getEncoder().encodeToString((USER_UDA + ":" + PASSWORD_UDA).getBytes())));
 		HttpRestResponse httpRestResponse = wsBody(UAA_END_POINT_URL + "/oauth/token", null, HttpMethod.POST, header,
@@ -213,11 +290,10 @@ public class UltimateBase {
 	@SuppressWarnings("rawtypes")
 	private HttpRestResponse wsBody(String url, Object body, HttpMethod method, Map<String, String> headerMap,
 			ParamQueryCustomLib... paramQuery) {
-		System.err.println("masuk ke sini");
 		MultiValueMap<String, Object> header = new LinkedMultiValueMap<>();
 		HttpHeaders headers = new HttpHeaders();
-	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-	    
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
 		if (headerMap != null) {
 			for (Entry<String, String> hm : headerMap.entrySet()) {
 				headers.add(hm.getKey(), hm.getValue());
@@ -237,15 +313,14 @@ public class UltimateBase {
 		}
 		System.err.println("body : " + new Gson().toJson(body));
 		System.err.println("header : " + new Gson().toJson(headers));
-		
+
 		HttpEntity httpEntity = new HttpEntity(body, headers);
 		RestTemplate restTemplate = new RestTemplate();
 		System.err.println("url yang diberikan : " + url.concat(paramBuilder.toString()));
 
 		String resultApi = new String();
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.
-					exchange(url.concat(paramBuilder.toString()), method,
+			ResponseEntity<String> responseEntity = restTemplate.exchange(url.concat(paramBuilder.toString()), method,
 					httpEntity, String.class);
 			System.err.println("status : " + responseEntity.getStatusCode());
 			System.err.println("result api : " + responseEntity.getBody());
@@ -294,7 +369,6 @@ public class UltimateBase {
 	private WsResponse getResultWs(String url, Object body, HttpMethod method, Map<String, String> headerMap,
 			ParamQueryCustomLib... paramQuery) {
 		WsResponse wsResponse = new WsResponse();
-		
 		HttpRestResponse httpRestResponse = wsBody(url, body, method, headerMap, paramQuery);
 
 		switch (httpRestResponse.getStatus()) {
@@ -330,5 +404,16 @@ public class UltimateBase {
 		}
 		return finalMap;
 	}
-
+	protected MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
+	protected final Date dateNow = new Date(); 
+	
+	protected String staplingWords(String word, String nvl) {
+		return nvl+word+nvl;
+	}
+	
+	protected <T> List<T> reloadUniqueValue(List<T> value) {
+		Set<T> uniqueVal = new HashSet<T>(value);
+		List<T> finalList = new ArrayList<>(uniqueVal);
+		return finalList;
+	}
 }
