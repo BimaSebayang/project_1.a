@@ -37,7 +37,7 @@ public class LoginWsCtl extends BaseRestWebController {
 			return LOGIN_URL;
 		} else {
 			TicketCc cc = new TicketCc();
-			cc.setModule("web-uaa");
+			cc.setModule("web-languange");
 			cc.setSessionId(request.getSession().getId());
 			cc.setAccessIdentifier(getAccessDevice(request));
 			cc.setUserIdentifier(loginForm.getUserName());

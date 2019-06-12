@@ -50,6 +50,8 @@ public class UltimateBase {
 	@Value("${roxas.uda-web-url}")
 	protected String UDA_END_POINT_URL;
 	@Value("${roxas.gateway.port-title.languange}")
+	protected String LANG_END_POINT_URL;
+	@Value("${roxas.gateway.port-title.uaa}")
 	protected String UAA_END_POINT_URL;
 	@Value("${roxas.user-uda}")
 	protected String USER_UDA;
@@ -64,7 +66,7 @@ public class UltimateBase {
 
 	protected static final String MOBILE = "mobile";
 	protected static final String DESKTOP = "desktop";
-	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
+	protected static final String DASHBOARD_URL = "/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
 
 	protected TblUserDto getUserDtoAccess(TicketCc cc) {
@@ -89,7 +91,7 @@ public class UltimateBase {
 
 	protected String getToken(HttpServletRequest request) {
 		TicketCc cc = new TicketCc();
-		cc.setModule("web-uaa");
+		cc.setModule("web-languange");
 		cc.setSessionId(request.getSession().getId());
 		cc.setAccessIdentifier(getAccessDevice(request));
 		TblUserDto tblUserDto = getUserDtoAccess(cc);
@@ -188,7 +190,7 @@ public class UltimateBase {
 //				"Basic ".concat("bXktdHJ1c3RlZC1jbGllbnQ6c2VjcmV0"));
 		header.put("Authorization",
 				"Basic ".concat(Base64.getEncoder().encodeToString((USER_UDA + ":" + PASSWORD_UDA).getBytes())));
-		HttpRestResponse httpRestResponse = wsBody(UAA_END_POINT_URL + "/oauth/token", null, HttpMethod.POST, header,
+		HttpRestResponse httpRestResponse = wsBody(LANG_END_POINT_URL + "/oauth/token", null, HttpMethod.POST, header,
 				new ParamQueryCustomLib("grant_type", PASSWORD), new ParamQueryCustomLib("username", userName),
 				new ParamQueryCustomLib("password", userPassword));
 		switch (httpRestResponse.getStatus()) {

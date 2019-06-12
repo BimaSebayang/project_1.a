@@ -23,7 +23,7 @@ public abstract class BaseWebController extends UltimateBase {
 	
 	protected void refreshAllSession(HttpServletRequest request) {
 		TicketCc cc = new TicketCc();
-		cc.setModule("web-uaa");
+		cc.setModule("web-languange");
 		cc.setSessionId(request.getSession().getId());
 		cc.setAccessIdentifier(getAccessDevice(request));
 		TblUserDto tblUserDto = getUserDtoAccess(cc);
@@ -41,7 +41,7 @@ public abstract class BaseWebController extends UltimateBase {
 
     protected String onSecurityAccess(String url, HttpServletRequest request) {
     	TicketCc cc = new TicketCc();
-		cc.setModule("web-uaa");
+		cc.setModule("web-languange");
 		cc.setSessionId(request.getSession().getId());
 		cc.setAccessIdentifier(getAccessDevice(request));
 		TblUserDto tblUserDto = getUserDtoAccess(cc);
