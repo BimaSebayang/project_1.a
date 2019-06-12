@@ -11,7 +11,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import id.co.roxas.app.web.languange.UltimateBase;
-import id.co.roxas.app.web.languange.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
@@ -34,7 +33,7 @@ public abstract class BaseWebController extends UltimateBase {
 		@SuppressWarnings("unused")
 		WsResponse response2 = resultWsWithoutSecurity
 				(UAA_END_POINT_URL+"/web-request/ticket/update-user", 
-						cc, HttpMethod.PUT, null, new ParamQueryCustomLib[] {});
+						cc, HttpMethod.PUT, null, new id.co.roxas.app.web.languange.controller.lib.ParamQueryCustomLib[] {});
 		request.getSession().invalidate();
 	}
 	

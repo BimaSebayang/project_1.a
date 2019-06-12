@@ -6,7 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.co.roxas.app.web.languange.controller.BaseRestWebController;
-import id.co.roxas.app.web.languange.lib.ParamQueryCustomLib;
+import id.co.roxas.app.web.languange.controller.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 
 @RestController
