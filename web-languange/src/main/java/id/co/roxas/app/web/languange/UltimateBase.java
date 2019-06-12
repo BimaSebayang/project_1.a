@@ -46,7 +46,7 @@ import id.co.roxas.data.transfer.object.shared.ticket.TicketCc;
 //Please do not change access identifier,
 @Component
 public class UltimateBase {
-	
+	//save testter
 	@Value("${roxas.uda-web-url}")
 	protected String UDA_END_POINT_URL;
 	@Value("${roxas.gateway.port-title.languange}")
