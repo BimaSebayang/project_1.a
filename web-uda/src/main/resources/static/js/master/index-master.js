@@ -23,6 +23,7 @@ masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 			});
 
 	$scope.clickSide = function(url) {
+		debugger;
 		$scope.lastUrl = url;
 	};
 
