@@ -46,6 +46,7 @@
         <module>../languange-identifier-core</module>
         <module>../Core-gateway</module>
         <module>../web-gateway</module>
+        <module>../web-languange</module>
     </modules>
 	
 

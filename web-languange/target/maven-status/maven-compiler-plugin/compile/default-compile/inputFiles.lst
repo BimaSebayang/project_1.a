@@ -1,0 +1,17 @@
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/master/MasterIndexCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/spellChecker/SpellCheckerWsCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/UltimateBase.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/WebLanguangeApplication.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/lib/ParamQueryCustomLib.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/login/LoginCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/BaseWebController.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/login/LoginWsCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/spellChecker/SpellCheckerCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/config/HttpSecurityService.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/dictionary/DictionaryCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/config/HttpErrorRefactor.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/master/MasterIndexWsCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/config/HttpRestResponse.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/dictionary/DictionaryWsCtl.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/BaseRestWebController.java
+/home/iforce-86/Documents/Own_Project/git-project_1.a/project_1.a/web-languange/src/main/java/id/co/roxas/app/web/languange/controller/constructor/InitPostConstruct.java

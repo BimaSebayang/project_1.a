@@ -9,11 +9,11 @@
 		<version>0.0.1</version>
 		<relativePath />
 	</parent>
-	<groupId>id.co.roxas.app.web.languange</groupId>
+	<groupId>id.co.roxas.app.web.uda</groupId>
 	<artifactId>web-languange</artifactId>
 	<version>1.1.1</version>
 	<name>web-uda</name>
-	<description>web development create user and gain token</description>
+	<description>web development for word</description>
 
 	<properties>
 		<java.version>1.8</java.version>

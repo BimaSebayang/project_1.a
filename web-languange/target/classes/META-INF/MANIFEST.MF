@@ -3,7 +3,7 @@ Built-By: iforce-86
 Build-Jdk: 11.0.2
 Implementation-Title: web-uda
 Implementation-Version: 1.1.1
-Implementation-Vendor-Id: id.co.roxas.app.web.languange
-Implementation-URL: http://maven.apache.org/web-languange
+Implementation-Vendor-Id: id.co.roxas.app.web.uda
+Implementation-URL: http://web-languange
 Created-By: Maven Integration for Eclipse
 
