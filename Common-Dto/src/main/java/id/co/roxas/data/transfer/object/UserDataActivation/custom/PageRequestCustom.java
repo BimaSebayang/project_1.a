@@ -22,6 +22,12 @@ public class PageRequestCustom<T> {
 		this.sortBy = sortBy;
 		this.filtering = filtering;
 	}
+	
+	
+	public PageRequestCustom() {
+	}
+
+
 	public List<T> getListResponse() {
 		return listResponse;
 	}

@@ -2,7 +2,7 @@ var masterWebUdaIndexApp = angular.module('masterWebUdaIndexApp', []);
 
 masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 		$rootScope, $location, $window) {
-	$scope.endpoint = location.origin;
+	$scope.endpoint = location.origin + "/languange";
 	$scope.controllerform = '';
 	$scope.isFilterUserAdminSettingConfig = false;
 	$scope.isFilteringRoleAdminSettingConfig = false;

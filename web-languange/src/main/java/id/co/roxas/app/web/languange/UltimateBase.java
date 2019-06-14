@@ -64,6 +64,7 @@ public class UltimateBase {
 	@Value("${roxas.login-url}")
 	protected String LOGIN_URL;
 
+	protected static final String SIZE_LANG = "10";
 	protected static final String MOBILE = "mobile";
 	protected static final String DESKTOP = "desktop";
 	protected static final String DASHBOARD_URL = "/master-web-uda-index";
@@ -134,6 +135,29 @@ public class UltimateBase {
 			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("page", page));
 		}
 		this.paramQueryCustomLibs.add(new ParamQueryCustomLib("size", SIZE_PAGE));
+		if (Strings.isBlank(search)) {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("search", ""));
+		} else {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("search", search));
+		}
+
+		if (sort.length == 0) {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("sort", defaultSort));
+		}
+
+		for (String s : sort) {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("sort", s));
+		}
+	}
+	
+	protected void paramPagingNew(String page, String size, String search, String defaultSort, String... sort) {
+		this.paramQueryCustomLibs = new ArrayList<>();
+		if (Strings.isBlank(page)) {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("page", "0"));
+		} else {
+			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("page", page));
+		}
+		this.paramQueryCustomLibs.add(new ParamQueryCustomLib("size", size));
 		if (Strings.isBlank(search)) {
 			this.paramQueryCustomLibs.add(new ParamQueryCustomLib("search", ""));
 		} else {

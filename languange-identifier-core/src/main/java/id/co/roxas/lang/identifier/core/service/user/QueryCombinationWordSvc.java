@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCustom;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
@@ -18,21 +21,20 @@ public class QueryCombinationWordSvc extends BaseService{
     @Autowired
     private TblLangRepositoryTempDtlDao tblLangRepositoryTempDtlDao;
     
-    public List<TblLangRepositoryTempDtlDto> getAllMeaningOfSomeWords(String words){
-    	List<TblLangRepositoryTempDtlDto> tblLangRepositoryTempDtlDtos = new ArrayList<>();
-    	
-    	List<TblLangRepositoryTempDtl> tblLangRepositoryTempDtls = tblLangRepositoryTempDtlDao.
-    			getAllMeaningOfSomeWord(staplingWords(words, "%"));
-    	
-//    	List<TblLangRepositoryTempDtl> tblLangRepositoryTempDtls = tblLangRepositoryTempDtlDao.findAll();
-//    	System.err.println("word : " + staplingWords(words, "%"));
-    	for (TblLangRepositoryTempDtl tblLangRepositoryTempDtl : tblLangRepositoryTempDtls) {
+    public PageRequestCustom<TblLangRepositoryTempDtlDto> getAllMeaningOfSomeWords(String words, Pageable pageable){
+    	List<TblLangRepositoryTempDtlDto> tblLangRepositoryTempDtlDtos = new ArrayList<>();	
+    	Page<TblLangRepositoryTempDtl> page = tblLangRepositoryTempDtlDao.
+    			getAllMeaningOfSomeWord(words, pageable);
+    	for (TblLangRepositoryTempDtl tblLangRepositoryTempDtl : page.getContent()) {
 			TblLangRepositoryTempDtlDto tempDtlDto = new TblLangRepositoryTempDtlDto();
 			tempDtlDto = mapperFacade.map(tblLangRepositoryTempDtl, TblLangRepositoryTempDtlDto.class);
-			tempDtlDto.setTblId(new TblLangRepositoryTempDto());
+			TblLangRepositoryTempDto tblLangRepositoryTempDto = mapperFacade.
+					map(tblLangRepositoryTempDtl.getTblId(), TblLangRepositoryTempDto.class);
+			tblLangRepositoryTempDto.setTblUsingCharacterDetails(new ArrayList<>());
+			tempDtlDto.setTblId(tblLangRepositoryTempDto);
 			tblLangRepositoryTempDtlDtos.add(tempDtlDto);
 		}
-    	
-    	return tblLangRepositoryTempDtlDtos;
+    	return new PageRequestCustom<>(tblLangRepositoryTempDtlDtos, page.getPageable().getPageSize(), page.getTotalPages(),
+				page.getPageable().getPageNumber(),page.getTotalElements(), getSorter(pageable), null);
     }
 }
