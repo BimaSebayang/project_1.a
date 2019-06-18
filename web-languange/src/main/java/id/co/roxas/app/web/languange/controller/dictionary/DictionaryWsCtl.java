@@ -1,9 +1,9 @@
 package id.co.roxas.app.web.languange.controller.dictionary;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpMethod;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import id.co.roxas.app.web.languange.controller.BaseWebController;
 import id.co.roxas.app.web.languange.controller.config.HttpSecurityService;
-import id.co.roxas.app.web.languange.controller.lib.ParamQueryCustomLib;
-import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDto;
-import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCustom;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageClassResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageRevolver;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
@@ -47,6 +44,23 @@ public class DictionaryWsCtl extends BaseWebController{
 		pageRequestCustom.setAllDatas(tempDtlDtos);
 		pageRequestCustom.setPage(pageResponse.getPageNumber());
 		pageRequestCustom.setTotalPage(pageResponse.getTotalPage());
+	    Map<String, Object> mapper = new HashMap<>();
+		if(tempDtlDtos.size()==0) {
+			PageResponse pageSugest = pageResultsWithSecurityAccess
+					(LANG_END_POINT_URL + "/query-combination-word/temp/suggest-word", 
+							revolver.getSearch(), 
+							HttpMethod.POST, null, 
+							getToken(request), httpSecurityService);
+		 List<String> allSugestWords = new ArrayList<>();
+		    try {
+				allSugestWords = mapperJsonToListDto(pageSugest.getWsContent(), String.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    mapper.put("suggestion", allSugestWords);
+		    pageRequestCustom.setAdditionalCondition(mapper);
+		}
 		return pageRequestCustom;
 	}
 	

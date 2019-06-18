@@ -13,6 +13,9 @@ import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
 @Repository
 public interface TblLangRepositoryTempDtlDao extends JpaRepository<TblLangRepositoryTempDtl, String>{
 
+	@Query("select a.langName from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
+	public List<String> getAllWords();
+	
 	@Query("select a from TblLangRepositoryTempDtl a"
 			+ " where "
 			+ " upper(a.langName) like upper(concat('%',?1,'%'))"

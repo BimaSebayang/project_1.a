@@ -44,7 +44,22 @@
 
 
 
-	<h2 class="pb-3 pt-2 border-bottom mb-5">Hasil Pencarian</h2>
+	
+	
+	<div class="d-flex">
+		<div>
+			<h2>Hasil Pencarian</h2>
+		</div>
+		<div class="ml-auto">
+			<div class="ml-auto">
+					<select ng-model="word" class="form-control" ng-change = "queryWordSuggest(word)"
+						ng-options="suggestionWord for suggestionWord in suggestionWords">
+						 <option value="" disabled selected>{{suggestionRole}}</option>
+					</select>
+			</div>
+		</div>
+	</div>
+	<hr style="position: relative; top: -20px;">
 
 	<div class="container">
 		<h4>Timeline Style : {{wordSearch}}</h4>

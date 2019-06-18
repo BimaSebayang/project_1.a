@@ -16,8 +16,8 @@ import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCus
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblSearchWordHistoryDto;
-import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
+import id.co.roxas.lang.identifier.core.lib.LevensteinDistance;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
 import id.co.roxas.lang.identifier.core.service.AsynchService;
 import id.co.roxas.lang.identifier.core.service.BaseService;
@@ -30,6 +30,17 @@ public class QueryCombinationWordSvc extends BaseService {
 	@Autowired
 	private AsynchService asynchService;
 
+	public List<String> allSuggestWords(String words,String user){
+		List<String> allWords = new ArrayList<>();
+		
+		List<String> temp = tblLangRepositoryTempDtlDao.getAllWords();
+		
+		allWords = LevensteinDistance.collectAllLevenstheinLevel
+				(words, temp);
+		
+		return allWords;
+	}
+	
 	public PageRequestCustom<TblLangRepositoryTempDtlDto> getAllMeaningOfSomeWords(String words, String user,
 			Pageable pageable) {
 		List<TblLangRepositoryTempDtlDto> tblLangRepositoryTempDtlDtos = new ArrayList<>();

@@ -46,4 +46,17 @@ public class QueryCombinationWordCtl extends BaseController{
 			return new PageResponse(tempDtlDtos, authorizationClassConf, SUCCESS_RETRIEVE);
 		}
 	}
+	
+	@PostMapping("/temp/suggest-word")
+	public WsResponse suggestSomeWords(@Valid @RequestBody String words,Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf
+				(new String[]{}, new String[]{},"I001", authentication.getName());
+		List<String> leven = queryCombinationWordSvc.allSuggestWords(words, 
+				authentication.getName());
+		if (responsePusherInvalidatorAccessUser(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			return new WsResponse(leven, SUCCESS_RETRIEVE, authorizationClassConf);
+		}
+	}
 }

@@ -2,6 +2,7 @@ package id.co.roxas.data.transfer.object.languangeIdentifierCore.core;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class TblLangRepositoryTempDtlDto implements Serializable {
 
@@ -85,4 +86,6 @@ public class TblLangRepositoryTempDtlDto implements Serializable {
 		return dtoTicketing;
 	}
 
+
+	
 }

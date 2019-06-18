@@ -11,6 +11,7 @@ public class PageClassResponse<T> {
 	private int page;
 	private List<Map<String,Object>> totalPage;
 	private Map<String,Object> filtering = new HashMap<String,Object>();
+	private Map<String, Object> additionalCondition = new HashMap<String, Object>();
 	
 	public List<T> getAllDatas() {
 		return allDatas;
@@ -43,6 +44,12 @@ public class PageClassResponse<T> {
 			mapPages.add(mapPage);
 		}
 		this.totalPage = mapPages;
+	}
+	public Map<String, Object> getAdditionalCondition() {
+		return additionalCondition;
+	}
+	public void setAdditionalCondition(Map<String, Object> additionalCondition) {
+		this.additionalCondition = additionalCondition;
 	}
 	
     
