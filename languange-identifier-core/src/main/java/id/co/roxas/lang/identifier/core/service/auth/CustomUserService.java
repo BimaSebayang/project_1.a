@@ -7,11 +7,12 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblRoleDtlDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.lang.identifier.core.config.PasswordRefactor;
-
+@Service
 public class CustomUserService implements UserDetails {
 
 	private static final long serialVersionUID = -5446817407722834700L;
@@ -20,6 +21,11 @@ public class CustomUserService implements UserDetails {
     private boolean isActive = false;
     Collection<? extends GrantedAuthority> authorities;
 	
+    
+    
+	public CustomUserService() {
+	}
+
 	public CustomUserService(TblUserDto tblUser) {
 		  this.userName = tblUser.getUserId();
 		  this.password = "{noop}"+PasswordRefactor.refactorChar(tblUser.getUserPassword());

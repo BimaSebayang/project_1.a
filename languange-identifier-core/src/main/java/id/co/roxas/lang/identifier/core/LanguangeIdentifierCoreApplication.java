@@ -39,6 +39,7 @@ public class LanguangeIdentifierCoreApplication {
 		@Override
 		public UserDetails loadUserByUsername(String userValidation) throws UsernameNotFoundException {
 			return new CustomUserService(userAuthenticationCustomLogin.findByUserTicketOrUserEmailOrUserUserPhoneOrUserId(userValidation));
+		    //return new CustomUserService();
 		}
 	})	;
 	}

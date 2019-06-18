@@ -42,7 +42,7 @@ public class QueryCombinationWordCtl extends BaseController{
 			return getPageInvalid();
 		} else {
 			PageRequestCustom<TblLangRepositoryTempDtlDto> tempDtlDtos = 
-					queryCombinationWordSvc.getAllMeaningOfSomeWords(words,pageable);
+					queryCombinationWordSvc.getAllMeaningOfSomeWords(words,authentication.getName(),pageable);
 			return new PageResponse(tempDtlDtos, authorizationClassConf, SUCCESS_RETRIEVE);
 		}
 	}
