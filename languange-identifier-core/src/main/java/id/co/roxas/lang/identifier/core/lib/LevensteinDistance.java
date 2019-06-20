@@ -1,6 +1,7 @@
 package id.co.roxas.lang.identifier.core.lib;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class LevensteinDistance {
 
@@ -34,26 +36,35 @@ public class LevensteinDistance {
 		return temp;
 	}
 
+	public static String replaceUnalphabeticChar(String word) {
+		return word.replaceAll("[^A-Za-z- ]", "");
+	}
+
 	public static void main(String[] args) {
+		
           Map<String, String> map = new HashMap<>();
           map.put("betul", "sudah benar banget");
           map.put("tepat", "pas kena banget");
           map.put("pas", "tepat banget");
           map.put("benar", "sudah betul banget");
-          
-          System.err.println(new Gson().toJson(collectAllTwoSlidingValue("yes banget", 
+          System.err.println(new Gson().toJson(collectAllTwoSlidingValue("pas betul banget", 
         		  map)));
-          
-    //      System.out.println(new Gson().toJson(TwoSlidingValue("pas kena", "sudah betul banget")));
 	}
 
 	public static List<String> cuttingString(String w) {
 		Set<String> str = new HashSet<>();
-		int lengW = w.toCharArray().length;
-
-		for (int i = 1; i <= lengW; i++) {
-			for (int j = 0; j < lengW - i + 1; j++) {
-				str.add(w.substring(j, j + i));
+		w = replaceUnalphabeticChar(w);
+		String[] sw = w.split(" ");
+		List<String> arr = new ArrayList<>(Arrays.asList(sw));
+		for (int i = 0; i <= arr.size(); i++) {
+			for (int j = 1; j <= arr.size(); j++) {
+				if (i + j <= arr.size()) {
+					StringBuilder sb = new StringBuilder();
+					for (String subarr : arr.subList(i, i + j)) {
+                        sb.append(subarr.concat(" "));
+                        str.add(sb.toString().trim());
+					}
+				}
 			}
 		}
 		return new ArrayList<>(str);
@@ -80,27 +91,29 @@ public class LevensteinDistance {
 		return strs;
 	}
 
-	public static List<TwoSlidingClass> collectAllTwoSlidingValue(String queryWord, Map<String, String> wordsWithMeaning) {
+	public static List<TwoSlidingClass> collectAllTwoSlidingValue(String queryWord,
+			Map<String, String> wordsWithMeaning) {
+		System.err.println("start sliding");
 		List<TwoSlidingClass> twoSlidingClassess = new ArrayList<>();
 		List<Integer> allTwoSlidingValue = new ArrayList<>();
-        for (Entry<String, String> wwm : wordsWithMeaning.entrySet()) {
-        	TwoSlidingClass resultSliding = TwoSlidingValue(queryWord, wwm.getValue());
+		for (Entry<String, String> wwm : wordsWithMeaning.entrySet()) {
+			TwoSlidingClass resultSliding = TwoSlidingValue(queryWord, wwm.getValue());
 			int h = resultSliding.getLengSubQuery();
-			twoSlidingClassess.add(new TwoSlidingClass
-					(wwm.getKey(), wwm.getValue(),resultSliding.getSubquery(), 
-							h));
+			twoSlidingClassess.add(new TwoSlidingClass(wwm.getKey(), wwm.getValue(), resultSliding.getSubquery(), h));
 			allTwoSlidingValue.add(h);
 		}
-        int maxSlidingValue = Collections.max(allTwoSlidingValue);
-        System.err.println(maxSlidingValue);
-        List<TwoSlidingClass> classes = new ArrayList<>();
-        for (TwoSlidingClass tsc : twoSlidingClassess) {
-			if(tsc.getLengSubQuery()==maxSlidingValue) {
+		int maxSlidingValue = Collections.max(allTwoSlidingValue);
+		System.err.println(maxSlidingValue);
+		List<TwoSlidingClass> classes = new ArrayList<>();
+		for (TwoSlidingClass tsc : twoSlidingClassess) {
+			if (tsc.getLengSubQuery() == maxSlidingValue) {
 				classes.add(tsc);
 			}
 		}
 		return classes;
 	}
+	
+	
 
 	private static TwoSlidingClass TwoSlidingValue(String w1, String w2) {
 		int lengW1 = w1.toCharArray().length;
@@ -114,21 +127,16 @@ public class LevensteinDistance {
 	}
 
 	private static TwoSlidingClass TwoSlidingValueMin(String w1, String w2) {
-		List<Integer> sorted = new ArrayList<>();
 		List<String> ls = cuttingString(w2);
 		TwoSlidingClass twoSlidingClass = new TwoSlidingClass();
 		for (String l : ls) {
-			
 			if (w1.contains(l)) {
-				
-				int len = l.toCharArray().length;
-				System.out.println(w1 + " " + l + " === length : " + len);
+				int len = l.split(" ").length;
 				if (twoSlidingClass.getLengSubQuery() < len) {
 					twoSlidingClass = new TwoSlidingClass(l, len);
 				}
 			}
 		}
-
 		return twoSlidingClass;
 	}
 

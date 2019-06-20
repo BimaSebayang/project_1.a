@@ -2,7 +2,9 @@ package id.co.roxas.lang.identifier.core.service.user;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -16,8 +18,10 @@ import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCus
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblSearchWordHistoryDto;
+import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.TwoSlidingClassDto;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
 import id.co.roxas.lang.identifier.core.lib.LevensteinDistance;
+import id.co.roxas.lang.identifier.core.lib.TwoSlidingClass;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
 import id.co.roxas.lang.identifier.core.service.AsynchService;
 import id.co.roxas.lang.identifier.core.service.BaseService;
@@ -38,6 +42,18 @@ public class QueryCombinationWordSvc extends BaseService {
 		allWords = LevensteinDistance.collectAllLevenstheinLevel
 				(words, temp);
 		
+		return allWords;
+	}
+	
+	public List<TwoSlidingClassDto> allSynonimsWord(String words,String user){
+		List<TwoSlidingClassDto> allWords = new ArrayList<>();
+		List<Object[]> temp = tblLangRepositoryTempDtlDao.getAllWordsAndItsMeaning();
+		Map<String, String> obj = new HashMap<>();
+		for (Object[] o : temp) {
+			obj.put((String)o[0], (String)o[1]);
+		}
+		List<TwoSlidingClass> twss = LevensteinDistance.collectAllTwoSlidingValue(words, obj);
+		allWords = mapperFacade.mapAsList(twss, TwoSlidingClassDto.class);
 		return allWords;
 	}
 	

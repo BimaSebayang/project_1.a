@@ -19,6 +19,7 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
+import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.TwoSlidingClassDto;
 import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 import id.co.roxas.lang.identifier.core.controller.BaseController;
 import id.co.roxas.lang.identifier.core.service.user.QueryCombinationWordSvc;
@@ -50,9 +51,23 @@ public class QueryCombinationWordCtl extends BaseController{
 	@PostMapping("/temp/suggest-word")
 	public WsResponse suggestSomeWords(@Valid @RequestBody String words,Authentication authentication) {
 		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf
-				(new String[]{}, new String[]{},"I001", authentication.getName());
+				(new String[]{},new String[]{}, getAllAuthUser(authentication),"I001", authentication.getName());
 		List<String> leven = queryCombinationWordSvc.allSuggestWords(words, 
 				authentication.getName());
+		if (responsePusherInvalidatorAccessUser(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			return new WsResponse(leven, SUCCESS_RETRIEVE, authorizationClassConf);
+		}
+	}
+
+	@PostMapping("/temp/synonims-word")
+	public WsResponse synonymsWord(@Valid @RequestBody String words,
+			@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
+			Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf
+				(registUuid(uuid),registUuid(TwoSlidingClassDto.getDtoticketing()),getAllAuthUser(authentication),"I001", authentication.getName());
+		List<TwoSlidingClassDto> leven = queryCombinationWordSvc.allSynonimsWord(words, authentication.getName());
 		if (responsePusherInvalidatorAccessUser(authentication, authorizationClassConf, true)) {
 			return getResponseInvalid();
 		} else {

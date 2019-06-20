@@ -16,6 +16,9 @@ public interface TblLangRepositoryTempDtlDao extends JpaRepository<TblLangReposi
 	@Query("select a.langName from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
 	public List<String> getAllWords();
 	
+	@Query("select a.langName, a.langDesc from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
+	public List<Object[]> getAllWordsAndItsMeaning();
+	
 	@Query("select a from TblLangRepositoryTempDtl a"
 			+ " where "
 			+ " upper(a.langName) like upper(concat('%',?1,'%'))"

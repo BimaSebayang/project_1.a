@@ -19,43 +19,45 @@
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-	
+
 	<dependencies>
-		
+
+	
+
 		<dependency>
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>
 			<version>1.5.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
-		
+
 	</dependencies>
 
 
 
-<!-- 	<build> -->
-<!-- 		<defaultGoal>spring-boot:run</defaultGoal> -->
-<!-- 		<plugins> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.springframework.boot</groupId> -->
-<!-- 				<artifactId>spring-boot-maven-plugin</artifactId> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>repackage</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-<!-- 		</plugins> -->
-<!-- 	</build> -->
+	<!-- <build> -->
+	<!-- <defaultGoal>spring-boot:run</defaultGoal> -->
+	<!-- <plugins> -->
+	<!-- <plugin> -->
+	<!-- <groupId>org.springframework.boot</groupId> -->
+	<!-- <artifactId>spring-boot-maven-plugin</artifactId> -->
+	<!-- <executions> -->
+	<!-- <execution> -->
+	<!-- <goals> -->
+	<!-- <goal>repackage</goal> -->
+	<!-- </goals> -->
+	<!-- </execution> -->
+	<!-- </executions> -->
+	<!-- </plugin> -->
+	<!-- </plugins> -->
+	<!-- </build> -->
 
 
-<build>
+	<build>
 		<finalName>Common-Dto</finalName>
 		<plugins>
 
@@ -86,15 +88,15 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 
-				  <!-- DO NOT include log4j.properties file in your Jar -->
-<!-- 				  <excludes> -->
-<!-- 					<exclude>**/log4j.properties</exclude> -->
-<!-- 				  </excludes> -->
-				  <archive>
-					<manifest>
-						<mainClass>id.co.roxas.data.transfer.object.UserDataActivation</mainClass>
-					</manifest>
-				  </archive>
+					<!-- DO NOT include log4j.properties file in your Jar -->
+					<!-- <excludes> -->
+					<!-- <exclude>**/log4j.properties</exclude> -->
+					<!-- </excludes> -->
+					<archive>
+						<manifest>
+							<mainClass>id.co.roxas.data.transfer.object.UserDataActivation</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 
