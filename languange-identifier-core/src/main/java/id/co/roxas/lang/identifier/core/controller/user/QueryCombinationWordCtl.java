@@ -1,6 +1,7 @@
 package id.co.roxas.lang.identifier.core.controller.user;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -19,6 +20,7 @@ import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
+import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.ExtractedResultDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.TwoSlidingClassDto;
 import id.co.roxas.data.transfer.object.shared.config.AuthorizationClassConf;
 import id.co.roxas.lang.identifier.core.controller.BaseController;
@@ -66,8 +68,23 @@ public class QueryCombinationWordCtl extends BaseController{
 			@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
 			Authentication authentication) {
 		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf
-				(registUuid(uuid),registUuid(TwoSlidingClassDto.getDtoticketing()),getAllAuthUser(authentication),"I001", authentication.getName());
-		List<TwoSlidingClassDto> leven = queryCombinationWordSvc.allSynonimsWord(words, authentication.getName());
+				(registUuid(uuid),registUuid(ExtractedResultDto.getDtoticketing()),getAllAuthUser(authentication),"I001", authentication.getName());
+		Map<String,List<ExtractedResultDto>> leven = queryCombinationWordSvc.allSynonimsWord(words, authentication.getName());
+		if (responsePusherInvalidatorAccessUser(authentication, authorizationClassConf, true)) {
+			return getResponseInvalid();
+		} else {
+			return new WsResponse(leven, SUCCESS_RETRIEVE, authorizationClassConf);
+		}
+	}
+	
+	@PostMapping("/temp/synonims-word/two-sliding")
+	public WsResponse synonymsWordWithTwoSliding(@Valid @RequestBody String words,
+			@RequestHeader(name = "uuid-connector-response", required = true) String uuid,
+			Authentication authentication) {
+		AuthorizationClassConf authorizationClassConf = new AuthorizationClassConf
+				(registUuid(uuid),registUuid(ExtractedResultDto.getDtoticketing()),getAllAuthUser(authentication),"I001", authentication.getName());
+		Map<String,List<TwoSlidingClassDto>> leven = queryCombinationWordSvc.
+				allSynonimsWordTwoSlidingDto(words, authentication.getName());
 		if (responsePusherInvalidatorAccessUser(authentication, authorizationClassConf, true)) {
 			return getResponseInvalid();
 		} else {

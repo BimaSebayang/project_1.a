@@ -1,0 +1,5 @@
+version: '2'
+services:
+    security-web:
+        image: security-web
+        network_mode: host

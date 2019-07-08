@@ -82,7 +82,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>security-web</finalName>
+		<finalName>languange-web</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -37,7 +37,15 @@ public class LevensteinDistance {
 	}
 
 	public static String replaceUnalphabeticChar(String word) {
-		return word.replaceAll("[^A-Za-z- ]", "");
+		String finalString = word.replaceAll("[^A-Za-z ]", "");
+        String[] fs = finalString.trim().split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String stream : fs) {
+			if(stream.trim().toCharArray().length>=3) {
+				sb.append(stream.concat(" "));
+			}
+		}
+		return sb.toString().trim();
 	}
 
 	public static void main(String[] args) {
@@ -134,6 +142,7 @@ public class LevensteinDistance {
 				int len = l.split(" ").length;
 				if (twoSlidingClass.getLengSubQuery() < len) {
 					twoSlidingClass = new TwoSlidingClass(l, len);
+					System.err.println("checking sliding " + new Gson().toJson(twoSlidingClass));
 				}
 			}
 		}

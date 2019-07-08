@@ -36,15 +36,18 @@ public class TblCombinationWordRepository {
         )
 	private String combId;
 	
-	@Column(name="comb_word", length=100, nullable=false)
+	@Column(name="comb_word", length=100)
 	private String combWord;
 	
-	@Column(name="count_word",nullable=false)
+	@Column(name="count_word")
 	private Integer countWord;
 	
 	@Column(name="created_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
+	
+	@Column(columnDefinition = "text", name = "addition_info")
+	private String additionInfo;
 	
 	@Column(name = "created_by",length = 20)
 	private String createdBy;
@@ -100,6 +103,15 @@ public class TblCombinationWordRepository {
 		this.countWord = countWord;
 	}
 
+	public String getAdditionInfo() {
+		return additionInfo;
+	}
+
+	public void setAdditionInfo(String additionInfo) {
+		this.additionInfo = additionInfo;
+	}
+
+	
 	
 	
 }

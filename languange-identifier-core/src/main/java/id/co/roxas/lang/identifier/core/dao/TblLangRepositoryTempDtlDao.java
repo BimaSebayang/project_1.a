@@ -13,11 +13,16 @@ import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
 @Repository
 public interface TblLangRepositoryTempDtlDao extends JpaRepository<TblLangRepositoryTempDtl, String>{
 
-	@Query("select a.langName from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
+	@Query("select distinct(a.langName) from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
 	public List<String> getAllWords();
 	
-	@Query("select a.langName, a.langDesc from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' ")
-	public List<Object[]> getAllWordsAndItsMeaning();
+	@Query("select a.langName, a.langDesc from TblLangRepositoryTempDtl a where a.roleDetail = 'MEANING' "
+			+ " and upper(a.langName) != upper(?1)")
+	public List<Object[]> getAllWordsAndItsMeaning(String word);
+	
+	@Query("select a.langName, a.langDesc from TblLangRepositoryTempDtl a "
+			+ " where a.roleDetail = 'MEANING' and upper(a.langName) = upper(?1)")
+	public List<String> getWordsMeaning(String word);
 	
 	@Query("select a from TblLangRepositoryTempDtl a"
 			+ " where "

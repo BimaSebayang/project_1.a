@@ -1,0 +1,36 @@
+docker- build war : ./mvnw -Pprod clean package
+docker- log : docker-compose -f (yml) logs
+docker- build image : docker build -t (nama image) .
+ex : sudo docker build -t gcn-web .
+docker- extract image : docker save -o (nama file) (nama image)
+docker- load image to docker : docker load -i (nama image)
+
+cara menjalankan yml (dibackground, without '-d' run on ui)
+docker- up : docker-compose -f (yml) up -d
+
+docker- remove container : docker-compose -f run.yml rm gcn-web
+
+cara melihat semua container docker
+docker ps -a
+
+cara remove semua container
+docker container prune
+
+cara melihat semua container  
+docker ps
+
+cara melihat semua images
+docker images
+
+cara remove image
+docker rmi (image id)
+
+
+cara matiin nya
+docker ps (untuk melihat semua container id-nya)
+docker stop (id containernya)
+
+jalankan langsung dari imagenya
+docker run -ti 6f5065da87a4 /bin/sh
+
+

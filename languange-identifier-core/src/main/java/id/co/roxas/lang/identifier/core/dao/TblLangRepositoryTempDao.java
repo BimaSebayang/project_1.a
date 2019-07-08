@@ -16,7 +16,7 @@ public interface TblLangRepositoryTempDao extends JpaRepository<TblLangRepositor
 	 @Query("select a from TblLangRepositoryTemp a where upper(a.langName) = upper(?1)")
      public List<TblLangRepositoryTemp> getTempDataInfo(String words);
 	 
-	 @Query("select a from TblLangRepositoryTemp a where a not in "
+	 @Query("select distinct(a) from TblLangRepositoryTemp a where a not in "
 	 		+ " (select b.tblId from TblLangRepositoryTempDtl b)")
 	 public List<TblLangRepositoryTemp> getAllTempPage();
 	

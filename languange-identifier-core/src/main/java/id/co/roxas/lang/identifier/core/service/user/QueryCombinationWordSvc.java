@@ -18,10 +18,13 @@ import id.co.roxas.data.transfer.object.UserDataActivation.custom.PageRequestCus
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDtlDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblLangRepositoryTempDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.core.TblSearchWordHistoryDto;
+import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.ExtractedResultDto;
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.TwoSlidingClassDto;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
 import id.co.roxas.lang.identifier.core.lib.LevensteinDistance;
 import id.co.roxas.lang.identifier.core.lib.TwoSlidingClass;
+import id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.FuzzySearch;
+import id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.models.ExtractedResult;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
 import id.co.roxas.lang.identifier.core.service.AsynchService;
 import id.co.roxas.lang.identifier.core.service.BaseService;
@@ -45,16 +48,61 @@ public class QueryCombinationWordSvc extends BaseService {
 		return allWords;
 	}
 	
-	public List<TwoSlidingClassDto> allSynonimsWord(String words,String user){
-		List<TwoSlidingClassDto> allWords = new ArrayList<>();
-		List<Object[]> temp = tblLangRepositoryTempDtlDao.getAllWordsAndItsMeaning();
+	public Map<String,List<ExtractedResultDto>> allSynonimsWord(String words,String user){
+		List<ExtractedResultDto> allWords = new ArrayList<>();
+		
+		List<String> meaning = tblLangRepositoryTempDtlDao.getWordsMeaning(words);
+		if(meaning==null) {
+			return new HashMap<>();
+		}
+		List<Object[]> temp = tblLangRepositoryTempDtlDao.getAllWordsAndItsMeaning(words);
 		Map<String, String> obj = new HashMap<>();
 		for (Object[] o : temp) {
-			obj.put((String)o[0], (String)o[1]);
+			String categorizeChar = LevensteinDistance.replaceUnalphabeticChar((String)o[1]);
+			if(categorizeChar.trim().toCharArray().length>=3) {
+			obj.put((String)o[0], categorizeChar.trim());
+			}
 		}
-		List<TwoSlidingClass> twss = LevensteinDistance.collectAllTwoSlidingValue(words, obj);
-		allWords = mapperFacade.mapAsList(twss, TwoSlidingClassDto.class);
-		return allWords;
+		
+		Map<String,List<ExtractedResultDto>> mapResults = new HashMap<>();
+		
+		for(String str : meaning) {
+		List<ExtractedResult> extractedResults = FuzzySearch.extractAllHigherScore
+				(str, obj);
+		allWords = mapperFacade.mapAsList(extractedResults, ExtractedResultDto.class);
+		mapResults.put(LevensteinDistance.replaceUnalphabeticChar(str), allWords);
+		}
+		
+		return mapResults;
+	}
+	
+	public Map<String,List<TwoSlidingClassDto>> allSynonimsWordTwoSlidingDto(String words,String user){
+		List<TwoSlidingClassDto> allWords = new ArrayList<>();
+	
+		List<String> meaning = tblLangRepositoryTempDtlDao.getWordsMeaning(words);
+		if(meaning==null) {
+			return new HashMap<>();
+		}
+		List<Object[]> temp = tblLangRepositoryTempDtlDao.getAllWordsAndItsMeaning(words);
+		Map<String, String> obj = new HashMap<>();
+		for (Object[] o : temp) {
+			String categorizeChar = LevensteinDistance.replaceUnalphabeticChar((String)o[1]);
+			if(categorizeChar.trim().toCharArray().length>=3) {
+			obj.put((String)o[0], categorizeChar.trim());
+			}
+		}
+		
+		Map<String,List<TwoSlidingClassDto>> mapResults = new HashMap<>();
+		
+		for(String str : meaning) {
+        List<TwoSlidingClass> twoSlidingClasses =
+        		LevensteinDistance.collectAllTwoSlidingValue(LevensteinDistance.replaceUnalphabeticChar(str)
+        				, obj);
+		allWords = mapperFacade.mapAsList(twoSlidingClasses, TwoSlidingClassDto.class);
+		mapResults.put(LevensteinDistance.replaceUnalphabeticChar(str), allWords);
+		}
+		
+		return mapResults;
 	}
 	
 	public PageRequestCustom<TblLangRepositoryTempDtlDto> getAllMeaningOfSomeWords(String words, String user,

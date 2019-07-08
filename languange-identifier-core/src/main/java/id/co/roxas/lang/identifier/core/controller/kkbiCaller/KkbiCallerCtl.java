@@ -1,7 +1,9 @@
 package id.co.roxas.lang.identifier.core.controller.kkbiCaller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -25,9 +27,11 @@ import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.KbbiMappe
 import id.co.roxas.lang.identifier.core.dao.TblCombinationWordRepositoryDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
+import id.co.roxas.lang.identifier.core.dao.TblSynonimsWordRepositoryDao;
 import id.co.roxas.lang.identifier.core.repository.TblCombinationWordRepository;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTemp;
 import id.co.roxas.lang.identifier.core.repository.TblLangRepositoryTempDtl;
+import id.co.roxas.lang.identifier.core.repository.TblSynonimsWordRepositoryTemp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -41,6 +45,9 @@ public class KkbiCallerCtl {
 	@Autowired
 	private TblCombinationWordRepositoryDao tblCombinationWordRepositoryDao;
 
+	@Autowired
+	private TblSynonimsWordRepositoryDao tblSynonimsWordRepositoryTempDao;
+	
 	@Autowired
 	private TblLangRepositoryTempDao tblLangRepositoryTempDao;
 	
@@ -70,6 +77,24 @@ public class KkbiCallerCtl {
 			hs.addAll(mapKbbi(replaceSomeWord(pol)));
 		}
 		return hs;
+	}
+	
+	@GetMapping("/word-letter/synonims/save")
+	private String onProgressSaveSynonims() throws Exception {
+		List<String> list = tblLangRepositoryTempDtlDao.getAllWords();
+		for (String string : list) {
+			ConnectSynonim(string);
+		}
+		return "DONE";
+	}
+	
+	@GetMapping("/word-letter/comb-word/save")
+	private String onProgressWordComb() throws Exception {
+	
+		for (int i =1; i<=106 ; i++) {
+			connectCombWord(i);
+		}
+		return "DONE";
 	}
 	
 	@GetMapping("/word-letter/save")
@@ -290,6 +315,100 @@ public class KkbiCallerCtl {
 		}
 		System.out.println("End of page.");
 	}
+	
+	public void ConnectSynonim(String huruf)  {
+
+			// Set URL
+			URL url = null;
+			try {
+				url = new URL("https://kamuslengkap.com/kamus/sinonim/arti-kata/" + huruf);
+			} catch (MalformedURLException e) {
+				System.err.println("404 : " +"https://kamuslengkap.com/kamus/sinonim/arti-kata/" + huruf );
+				return;
+			}
+			URLConnection spoof = null;
+			try {
+				spoof = url.openConnection();
+			} catch (IOException e) {
+				System.err.println("404 : " +"https://kamuslengkap.com/kamus/sinonim/arti-kata/" + huruf );
+				return;
+			}
+
+			// Spoof the connection so we look like a web browser
+			spoof.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0; H010818)");
+			BufferedReader in = null;
+			try {
+				in = new BufferedReader(new InputStreamReader(spoof.getInputStream()));
+				String strLine = "";
+
+				// Loop through every line in the source
+				StringBuilder sb = new StringBuilder();
+				while ((strLine = in.readLine()) != null) {
+					sb.append(strLine);
+				}
+
+					TblSynonimsWordRepositoryTemp  langRepository = new TblSynonimsWordRepositoryTemp();
+					langRepository.setLangName(huruf);
+					langRepository.setCreatedBy("ME");
+					langRepository.setCreatedDate(new Date());
+					langRepository.setLangResource("https://kamuslengkap.com/kamus/sinonim/arti-kata/" + huruf);
+					langRepository.setLangDesc(sb.toString());
+					tblSynonimsWordRepositoryTempDao.save(langRepository);
+			} catch (IOException e) {
+				System.err.println("404 : " +"https://kamuslengkap.com/kamus/sinonim/arti-kata/" + huruf );
+				return;
+			}
+			
+			
+		System.out.println("End of page.");
+	}
+	
+	
+	public void connectCombWord(int angka)  {
+        String nameurl = "https://kbbi.co.id/daftar-kata?page=" + angka;
+		// Set URL
+		URL url = null;
+		try {
+			url = new URL(nameurl);
+		} catch (MalformedURLException e) {
+			System.err.println("404 : " +nameurl);
+			return;
+		}
+		URLConnection spoof = null;
+		try {
+			spoof = url.openConnection();
+		} catch (IOException e) {
+			System.err.println("404 : " +nameurl);
+			return;
+		}
+
+		// Spoof the connection so we look like a web browser
+		spoof.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0; H010818)");
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(spoof.getInputStream()));
+			String strLine = "";
+
+			// Loop through every line in the source
+			StringBuilder sb = new StringBuilder();
+			while ((strLine = in.readLine()) != null) {
+				sb.append(strLine);
+			}
+
+				TblCombinationWordRepository  langRepository = new TblCombinationWordRepository();
+				langRepository.setCombWord(Integer.toString(angka));
+				langRepository.setCreatedBy("ME");
+				langRepository.setCreatedDate(new Date());
+				langRepository.setAdditionInfo(sb.toString());
+				tblCombinationWordRepositoryDao.save(langRepository);
+		} catch (IOException e) {
+			System.err.println("404 : " +"https://kamuslengkap.com/kamus/sinonim/arti-kata/" + nameurl );
+			return;
+		}
+		
+		
+	System.out.println("End of page.");
+}
 
 	public List<String> SemuaAbjad() {
 		List<String> arrays = new ArrayList<>();
