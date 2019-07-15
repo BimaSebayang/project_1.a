@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import id.co.roxas.data.transfer.object.languangeIdentifierCore.custom.KbbiMapperDto;
+import id.co.roxas.lang.identifier.core.controller.BaseController;
 import id.co.roxas.lang.identifier.core.dao.TblCombinationWordRepositoryDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDtlDao;
@@ -37,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/lang-init")
-public class KkbiCallerCtl {
+public class KkbiCallerCtl extends BaseController{
 
 	@Autowired
 	private TblLangRepositoryTempDao tblLangRepositoryDao;

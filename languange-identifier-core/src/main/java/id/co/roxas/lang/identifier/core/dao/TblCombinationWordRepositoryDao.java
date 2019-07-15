@@ -12,6 +12,12 @@ import id.co.roxas.lang.identifier.core.repository.TblCombinationWordRepository;
 @Repository
 public interface TblCombinationWordRepositoryDao extends JpaRepository<TblCombinationWordRepository, String>{
 
+	@Query("select a from TblCombinationWordRepository a where a.combWord in ?1")
+	public List<TblCombinationWordRepository> getAllWordsInCondition(List<String> str);
+	
+	@Query("select a.combWord from TblCombinationWordRepository a where a.combWord not in ?1")
+	public List<String> getAllComb(List<String> str);
+	
 	@Query("select a.combWord from TblCombinationWordRepository a where a.countWord = ?1")
 	public List<String> getAllWords(int countWord);
 	

@@ -1,0 +1,5 @@
+version: '2'
+services:
+    twilight-core-gateway:
+        image: twilight-core-gateway
+        network_mode: host

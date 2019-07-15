@@ -22,18 +22,18 @@ import id.co.roxas.lang.identifier.core.config.StringPrefixedSequenceIdGenerator
 
 @Entity
 @Table(name="Tbl_Lang_Repository_Temp")
-public class TblLangRepositoryTemp {
+public class TblLangRepositoryTemp{
 
 	@Id
 	@Column(name="lang_id", length=100, updatable=false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lang_id")
-    @GenericGenerator(
-        name = "lang_id", 
-        strategy = "id.co.roxas.lang.identifier.core.config.StringPrefixedSequenceIdGenerator", 
-        parameters = {@Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "100"),
-        		@Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "LANG"),
-        		@Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%096d")}
-        )
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lang_id")
+//    @GenericGenerator(
+//        name = "lang_id", 
+//        strategy = "id.co.roxas.lang.identifier.core.config.StringPrefixedSequenceIdGeneratorTblLangRepositoryTemp", 
+//        parameters = {@Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "100"),
+//        		@Parameter(name = StringPrefixedSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "LANGO"),
+//        		@Parameter(name = StringPrefixedSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%095d")}
+//        )
 	private String langId;
 	
 	@Column(name="lang_name", length=50, nullable=false)
@@ -53,8 +53,6 @@ public class TblLangRepositoryTemp {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "langId")
 	List<TblUsingCharacterDetail> tblUsingCharacterDetails;
-	
-	
 	
 	public String getLangId() {
 		return langId;

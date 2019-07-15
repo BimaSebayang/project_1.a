@@ -26,7 +26,9 @@ public class StringPrefixedSequenceIdGenerator extends SequenceStyleGenerator{
 	    @Override
 	    public Serializable generate(SharedSessionContractImplementor session,
 	            Object object) throws HibernateException {
-	        return valuePrefix + String.format(numberFormat, super.generate(session, object));
+	    	String valueId = valuePrefix + String.format(numberFormat, super.generate(session, object));
+	    	System.err.println("value Id " + valueId);
+	        return valueId;
 	    }
 	    
 	    @Override

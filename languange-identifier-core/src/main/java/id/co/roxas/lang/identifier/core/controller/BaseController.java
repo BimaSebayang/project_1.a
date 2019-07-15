@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +27,10 @@ public class BaseController extends UltimateBase {
 
 	protected String[] registUuid(String... uuids) {
 		return uuids;
+	}
+	
+	protected long convertLongToSecond(long longTime) {
+		return TimeUnit.MILLISECONDS.toSeconds(longTime);
 	}
 	
 	protected String[] getAllAuthUser(Authentication authentication) {

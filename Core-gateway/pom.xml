@@ -99,7 +99,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>gateway</finalName>
+		<finalName>twilight-core-gateway</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

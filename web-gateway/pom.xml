@@ -105,7 +105,7 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>twilight-town</finalName>
+		<finalName>twilight-web-gateway</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
