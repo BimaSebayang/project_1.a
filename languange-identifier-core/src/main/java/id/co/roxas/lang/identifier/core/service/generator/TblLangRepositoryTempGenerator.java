@@ -3,9 +3,10 @@ package id.co.roxas.lang.identifier.core.service.generator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import id.co.roxas.lang.identifier.core.dao.TblLangRepositoryTempDao;
+import id.co.roxas.lang.identifier.core.service.BaseService;
 
 @Service
-public class TblLangRepositoryTempGenerator {
+public class TblLangRepositoryTempGenerator extends BaseService{
      
 	    @Autowired
 	    private TblLangRepositoryTempDao tblLangRepositoryTempDao;

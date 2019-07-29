@@ -15,7 +15,7 @@ import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public class LevensteinDistance {
 
-	private static int getMinValue(int... i) {
+	public static int getMinValue(int... i) {
 		int temp = Integer.MAX_VALUE;
 		for (int j : i) {
 			if (temp > j) {
@@ -25,7 +25,7 @@ public class LevensteinDistance {
 		return temp;
 	}
 
-	private static int getMaxValue(int... i) {
+	public static int getMaxValue(int... i) {
 		int temp = 0;
 
 		for (int j : i) {
@@ -123,7 +123,7 @@ public class LevensteinDistance {
 	
 	
 
-	private static TwoSlidingClass TwoSlidingValue(String w1, String w2) {
+	public static TwoSlidingClass TwoSlidingValue(String w1, String w2) {
 		int lengW1 = w1.toCharArray().length;
 		int lengW2 = w2.toCharArray().length;
 
@@ -134,7 +134,7 @@ public class LevensteinDistance {
 		}
 	}
 
-	private static TwoSlidingClass TwoSlidingValueMin(String w1, String w2) {
+	public static TwoSlidingClass TwoSlidingValueMin(String w1, String w2) {
 		List<String> ls = cuttingString(w2);
 		TwoSlidingClass twoSlidingClass = new TwoSlidingClass();
 		for (String l : ls) {
@@ -149,7 +149,7 @@ public class LevensteinDistance {
 		return twoSlidingClass;
 	}
 
-	private static int LevenstheinValue(String w1, String w2) {
+	public static int LevenstheinValue(String w1, String w2) {
 		char[] chW1 = w1.toLowerCase().toCharArray();
 		char[] chW2 = w2.toLowerCase().toCharArray();
 		int[][] dist = new int[chW1.length + 1][chW2.length + 1];

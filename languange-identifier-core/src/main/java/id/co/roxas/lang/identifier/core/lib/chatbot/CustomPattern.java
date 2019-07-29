@@ -1,33 +1,17 @@
-package id.co.roxas.lang.identifier.core.tester;
+package id.co.roxas.lang.identifier.core.lib.chatbot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.gson.Gson;
-
-public class regexR {
-
-	public static void main(String[] args) {
-		String chat = "jika ditanya apa kabar kamu? maka jawab baik baik saja kakak";
-	    Map<String, String> mss = QuestionAndAnswerFinder("Jika ditanya {question} maka jawab {answer}", 
-	    		chat);
-	    System.out.println(new Gson().toJson(mss));
-		
-		
-		//System.out.println(chat.lastIndexOf("maka jawab"));
-	}
+public class CustomPattern {
 	
-	private static Map<String, String> QuestionAndAnswerFinder(String expectedChat,String chat){
+	public static Map<String, Object> QuestionAndAnswerFinder(String expectedChat,String chat){
 		List<String> bussiness = findAllPatternBussiness("{", "}", expectedChat);
-		expectedChat = expectedChat.toLowerCase();
-		chat = chat.toLowerCase();
-		 Map<String, String> map = new HashMap<>();
+		 Map<String, Object> map = new HashMap<>();
 		List<String> references = new ArrayList<>();
 		for (String buss : bussiness) {
 			List<String> pattern = findAllPatternBussiness("", buss, expectedChat);
@@ -37,12 +21,12 @@ public class regexR {
 		}
 		for (int i = 0; i < references.size(); i++) {
 			if(i!=references.size()-1) {
-			String component = findAllPatternBussiness(references.get(i), references.get(i+1),
-					chat).get(0).trim();	
-			map.put(bussiness.get(i), removUnusedWords(component, references.get(i), references.get(i+1)));
+			String component = findAllPatternBussiness(references.get(i).toLowerCase(), references.get(i+1).toLowerCase(),
+					chat.toLowerCase()).get(0).trim();	
+			map.put(removUnusedWords(bussiness.get(i), "{","}"), removUnusedWords(component, references.get(i).toLowerCase(), references.get(i+1).toLowerCase()));
 			}
 			else {
-				map.put(bussiness.get(i), chat.substring(chat.lastIndexOf(references.get(i))+references.get(i).length()).trim());
+				map.put(removUnusedWords(bussiness.get(i), "{","}"), chat.substring(chat.lastIndexOf(references.get(i))+references.get(i).length()).trim());
 			}
 		}
 		
@@ -67,6 +51,7 @@ public class regexR {
 	
 	
 	private static List<String> findAllPatternBussiness(String regexstart, String regexEnd, String word){
+	
 		List<String> patterns = new ArrayList<>();
 		String patternStr = Pattern.quote(regexstart)+"(.*?)"+Pattern.quote(regexEnd);
 		Pattern p = Pattern.compile(patternStr);
@@ -77,5 +62,4 @@ public class regexR {
 		
 		return patterns;
 	}
-
 }

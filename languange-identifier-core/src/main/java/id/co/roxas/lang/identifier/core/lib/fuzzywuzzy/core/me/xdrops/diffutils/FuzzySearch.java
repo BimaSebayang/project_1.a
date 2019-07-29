@@ -366,9 +366,29 @@ public class FuzzySearch {
 		return extractor.extractTopMap(query, choices, new WeightedRatio());
 	}
 	
+	public static <T> List<ExtractedResult> extractSortedMap2(String query,Map<Class<T>,String> choices) {
+		Extractor extractor = new Extractor();
+		return extractor.extractTopMap2(query, choices, new WeightedRatio());
+	}
+	
 	public static List<ExtractedResult> extractAllHigherScore(String query,Map<String,String> choices) {
 		Extractor extractor = new Extractor();
 		List<ExtractedResult> extractAll = FuzzySearch.extractSortedMap(query, choices);
+		List<ExtractedResult> extractAllHigherScore = new ArrayList<>();
+		int topScore = extractAll.get(0).getScore(); 
+		
+		for (ExtractedResult extractedResult : extractAll) {
+			if(extractedResult.getScore()==topScore) {
+				extractAllHigherScore.add(extractedResult);
+			}
+		}
+		
+		return extractAllHigherScore;
+	}
+	
+	public static <T> List<ExtractedResult> extractAllHigherScore2(String query,Map<Class<T>,String> choices) {
+		Extractor extractor = new Extractor();
+		List<ExtractedResult> extractAll = FuzzySearch.extractSortedMap2(query, choices);
 		List<ExtractedResult> extractAllHigherScore = new ArrayList<>();
 		int topScore = extractAll.get(0).getScore(); 
 		

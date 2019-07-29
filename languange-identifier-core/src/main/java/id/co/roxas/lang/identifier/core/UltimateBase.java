@@ -1,6 +1,7 @@
 package id.co.roxas.lang.identifier.core;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,6 +62,11 @@ public class UltimateBase {
 	protected static final String INSUCCESS_DELETE = "Delete Insuccess";
 	protected static final String WEB_UAA = "web-uaa";
 	protected static final String WEB_LANG = "web-languange";
+	public final static String QUESTION = "question";
+	public final static String RESPONSE = "response";
+	public final static String TR0001 = "TR0001";
+	public final static String TR0002 = "TR0002";
+	public final static String NULL = "NULL";
 	@Value("${roxas.gateway.port-title.uaa}")
 	protected String UAA_END_POINT_URL;
 	@Value("${roxas.user-uda}")
@@ -81,7 +89,28 @@ public class UltimateBase {
 	protected static final String DESKTOP = "desktop";
 	protected static final String DASHBOARD_URL = "/web-uda/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
+	private String chatbotAnswer = new String(); 
 
+	protected List<String> findAllPatternBussiness(String regexstart, String regexEnd, String word){
+		List<String> patterns = new ArrayList<>();
+		String patternStr = Pattern.quote(regexstart)+"(.*?)"+Pattern.quote(regexEnd);
+		//System.err.println(word);
+		Pattern p = Pattern.compile(patternStr);
+		Matcher m = p.matcher(word);
+		while (m.find()) {
+			patterns.add(m.group());
+		}
+		
+		return patterns;
+	}
+	
+	protected String parseDateToString(Date date, String format) {
+		String dateFor = null;
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+	    dateFor = sdf.format(date);
+		return dateFor;
+	}
+	
 	protected TblUserDto getUserDtoAccess(TicketCc cc) {
 		WsResponse response = resultWsWithoutSecurity(UAA_END_POINT_URL + "/web-request/ticket/request-user", cc,
 				HttpMethod.POST, null, new ParamQueryCustomLib[] {});
@@ -416,4 +445,14 @@ public class UltimateBase {
 		List<T> finalList = new ArrayList<>(uniqueVal);
 		return finalList;
 	}
+
+	public String getChatbotAnswer() {
+		return chatbotAnswer;
+	}
+
+	public void setChatbotAnswer(String chatbotAnswer) {
+		this.chatbotAnswer = chatbotAnswer;
+	}
+	
+	
 }

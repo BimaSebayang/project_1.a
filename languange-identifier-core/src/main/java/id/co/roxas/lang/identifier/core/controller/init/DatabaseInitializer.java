@@ -208,7 +208,7 @@ public class DatabaseInitializer extends BaseController{
 		}
 	}
 	
-	private List<String> findAllPatternBussiness(String regexstart, String regexEnd, String word){
+	protected List<String> findAllPatternBussiness(String regexstart, String regexEnd, String word){
 		List<String> patterns = new ArrayList<>();
 		String patternStr = Pattern.quote(regexstart)+"(.*?)"+Pattern.quote(regexEnd);
 		//System.err.println(word);

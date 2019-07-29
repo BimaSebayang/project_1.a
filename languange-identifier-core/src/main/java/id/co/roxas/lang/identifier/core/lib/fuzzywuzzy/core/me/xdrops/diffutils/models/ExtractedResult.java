@@ -1,10 +1,12 @@
 package id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.models;
 
-public class ExtractedResult implements Comparable<ExtractedResult> {
+public class ExtractedResult<T> implements Comparable<ExtractedResult> {
 	private String word;
+	private T ClassNext;
     private String meaning;
     private int score;
     private int index;
+    private int dtlId;
 
     public ExtractedResult(String string, int score, int index) {
         this.meaning = string;
@@ -21,6 +23,14 @@ public class ExtractedResult implements Comparable<ExtractedResult> {
 		this.score = score;
 		this.index = index;
 	}
+    
+    public ExtractedResult(T string2, String string, int score, int index) {
+		super();
+		this.ClassNext = string2;
+		this.meaning = string;
+		this.score = score;
+		this.index = index;
+    }
 
 
 
@@ -57,6 +67,27 @@ public class ExtractedResult implements Comparable<ExtractedResult> {
 	public void setString2(String string2) {
 		this.word = string2;
 	}
+
+	public int getDtlId() {
+		return dtlId;
+	}
+
+	public void setDtlId(int dtlId) {
+		this.dtlId = dtlId;
+	}
+
+
+
+	public T getClassNext() {
+		return ClassNext;
+	}
+
+
+
+	public void setClassNext(T classNext) {
+		ClassNext = classNext;
+	}
     
+	
     
 }

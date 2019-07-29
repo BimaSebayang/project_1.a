@@ -11,7 +11,7 @@ import id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.
 import id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.models.BoundExtractedResult;
 import id.co.roxas.lang.identifier.core.lib.fuzzywuzzy.core.me.xdrops.diffutils.models.ExtractedResult;
 
-public class Extractor {
+public class Extractor<T> {
 
 	private int cutoff;
 
@@ -64,6 +64,23 @@ public class Extractor {
 
 			if (score >= cutoff) {
 				yields.add(new ExtractedResult(word,meaning, score, index));
+			}
+			index++;
+		}
+
+		return yields;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ExtractedResult<T>> extractWithoutOrderMap2(String query,Map<Class<T>, String> choices, Applicable func) {
+		List<ExtractedResult<T>> yields = new ArrayList<>();
+		int index = 0;
+		for (Entry<Class<T>, String> extractedResult: choices.entrySet()) {
+			String meaning = extractedResult.getValue();
+			int score = func.apply(query,meaning);
+
+			if (score >= cutoff) {
+				yields.add(new ExtractedResult(extractedResult.getKey(),meaning, score, index));
 			}
 			index++;
 		}
@@ -153,7 +170,12 @@ public class Extractor {
 	public List<ExtractedResult> extractTopMap(String query, Map<String, String> choices, Applicable func) {
 		List<ExtractedResult> best = extractWithoutOrderMap(query, choices, func);
 		Collections.sort(best, Collections.<ExtractedResult>reverseOrder());
-
+		return best;
+	}
+	
+	public <T> List<ExtractedResult> extractTopMap2(String query, Map<Class<T>, String> choices, Applicable func) {
+		List<ExtractedResult> best = extractWithoutOrderMap2(query, choices, func);
+		Collections.sort(best, Collections.<ExtractedResult>reverseOrder());
 		return best;
 	}
 
