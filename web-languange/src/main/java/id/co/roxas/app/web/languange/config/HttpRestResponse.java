@@ -1,4 +1,4 @@
-package id.co.roxas.app.web.languange.controller.config;
+package id.co.roxas.app.web.languange.config;
 
 import org.springframework.http.HttpStatus;
 

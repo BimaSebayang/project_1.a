@@ -1,11 +1,13 @@
 package id.co.roxas.lang.identifier.core.controller.chatbot;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.chatbot.TblChatbotHistoryChatDialogueDto;
+import id.co.roxas.data.transfer.object.chatbot.respond.ChatbotDialogueUiDto;
 import id.co.roxas.lang.identifier.core.controller.BaseController;
 import id.co.roxas.lang.identifier.core.lib.chatbot.MyChatbotDto;
 import id.co.roxas.lang.identifier.core.repository.chatbot.TblChatbotQuestionAnswerKnowledge;
@@ -54,6 +57,12 @@ public class PleaseChatMeCtl extends BaseController {
 //		return new WsResponse(null, "DONE");
 //	}
 
+	@GetMapping("/i-want-my-history-chat")
+	private WsResponse historyChat(Authentication authentication) {
+		List<ChatbotDialogueUiDto> uiDtos = chatbotNeuronHistory.getAllMyHistoryChatWithYou(authentication.getName());
+		return new WsResponse(uiDtos, SUCCESS_RETRIEVE);
+	}
+	
 	@PostMapping("/i-want-chatbot-chatme-100-right")
 	private WsResponse chatting100Right(@RequestBody String textChat, Authentication authentication) {
 		TblChatbotHistoryChatDialogueDto history = chatbotNeuronHistory.getLastHistory(authentication.getName());
@@ -73,13 +82,22 @@ public class PleaseChatMeCtl extends BaseController {
 				chatAnswer = chatbotNeuronCenterService.neuronRunner(answerKnowledge.getChatbotRespond(),respond.getTrancNo(), respond.getExpectedQuestionUser(),
 						textChat, answerKnowledge.getGroupDialogue(),
 						answerKnowledge.getDialoguePosition(),authentication.getName(),seq);
-				seq++;
+				if(!chatAnswer.equalsIgnoreCase(TRANSACTION_STAT))
+				{
+					seq++;
+				}
 			}
 		} else {
 			    chatAnswer = chatbotNeuronCenterService.neuronRunner(null,NULL,null,
-					textChat, null,null,authentication.getName(),charSequence);
+					textChat, null,null,authentication.getName(),charSequence+1);
 		}
-
-		return new WsResponse(chatAnswer, "DONE");
+         
+		
+		ChatbotDialogueUiDto chatbotDialogueUiDto = new ChatbotDialogueUiDto();
+		chatbotDialogueUiDto.setChatDate(new Date());
+		chatbotDialogueUiDto.setIsIncoming(true);
+		chatbotDialogueUiDto.setIsOutgoing(false);
+		chatbotDialogueUiDto.setText(chatAnswer);
+		return new WsResponse(chatbotDialogueUiDto, "DONE");
 	}
 }

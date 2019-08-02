@@ -67,6 +67,8 @@ public class UltimateBase {
 	public final static String TR0001 = "TR0001";
 	public final static String TR0002 = "TR0002";
 	public final static String NULL = "NULL";
+	public final static String TRANSACTION_STAT = "Transaction_stat";
+	public final static String FREE_TEXT = "{FREE_TEXT}";
 	@Value("${roxas.gateway.port-title.uaa}")
 	protected String UAA_END_POINT_URL;
 	@Value("${roxas.user-uda}")

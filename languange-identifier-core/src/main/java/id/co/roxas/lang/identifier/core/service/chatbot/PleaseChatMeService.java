@@ -62,6 +62,10 @@ public class PleaseChatMeService extends BaseService {
 		TblChatbotQuestionAnswerKnowledge answerKnowledge = null;
 		int maxValue = 0;
 		for (TblChatbotQuestionAnswerKnowledge resp : response) {
+			if(resp.getDialoguePosition().intValue()>1 && resp.getFocusWords().equalsIgnoreCase(FREE_TEXT)) {
+				return resp;
+			}
+			
 			List<String> matchingCondition = MyComparerString.stringComparePossible(resp.getQuestionUser(),
 					userChatting);
 			List<String> focus = new ArrayList<>();
@@ -82,8 +86,6 @@ public class PleaseChatMeService extends BaseService {
 
 	public List<MyChatbotDto> prosesTransaction(TblChatbotQuestionAnswerKnowledge tblChatbotQuestionKnowledge) {
 		List<MyChatbotDto> transs = new ArrayList<>();
-		if (tblChatbotQuestionKnowledge.getIsTransaction() == 1) {
-
 			String responding = tblChatbotQuestionKnowledge.getChatbotRespond();
 			String[] responds = responding.split("@@");
 			for (String respond : responds) {
@@ -100,13 +102,6 @@ public class PleaseChatMeService extends BaseService {
 				chatbotDto.setExpectedQuestionUser(tblChatbotQuestionKnowledge.getQuestionUser());
 				transs.add(chatbotDto);
 			}
-		} else {
-			MyChatbotDto chatbotDto = new MyChatbotDto();
-			chatbotDto.setTrancNo(tblChatbotQuestionKnowledge.getChatbotRespond());
-			chatbotDto.setExpectedQuestionUser(tblChatbotQuestionKnowledge.getQuestionUser());
-			transs.add(chatbotDto);
-		}
-
 		return transs;
 	}
 

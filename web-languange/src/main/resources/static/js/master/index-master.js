@@ -1,7 +1,25 @@
-var masterWebUdaIndexApp = angular.module('masterWebUdaIndexApp', []);
+var masterWebUdaIndexApp = angular.module('masterWebUdaIndexApp', [])
+.directive('schrollBottom', function () {
+	  return {
+	    scope: {
+	      schrollBottom: "="
+	    },
+	    link: function (scope, element) {
+	      scope.$watchCollection('schrollBottom', function (newValue) {
+	        if (newValue)
+	        {
+	        	debugger;
+	          $(element).scrollTop($(element)[0].scrollHeight);
+	        }
+	      });
+	    }
+	  }
+	});
+
+
 
 masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
-		$rootScope, $location, $window) {
+		$rootScope, $location, $window,$anchorScroll) {
 	$scope.endpoint = location.origin + "/languange";
 	$scope.controllerform = '';
 	$scope.isFilterUserAdminSettingConfig = false;
@@ -13,8 +31,61 @@ masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 		}
 	};
 	
+	$scope.chats = [];
+	var i = 1;
+	
+	
+	$scope.loadChat = function(){
+		
+	$http.get($scope.endpoint + "/all-chat-history").then(
+			function(response) {
+				$scope.chats = response.data;
+				$scope.manipulation();
+				debugger;
+			},
+			function error(response) {
+			      alert('cannot retrieve data');
+			});
+	};
+	
+	$scope.loadChat();
+	
+	
+	$scope.answerChat = function(text){
+		    var url = $scope.endpoint + "/chat-with-roxas";
+	        $http.post(url, text, $scope.config).then(function (response) {
+	        	$scope.chats.push(response.data);
+	        	
+	        	$scope.manipulation();
+	        }, function error(response) {
+	            $scope.postResultMessage = "Error with status: " + response.statusText;
+	        });
+	}
+	
+	$scope.manipulation = function(){
+		$http.get($scope.endpoint + "/manipulator").then(
+				function(response) {
+					$scope.chats.push(response.data);
+				},
+				function error(response) {
+				      alert('cannot retrieve data');
+				});
+		};
+	
+	$scope.sendMyChat = function(chat){
+		i++;
+		$scope.chats.push({
+			'text' : chat,
+			'isOutgoing' : true,
+			'isIncoming' : false
+		});
+		
+		$scope.answerChat(chat);
+		
+	}
+	
 	$scope.clickSide = function(url) {
-		debugger;
+		
 		$scope.lastUrl = url;
 	};
 	

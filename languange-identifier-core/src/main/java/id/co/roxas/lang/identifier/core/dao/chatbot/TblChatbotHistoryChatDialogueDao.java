@@ -18,6 +18,8 @@ public interface TblChatbotHistoryChatDialogueDao extends JpaRepository<TblChatb
 			+ " order by a.dialogue_session desc,a.dialogue_position desc limit 1 ", nativeQuery = true)
 	public List<Object[]> objectDialogue(@Param("userId")String userId);
 	
+	@Query("select a from TblChatbotHistoryChatDialogue a where a.chatSequence = ?1")
+	public TblChatbotHistoryChatDialogue getDialogueHistoryChat(Integer chatSeq);
 	
 	@Query(value = " select "
 			+ " case "
@@ -38,4 +40,7 @@ public interface TblChatbotHistoryChatDialogueDao extends JpaRepository<TblChatb
 			+ " where a.user_chat = :userId "
 			+ " order by a.chat_sequence desc limit 1 ", nativeQuery = true)
 	public List<Object[]> sequenceDialogue(@Param("userId") String userId);
+	
+	@Query("select a from TblChatbotHistoryChatDialogue a where a.userChat = ?1 order by a.createdDate asc")
+	public List<TblChatbotHistoryChatDialogue> getAllHistory(String userName);
 }

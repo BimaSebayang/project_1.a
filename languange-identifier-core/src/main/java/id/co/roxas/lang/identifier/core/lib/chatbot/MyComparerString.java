@@ -10,11 +10,13 @@ public class MyComparerString {
 		// String[] aCompared = compared.split(" ");
 		String[] aComparing = comparing.split(" ");
 		List<String> str = new ArrayList<>();
-		compared = compared.trim().replaceAll("[^A-Za-z0-9]", "");
-		for (String acomp : aComparing) {
-			acomp = acomp.trim().replaceAll("[^A-Za-z0-9]", "");
-			if (compared.contains(acomp)) {
-				str.add(acomp);
+		if (compared != null) {
+			compared = compared.trim().replaceAll("[^A-Za-z0-9]", "");
+			for (String acomp : aComparing) {
+				acomp = acomp.trim().replaceAll("[^A-Za-z0-9]", "");
+				if (compared.contains(acomp)) {
+					str.add(acomp);
+				}
 			}
 		}
 		return str;
@@ -27,10 +29,9 @@ public class MyComparerString {
 			} else {
 				return comparing.containsAll(compared);
 			}
-		}
-		else {
+		} else {
 			return false;
 		}
-		
+
 	}
 }

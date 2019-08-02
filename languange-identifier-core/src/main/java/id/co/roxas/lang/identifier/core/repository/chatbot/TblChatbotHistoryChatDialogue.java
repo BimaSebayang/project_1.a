@@ -67,7 +67,7 @@ public class TblChatbotHistoryChatDialogue {
 	@Column(name="created_date")
 	private Date createdDate;
 	
-	@Column(name="chat_sequence", nullable = false)
+	@Column(name="chat_sequence", nullable = false, unique = true)
 	private Integer chatSequence;
 
 	

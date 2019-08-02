@@ -66,6 +66,47 @@
 	</div>
 
 
+<link href="/languange/css/chat-message.css" type="text/css" rel ="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+ type="text/css" rel="stylesheet"
+
+<div class="chat-container">
+<div class="messaging">
+      <div class="inbox_msg">
+        <div class="mesgs">
+          <div class="msg_history" schroll-bottom="chats">
+          
+          <div class="chat-caller"  ng-repeat = "chat in chats" >
+          <div class="outgoing_msg" ng-if = "chat.isOutgoing">
+              <div class="sent_msg">
+                <p>{{chat.text}}</p>
+                <span class="time_date"> 11:01 AM    |    June 9</span> 
+              </div>
+          </div>
+          <div class="incoming_msg" ng-if="chat.isIncoming">
+              <div class="incoming_msg_img"> <img src="/languange/images/RoxasIX.jpg" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>{{chat.text}}</p>
+                  <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
+              </div>
+          </div>
+          </div>
+            
+           </div>
+          <div class="type_msg" id="message">
+            <div class="input_msg_write">
+              <input type="text" class="write_msg" placeholder="Type a message" ng-model="myChat"/>
+              <button class="msg_send_btn" type="button" ng-click="sendMyChat(myChat)">
+              <i class="fa fa-comments" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div></div>
 
 
 

@@ -39,9 +39,4 @@ masterWebUdaIndexApp.controller('dictionary', function ($scope, $http, $rootScop
 				});
 	}
 	
-	
-	
-	$scope.hai = function(){
-		alert('im alaia');
-	}
 });

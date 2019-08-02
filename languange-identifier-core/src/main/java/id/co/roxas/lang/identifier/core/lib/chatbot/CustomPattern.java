@@ -9,7 +9,27 @@ import java.util.regex.Pattern;
 
 public class CustomPattern {
 	
-	public static Map<String, Object> QuestionAndAnswerFinder(String expectedChat,String chat){
+	public static Map<String, Object> QuestionAndAnswerFinder(String expectedChat,String chat,String focusWords){
+		List<String> bussiness = findAllPatternBussiness("{", "}", expectedChat);
+		 Map<String, Object> map = new HashMap<>();
+		List<String> references = new ArrayList<>();
+		for (String buss : bussiness) {
+			List<String> pattern = findAllPatternBussiness("", buss, expectedChat);
+			String h = pattern.get(0);
+			references.addAll(removeWordsInList(pattern, buss));
+			expectedChat = expectedChat.replace(h, "");
+		}
+		
+		List<String> ruinWords = findAllPatternBussiness("\"", "\"", chat);
+		
+		for (int i = 0; i < references.size(); i++) {
+			map.put(removUnusedWords(bussiness.get(i), "{","}"), removUnusedWords(ruinWords.get(i), "\"", "\""));
+		}
+		map.put("focusWords", focusWords);
+		return map;
+	}
+	
+	public static Map<String, Object> QuestionAndAnswerFinder2(String expectedChat,String chat,String focusWords){
 		List<String> bussiness = findAllPatternBussiness("{", "}", expectedChat);
 		 Map<String, Object> map = new HashMap<>();
 		List<String> references = new ArrayList<>();
@@ -29,7 +49,7 @@ public class CustomPattern {
 				map.put(removUnusedWords(bussiness.get(i), "{","}"), chat.substring(chat.lastIndexOf(references.get(i))+references.get(i).length()).trim());
 			}
 		}
-		
+		map.put("focusWords", focusWords);
 		return map;
 	}
 	

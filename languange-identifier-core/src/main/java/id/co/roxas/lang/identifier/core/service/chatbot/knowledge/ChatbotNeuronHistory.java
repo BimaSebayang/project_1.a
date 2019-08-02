@@ -1,5 +1,6 @@
 package id.co.roxas.lang.identifier.core.service.chatbot.knowledge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import id.co.roxas.data.transfer.object.chatbot.TblChatbotHistoryChatDialogueDto;
+import id.co.roxas.data.transfer.object.chatbot.respond.ChatbotDialogueUiDto;
 import id.co.roxas.lang.identifier.core.dao.chatbot.TblChatbotHistoryChatDialogueDao;
 import id.co.roxas.lang.identifier.core.repository.chatbot.TblChatbotHistoryChatDialogue;
 import id.co.roxas.lang.identifier.core.service.BaseService;
@@ -24,6 +26,43 @@ public class ChatbotNeuronHistory extends BaseService {
 		TblChatbotHistoryChatDialogue tblChatbotHistoryChatDialogue = mapperFacade.map(chatbotHistoryChatDialogueDto,
 				TblChatbotHistoryChatDialogue.class);
 		tblChatbotHistoryChatDialogueDao.save(tblChatbotHistoryChatDialogue);
+	}
+	
+	public List<TblChatbotHistoryChatDialogueDto> getAllHistory(String userId){
+		List<TblChatbotHistoryChatDialogue> chatDialogues = tblChatbotHistoryChatDialogueDao.getAllHistory(userId);
+		if(chatDialogues!=null) {
+			List<TblChatbotHistoryChatDialogueDto> dialogueDtos = mapperFacade.mapAsList(chatDialogues,
+					TblChatbotHistoryChatDialogueDto.class);
+			return dialogueDtos;
+		}
+		return null;
+	}
+	
+	public List<ChatbotDialogueUiDto> getAllMyHistoryChatWithYou(String userId){
+		List<TblChatbotHistoryChatDialogueDto> historyTable = getAllHistory(userId);
+		if(historyTable == null) {
+			return null;
+		}
+		List<ChatbotDialogueUiDto> chatbotDialogueUiDtos = new ArrayList<>();
+		for (TblChatbotHistoryChatDialogueDto tbl : historyTable) {
+			ChatbotDialogueUiDto uiDtoUser = new ChatbotDialogueUiDto();
+			ChatbotDialogueUiDto uiDtoChat = new ChatbotDialogueUiDto();
+			uiDtoUser.setChatDate(tbl.getCreatedDate());
+			uiDtoUser.setIsIncoming(false);
+			uiDtoUser.setIsOutgoing(true);
+			uiDtoUser.setText(tbl.getUserQuestion());
+			chatbotDialogueUiDtos.add(uiDtoUser);
+
+			uiDtoChat.setChatDate(tbl.getCreatedDate());
+			uiDtoChat.setIsIncoming(true);
+			uiDtoChat.setIsOutgoing(false);
+			uiDtoChat.setText(tbl.getChatbotRespond());
+		    chatbotDialogueUiDtos.add(uiDtoChat);
+
+		}
+		
+		
+		return chatbotDialogueUiDtos;
 	}
 
 	public TblChatbotHistoryChatDialogueDto getLastHistory(String userId) {
@@ -42,5 +81,11 @@ public class ChatbotNeuronHistory extends BaseService {
 			}
 		}
 		return historyChatDialogueDto;
+	}
+	
+	public TblChatbotHistoryChatDialogueDto getNeededHistory(Integer sequence) {
+		TblChatbotHistoryChatDialogueDto chatDialogueDto = mapperFacade.map
+				(tblChatbotHistoryChatDialogueDao.getDialogueHistoryChat(sequence), TblChatbotHistoryChatDialogueDto.class);
+		return chatDialogueDto;
 	}
 }

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import id.co.roxas.app.web.languange.config.HttpSecurityService;
 import id.co.roxas.app.web.languange.controller.BaseWebController;
-import id.co.roxas.app.web.languange.controller.config.HttpSecurityService;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageClassResponse;
 import id.co.roxas.data.transfer.object.UserDataActivation.model.PageRevolver;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;

@@ -44,7 +44,6 @@ public class ChatbotNeuronCenterService extends BaseService{
 	
 	private Map<String,Object> neuronObjectMaker(String trancFunc,Map<String, Object> map, String user){
 		if(trancFunc.equals(TR0001)) {
-			map.put("focusWords", null);
 			map.put("isForDialogue", 0);
 			map.put("groupDialogue", null);
 			map.put("dialoguePosition", 1);
@@ -79,20 +78,22 @@ public class ChatbotNeuronCenterService extends BaseService{
 		Integer isChatbotKnowing = 1;
 		Integer isDialogueCont = 0;
 		if(trancFunc.equals(TR0001)) {
-			Map<String, Object> patternInvolved = CustomPattern.QuestionAndAnswerFinder(questionAnswerChatbotKnow, 
-					userChat);
+			TblChatbotHistoryChatDialogueDto history = 
+					chatbotNeuronHistory.getNeededHistory(chatSequence-dialogPosition+1);
+			Map<String, Object> patternInvolved = CustomPattern.QuestionAndAnswerFinder(history.getChatbotKnowing(), 
+					history.getUserQuestion(),userChat);
 			myNeuronRunner(trancFunc, patternInvolved, user);
-			
 			responsive = chatbotResp;
-		}
-		else if(trancFunc.equals(TR0002)) {
-			responsive =  null;
+			return TRANSACTION_STAT;
 		}
 		else if(trancFunc.equals(NULL)) {
 			responsive =  "Maaf Saya Tidak paham dengan kalimat : ' " + userChat + " ' ";
 			isChatbotKnowing = 0;
 		}
 		
+		if(dialogPosition==null) {
+			dialogPosition = 0;
+		}
 		String questionId = tblChatbotQuestionKnowledgeDao.checkThereIsNextQuestion
 				(user, groupDialog, Integer.sum(dialogPosition, 1));
 		if(questionId!=null) {

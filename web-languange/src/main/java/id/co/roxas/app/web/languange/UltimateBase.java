@@ -30,8 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 
-import id.co.roxas.app.web.languange.controller.config.HttpRestResponse;
-import id.co.roxas.app.web.languange.controller.config.HttpSecurityService;
+import id.co.roxas.app.web.languange.config.HttpRestResponse;
+import id.co.roxas.app.web.languange.config.HttpSecurityService;
 import id.co.roxas.app.web.languange.controller.lib.ParamQueryCustomLib;
 import id.co.roxas.data.transfer.object.UserDataActivation.core.TblUserDto;
 import id.co.roxas.data.transfer.object.UserDataActivation.response.PageResponse;
