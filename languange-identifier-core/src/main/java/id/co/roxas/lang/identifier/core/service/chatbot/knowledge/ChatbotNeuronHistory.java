@@ -47,18 +47,17 @@ public class ChatbotNeuronHistory extends BaseService {
 		for (TblChatbotHistoryChatDialogueDto tbl : historyTable) {
 			ChatbotDialogueUiDto uiDtoUser = new ChatbotDialogueUiDto();
 			ChatbotDialogueUiDto uiDtoChat = new ChatbotDialogueUiDto();
-			uiDtoUser.setChatDate(tbl.getCreatedDate());
+			uiDtoUser.setChatDate("Saya| "+timerDecision(tbl.getCreatedDate()));
 			uiDtoUser.setIsIncoming(false);
 			uiDtoUser.setIsOutgoing(true);
 			uiDtoUser.setText(tbl.getUserQuestion());
 			chatbotDialogueUiDtos.add(uiDtoUser);
 
-			uiDtoChat.setChatDate(tbl.getCreatedDate());
+			uiDtoChat.setChatDate("Roxas| " + timerDecision(tbl.getCreatedDate()));
 			uiDtoChat.setIsIncoming(true);
 			uiDtoChat.setIsOutgoing(false);
 			uiDtoChat.setText(tbl.getChatbotRespond());
 		    chatbotDialogueUiDtos.add(uiDtoChat);
-
 		}
 		
 		

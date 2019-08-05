@@ -94,7 +94,7 @@ public class PleaseChatMeCtl extends BaseController {
          
 		
 		ChatbotDialogueUiDto chatbotDialogueUiDto = new ChatbotDialogueUiDto();
-		chatbotDialogueUiDto.setChatDate(new Date());
+		chatbotDialogueUiDto.setChatDate(timerDecision(new Date()));
 		chatbotDialogueUiDto.setIsIncoming(true);
 		chatbotDialogueUiDto.setIsOutgoing(false);
 		chatbotDialogueUiDto.setText(chatAnswer);

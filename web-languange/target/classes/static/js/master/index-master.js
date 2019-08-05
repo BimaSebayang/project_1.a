@@ -16,7 +16,19 @@ var masterWebUdaIndexApp = angular.module('masterWebUdaIndexApp', [])
 	  }
 	});
 
+masterWebUdaIndexApp.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.ngEnter);
+                });
 
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 		$rootScope, $location, $window,$anchorScroll) {
@@ -62,6 +74,17 @@ masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 	        });
 	}
 	
+	$scope.questionChat = function(text){
+	    var url = $scope.endpoint + "/my-question";
+        $http.post(url, text, $scope.config).then(function (response) {
+        	$scope.chats.push(response.data);
+        	$scope.answerChat(text);
+        	$scope.myChat = "";
+        }, function error(response) {
+            $scope.postResultMessage = "Error with status: " + response.statusText;
+        });
+   }
+	
 	$scope.manipulation = function(){
 		$http.get($scope.endpoint + "/manipulator").then(
 				function(response) {
@@ -74,14 +97,7 @@ masterWebUdaIndexApp.controller('indexConfiguration', function($scope, $http,
 	
 	$scope.sendMyChat = function(chat){
 		i++;
-		$scope.chats.push({
-			'text' : chat,
-			'isOutgoing' : true,
-			'isIncoming' : false
-		});
-		
-		$scope.answerChat(chat);
-		
+		$scope.questionChat(chat);
 	}
 	
 	$scope.clickSide = function(url) {

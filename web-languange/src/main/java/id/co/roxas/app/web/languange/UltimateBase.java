@@ -1,17 +1,24 @@
 package id.co.roxas.app.web.languange;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.util.Strings;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
+import org.joda.time.Weeks;
+import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -70,6 +77,46 @@ public class UltimateBase {
 	protected static final String DASHBOARD_URL = "/master-web-uda-index";
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
 
+	protected String timerDecision(Date date) {
+		Date dateNew = new Date();
+		long diffInMillies = Math.abs(date.getTime()-dateNew.getTime());
+		long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		DateTime start = new DateTime(date);
+		DateTime end = new DateTime(dateNew);
+		Weeks weeks = Weeks.weeksBetween(start, end);
+		int weekDiff= weeks.getWeeks();
+		Months months = Months.monthsBetween(start, end);
+		int monthDiff = months.getMonths();
+		Years years = Years.yearsBetween(start, end);
+		int yearsDiff = years.getYears();
+		if(diff==0) {
+			return "Hari Ini, "+ parseDateToString(date, "HH:mm");
+		}
+		else if(diff==1) {
+			return "Kemarin";
+		}
+		else if((diff>=2&&diff<=6)&&weekDiff==0) {
+			return diff+" hari yang lalu ";
+		}
+		else if(weekDiff>0&&monthDiff==0) {
+			return weekDiff + " minggu yang lalu";
+		}
+		else if(monthDiff>0&&yearsDiff==0) {
+			return monthDiff + " bulan yang lalu";
+		}
+		else if(yearsDiff>0) {
+			return yearsDiff + " tahun yang lalu";
+		}
+		return "Undecided Date";
+	}
+	
+	protected String parseDateToString(Date date, String format) {
+		String dateFor = null;
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+	    dateFor = sdf.format(date);
+		return dateFor;
+	}
+	
 	protected TblUserDto getUserDtoAccess(TicketCc cc) {
 		WsResponse response = resultWsWithoutSecurity(UAA_END_POINT_URL + "/web-request/ticket/request-user", cc,
 				HttpMethod.POST, null, new ParamQueryCustomLib[] {});

@@ -1,6 +1,7 @@
 package id.co.roxas.app.web.languange.controller.chatbot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,17 @@ public class ChatbotWsCtl extends BaseWebController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		chatbotDialogueUiDto.setChatDate("Roxas| " +chatbotDialogueUiDto.getChatDate());
+		return chatbotDialogueUiDto;
+	}
+	
+	@PostMapping("/my-question")
+	public ChatbotDialogueUiDto getMyQuestion(@RequestBody String text, HttpServletRequest request) {
+		ChatbotDialogueUiDto chatbotDialogueUiDto = new ChatbotDialogueUiDto();
+		chatbotDialogueUiDto.setChatDate("Saya| "+timerDecision(new Date()));
+		chatbotDialogueUiDto.setIsIncoming(false);
+		chatbotDialogueUiDto.setIsOutgoing(true);
+		chatbotDialogueUiDto.setText(text);
 		return chatbotDialogueUiDto;
 	}
 	

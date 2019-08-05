@@ -10,7 +10,7 @@ public class ChatbotDialogueUiDto implements Serializable{
 	private String text;
     private Boolean isOutgoing;
     private Boolean isIncoming;
-    private Date chatDate;
+    private String chatDate;
 	public String getText() {
 		return text;
 	}
@@ -29,10 +29,11 @@ public class ChatbotDialogueUiDto implements Serializable{
 	public void setIsIncoming(Boolean isIncoming) {
 		this.isIncoming = isIncoming;
 	}
-	public Date getChatDate() {
+	
+	public String getChatDate() {
 		return chatDate;
 	}
-	public void setChatDate(Date chatDate) {
+	public void setChatDate(String chatDate) {
 		this.chatDate = chatDate;
 	}
 	public static String getDtoticketing() {

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,10 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.util.Strings;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
+import org.joda.time.Weeks;
+import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -93,6 +98,39 @@ public class UltimateBase {
 	private List<ParamQueryCustomLib> paramQueryCustomLibs = new ArrayList<>();
 	private String chatbotAnswer = new String(); 
 
+	protected String timerDecision(Date date) {
+		Date dateNew = new Date();
+		long diffInMillies = Math.abs(date.getTime()-dateNew.getTime());
+		long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		DateTime start = new DateTime(date);
+		DateTime end = new DateTime(dateNew);
+		Weeks weeks = Weeks.weeksBetween(start, end);
+		int weekDiff= weeks.getWeeks();
+		Months months = Months.monthsBetween(start, end);
+		int monthDiff = months.getMonths();
+		Years years = Years.yearsBetween(start, end);
+		int yearsDiff = years.getYears();
+		if(diff==0) {
+			return "Hari Ini, "+ parseDateToString(date, "HH:mm");
+		}
+		else if(diff==1) {
+			return "Kemarin";
+		}
+		else if((diff>=2&&diff<=6)&&weekDiff==0) {
+			return diff+" hari yang lalu ";
+		}
+		else if(weekDiff>0&&monthDiff==0) {
+			return weekDiff + " minggu yang lalu";
+		}
+		else if(monthDiff>0&&yearsDiff==0) {
+			return monthDiff + " bulan yang lalu";
+		}
+		else if(yearsDiff>0) {
+			return yearsDiff + " tahun yang lalu";
+		}
+		return "Undecided Date";
+	}
+	
 	protected List<String> findAllPatternBussiness(String regexstart, String regexEnd, String word){
 		List<String> patterns = new ArrayList<>();
 		String patternStr = Pattern.quote(regexstart)+"(.*?)"+Pattern.quote(regexEnd);
