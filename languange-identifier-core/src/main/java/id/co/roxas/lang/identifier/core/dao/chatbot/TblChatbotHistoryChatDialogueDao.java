@@ -35,7 +35,8 @@ public interface TblChatbotHistoryChatDialogueDao extends JpaRepository<TblChatb
 			+ " then 0 "
 			+ " else "
 			+ " a.dialogue_position  "
-			+ " end "
+			+ " end, "
+			+ " a.is_chatbot_know "
 			+ " from Tbl_Chatbot_History_Chat_Dialogue a "
 			+ " where a.user_chat = :userId "
 			+ " order by a.chat_sequence desc limit 1 ", nativeQuery = true)

@@ -76,6 +76,7 @@ public class ChatbotNeuronHistory extends BaseService {
 				historyChatDialogueDto.setGroupDialogue((String) objects[0]);
 				historyChatDialogueDto.setChatSequence((Integer) objects[1]);
 				historyChatDialogueDto.setDialoguePosition((Integer) objects[2]);
+				historyChatDialogueDto.setIsChatbotKnow((Integer) objects[3]);
 				break;
 			}
 		}

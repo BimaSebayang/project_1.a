@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import id.co.roxas.data.transfer.object.UserDataActivation.response.WsResponse;
 import id.co.roxas.data.transfer.object.chatbot.TblChatbotHistoryChatDialogueDto;
 import id.co.roxas.data.transfer.object.chatbot.respond.ChatbotDialogueUiDto;

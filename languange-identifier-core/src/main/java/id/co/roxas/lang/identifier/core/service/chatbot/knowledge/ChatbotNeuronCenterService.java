@@ -87,7 +87,7 @@ public class ChatbotNeuronCenterService extends BaseService{
 			return TRANSACTION_STAT;
 		}
 		else if(trancFunc.equals(NULL)) {
-			responsive =  "Maaf Saya Tidak paham dengan kalimat : ' " + userChat + " ' ";
+			responsive =  " Maaf Roxas Tidak paham dengan kalimat : ' " + userChat + " ', \n\n\n apakah kakak ingin mengajari roxas kalimat tersebut? ";
 			isChatbotKnowing = 0;
 		}
 		

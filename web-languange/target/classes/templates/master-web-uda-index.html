@@ -15,14 +15,11 @@
 
 <!------ Include the above before your head tag---------->
 
-
 <link rel="stylesheet" href="/languange/css/dashboard-admin.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <script src="/languange/js/master/index-master.js"></script>
 <!------ This for component admin dashboard---------->
-
-
 
 </head>
 
@@ -45,8 +42,8 @@
 							class="fas fa-book shortmenu animate"></i></a></li>
 					<li class="nav-item"><a style="font-size: 13px;"
 						class="nav-link" ng-click="clickSide('spell-checker')"
-						title="Dashboard"> <i class="fas fa-magic"></i> Perbaikan Ejaan <i
-							class="fas fa-magic shortmenu animate"></i></a></li>
+						title="Dashboard"> <i class="fas fa-magic"></i> Perbaikan
+							Ejaan <i class="fas fa-magic shortmenu animate"></i></a></li>
 				</ul>
 				<ul class="navbar-nav ml-md-auto d-md-flex">
 					<li class="nav-item"><a class="nav-link" href="inbox"><i
@@ -66,71 +63,91 @@
 	</div>
 
 
- <button style="position: fixed; right: 5%; bottom: 7%;background-color: #3F51B5;
-         color: rgb(255, 255, 255);opacity: 5;border-radius: 50%; width: 70px;
-         height: 70px; " type="button" onclick="myFunction('messaging')">
-              <i class="fa fa-comments" aria-hidden="true"></i>
- </button>
+	<button class="button_welcome_message" type="button"
+		onclick="myWelcomeButtonMess('messaging','button_welcome_message')">
+		<i class="fa fa-comments" aria-hidden="true"></i>
+	</button>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
+		function myWelcomeButtonMess(myClassName, myButton) {
+			var x = document.getElementsByClassName(myClassName);
+			var y = document.getElementsByClassName(myButton);
+			debugger;
+			if (x[0].style.display === "none" || x[0].style.display === '') {
+				x[0].style.display = "block";
+				y[0].style.display = "none";
+			} else {
+				x[0].style.display = "none";
+				y[0].style.display = "block";
+			}
+		}
+	</script>
 
-function myFunction(myClassName) {
-	  var x = document.getElementsByClassName(myClassName);
-	  debugger;
-	  if (x[0].style.display === "none" || x[0].style.display === '') {
-	    x[0].style.display = "block";
-	  } else {
-	    x[0].style.display = "none";
-	  }
-	}
 
-</script>
+	<link href="/languange/css/chat-message.css" type="text/css"
+		rel="stylesheet">
 
+	<link
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+		type="text/css" rel="stylesheet"
+	<div class="chat-container">
 
-<link href="/languange/css/chat-message.css" type="text/css" rel ="stylesheet">
+		<div id="myMessaging" class="messaging">
+			<div class="inbox_msg_header">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
- type="text/css" rel="stylesheet"
+                <img class="img_chatt_one" src="/languange/images/RoxasIX.jpg" alt="sunil">
+				<button class="button_goodbye_message"
+					onclick="myWelcomeButtonMess('messaging','button_welcome_message')">
 
-<div class="chat-container">
+					<i class="fa fa-times" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="inbox_msg">
+				<div class="mesgs">
+					<div class="msg_history" schroll-bottom="chats">
 
-<div id="myMessaging" class="messaging">
-      <div class="inbox_msg">
-        <div class="mesgs">
-          <div class="msg_history" schroll-bottom="chats">
-          
-          <div class="chat-caller"  ng-repeat = "chat in chats" >
-          <div class="outgoing_msg" ng-if = "chat.isOutgoing">
-              <div class="sent_msg">
-                <p>{{chat.text}}</p>
-                <span class="time_date">{{chat.chatDate}}</span> 
-              </div>
-          </div>
-          <div class="incoming_msg" ng-if="chat.isIncoming">
-              <div class="incoming_msg_img"> <img src="/languange/images/RoxasIX.jpg" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>{{chat.text}}</p>
-                  <span class="time_date"> {{chat.chatDate}}</span></div>
-              </div>
-          </div>
-          </div>
-            
-           </div>
-          <div class="type_msg" id="message">
-            <div class="input_msg_write">
-              <textarea type="text" style="width: 90%; font-size: 15px;" class="write_msg" placeholder="Type a message" ng-enter="sendMyChat(myChat)" 
-                      ng-model="myChat"></textarea>
-              <button class="msg_send_btn" type="button" ng-click="sendMyChat(myChat)">
-              <i class="fa fa-comments" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    </div></div>
+						<div class="chat-caller" ng-repeat="chat in chats">
+							<div class="outgoing_msg" ng-if="chat.isOutgoing">
+								<div class="sent_msg">
+									<p>{{chat.text}}</p>
+									<span class="time_date">{{chat.chatDate}}</span>
+								</div>
+							</div>
+							<div class="incoming_msg" ng-if="chat.isIncoming">
+								<div class="incoming_msg_img">
+									<img src="/languange/images/RoxasIX.jpg" alt="sunil">
+								</div>
+								<div class="received_msg">
+<!--  <button   style="background: red; height: 15px; width : 15px; top : 10px; position: relative; border: medium none;  -->
+<!--         border-radius: 50%;"></button>  -->
+<!--  <button   style="background: yellow; height: 15px; width : 15px; top : 10px; position: relative; border: medium none;  -->
+<!--        border-radius: 50%;"></button>  -->
+									<div class="received_withd_msg">
+										<p>{{chat.text}}</p>
+										<span class="time_date"> {{chat.chatDate}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="type_msg" id="message">
+						<div class="input_msg_write">
+							<textarea type="text" style="width: 90%; font-size: 15px;"
+								class="write_msg" placeholder="Type a message"
+								ng-enter="sendMyChat(myChat)" ng-model="myChat"></textarea>
+							<button class="msg_send_btn" type="button"
+								ng-click="sendMyChat(myChat)">
+								<i class="fa fa-comments" aria-hidden="true"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 
 
